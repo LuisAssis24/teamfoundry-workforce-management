@@ -1,0 +1,65 @@
+# Backend (Spring Boot / Gradle)
+backend/HELP.md
+backend/.gradle/
+backend/**/build/
+!backend/**/src/main/**/build/
+!backend/**/src/test/**/build/
+backend/**/bin/
+!backend/**/src/main/**/bin/
+!backend/**/src/test/**/bin/
+backend/**/out/
+!backend/**/src/main/**/out/
+!backend/**/src/test/**/out/
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+
+# Frontend (Angular / Node)
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+frontend/node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-error.log*
+frontend/.angular/cache/
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/coverage/
+libpeerconnection.log
+testem.log
+frontend/typings/
+frontend/__screenshots__/
+frontend/.history/
+
+# IDEs and editors
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.idea/
+*.iws
+*.iml
+*.ipr
+.c9/
+*.launch
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/
+!frontend/.vscode/
+frontend/.vscode/*
+!frontend/.vscode/settings.json
+!frontend/.vscode/tasks.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/extensions.json
+
+# Miscellaneous
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+node_modules
+dist
+.angular
+.cache
+.vscode
+.idea
+coverage
+npm-debug.log
+Dockerfile*
+docker-compose.yml
