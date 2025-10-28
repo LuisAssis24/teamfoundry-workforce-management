@@ -15,6 +15,7 @@ backend/nbbuild/
 backend/dist/
 backend/nbdist/
 backend/.nb-gradle/
+backend/src/main/resources/application-local.yml
 
 # Frontend (Angular / Node)
 frontend/dist/
