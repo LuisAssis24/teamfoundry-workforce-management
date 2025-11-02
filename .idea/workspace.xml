@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="reset projeto">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/BackendApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/BackendApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +25,12 @@
     &quot;assignee&quot;: &quot;LuisAssis24&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management&quot;,
-    &quot;accountId&quot;: &quot;744e2a3a-bde5-4768-bf04-afd756c9b8e6&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/LuisAssis24/teamfoundry-workforce-management.git",
+    "accountId": "eb883989-17ec-43e6-aea6-922f48415ba1"
   }
-}</component>
+}]]></component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -45,27 +43,33 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\backend\src\test\java\com\teamfoundry\backend" />
-    </key>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+        <entry key="com.intellij.reactbuddy.storybook" value="false" />
+      </map>
+    </option>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
       </set>
     </attachedChunks>
   </component>
@@ -78,27 +82,11 @@
       <option name="presentableId" value="Default" />
       <updated>1762084882236</updated>
       <workItem from="1762084883878" duration="21000" />
-      <workItem from="1762086408056" duration="30000" />
-      <workItem from="1762087144100" duration="32000" />
-      <workItem from="1762087643498" duration="849000" />
-      <workItem from="1762088610758" duration="24000" />
+      <workItem from="1762091469964" duration="76000" />
     </task>
-    <task id="LOCAL-00001" summary="reset projeto">
-      <option name="closed" value="true" />
-      <created>1762086431135</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1762086431135</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="reset projeto" />
-    <option name="LAST_COMMIT_MESSAGE" value="reset projeto" />
   </component>
 </project>

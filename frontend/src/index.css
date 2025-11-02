@@ -10,17 +10,16 @@
     /* === Base === */
     --color-base-100: #ffffff;
     --color-base-content: #0f172a;
-    --color-base-muted: #f5f6f7;
+    --color-base-muted: #f5f5f5;
 
     /* === Brand === */
     --color-primary: #1f2959;
     --color-primary-hover: #2c3a74;
-    --color-secondary: #7780ae;
+    --color-secondary: #60678E;
     --color-secondary-hover: #8a93c2;
-    --color-accent: #594b1f;
+    --color-accent: #C8D1FF;
     --color-neutral: #9ca3af;
-    --color-neutral-dark: #6b7280;
-    --color-neutral-light: #f5f6f7;
+    --color-neutral-light: #f0f0f0;
 
     /* === Feedback === */
     --color-success: #22c55e;
@@ -74,10 +73,8 @@
     --sf: var(--color-secondary-hover);
     --sc: var(--text-inverse);
     --a: var(--color-accent);
-    --af: #705a22;
     --ac: var(--text-inverse);
     --n: var(--color-neutral);
-    --nf: var(--color-neutral-dark);
     --nc: var(--text-secondary);
     --b1: var(--color-base-100);
     --b2: var(--color-neutral-light);
