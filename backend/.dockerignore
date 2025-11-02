@@ -1,8 +1,0 @@
-.gradle
-build
-.idea
-.vscode
-*.iml
-*.class
-logs
-tmp
