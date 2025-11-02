@@ -1,68 +1,149 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@500;600;700&display=swap");
+@plugin "daisyui";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@layer base {
+  :root,
+  [data-theme="foundry"] {
+    color-scheme: light;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+    /* === Base === */
+    --color-base-100: #ffffff;
+    --color-base-content: #0f172a;
+    --color-base-muted: #f5f6f7;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+    /* === Brand === */
+    --color-primary: #1f2959;
+    --color-primary-hover: #2c3a74;
+    --color-secondary: #7780ae;
+    --color-secondary-hover: #8a93c2;
+    --color-accent: #594b1f;
+    --color-neutral: #9ca3af;
+    --color-neutral-dark: #6b7280;
+    --color-neutral-light: #f5f6f7;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+    /* === Feedback === */
+    --color-success: #22c55e;
+    --color-error: #dc2626;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+    /* === Ajustes Visuais === */
+    --radius-box: 1rem;
+    --radius-btn: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-badge: 0.25rem;
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+    --border: 1px;
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+    /* Font families */
+    --font-heading: "Poppins", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    /* Font sizes */
+    --fs-h1: 2.5rem;
+    --fs-h2: 2rem;
+    --fs-h3: 1.5rem;
+    --fs-body: 1rem;
+    --fs-label: 0.875rem;
+
+    /* Line heights */
+    --lh-h1: 1.2;
+    --lh-h2: 1.25;
+    --lh-h3: 1.3;
+    --lh-body: 1.5;
+    --lh-label: 1.4;
+
+    /* Font weights */
+    --fw-bold: 700;
+    --fw-semibold: 600;
+    --fw-medium: 500;
+    --fw-regular: 400;
+
+    /* Text colors */
+    --text-primary: var(--color-primary);
+    --text-secondary: #0f172a;
+    --text-muted: #9ca3af;
+    --text-inverse: #ffffff;
+
+    /* DaisyUI theme tokens */
+    --p: var(--color-primary);
+    --pf: var(--color-primary-hover);
+    --pc: var(--text-inverse);
+    --s: var(--color-secondary);
+    --sf: var(--color-secondary-hover);
+    --sc: var(--text-inverse);
+    --a: var(--color-accent);
+    --af: #705a22;
+    --ac: var(--text-inverse);
+    --n: var(--color-neutral);
+    --nf: var(--color-neutral-dark);
+    --nc: var(--text-secondary);
+    --b1: var(--color-base-100);
+    --b2: var(--color-neutral-light);
+    --b3: #e2e8f0;
+    --bc: var(--color-base-content);
+    --in: var(--color-info);
+    --su: var(--color-success);
+    --wa: var(--color-warning);
+    --er: var(--color-error);
+    --rounded-box: var(--radius-box);
+    --rounded-btn: var(--radius-btn);
+    --rounded-badge: var(--radius-badge);
+    --tab-radius: var(--radius-field);
   }
-  a:hover {
-    color: #747bff;
+
+  html {
+    font-family: var(--font-body), sans-serif;
+    color: var(--text-secondary);
+    background-color: var(--color-neutral-light);
   }
-  button {
-    background-color: #f9f9f9;
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background-color: var(--color-neutral-light);
+  }
+
+  h1 {
+    font-family: var(--font-heading), sans-serif;
+    font-size: var(--fs-h1);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-h1);
+    color: var(--text-primary);
+  }
+
+  h2 {
+    font-family: var(--font-heading), sans-serif;
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-h2);
+    color: var(--text-primary);
+  }
+
+  h3 {
+    font-family: var(--font-heading), sans-serif;
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-h3);
+    color: var(--text-primary);
+  }
+
+  p {
+    font-family: var(--font-body), sans-serif;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-body);
+    color: var(--text-secondary);
+  }
+
+  label,
+  small,
+  .label {
+    font-family: var(--font-body), sans-serif;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-label);
+    color: var(--text-muted);
   }
 }

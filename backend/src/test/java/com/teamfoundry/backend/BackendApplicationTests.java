@@ -8,6 +8,6 @@ class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Intentionally left blank - verifies Spring context starts.
 	}
-
 }
