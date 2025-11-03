@@ -1,60 +1,86 @@
+# CONFIGURAÇÃO GLOBAL PADRÃO
 spring:
+  application:
+    name: teamfoundry
   profiles:
-    active: dev
-
-# ==========================
-# Perfil de Desenvolvimento (dev)
-# ==========================
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/meubanco
-    username: postgres
-    password: senha123
-    driver-class-name: org.postgresql.Driver
-
+    active: docker  # perfil ativo por padrão
   jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+        format_sql: true
+  main:
+    allow-bean-definition-overriding: true
 
-  # Configuração do servidor
-  servlet:
-    context-path: /api
-server:
-  port: 8080
-
-# ==========================
-# Perfil de Teste (test)
-# ==========================
 ---
+
+#  PERFIL DE TESTES (H2 - memória)
 spring:
   config:
     activate:
       on-profile: test
-
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
     username: sa
     password:
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-
   h2:
     console:
       enabled: true
-      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: never
 
+---
+
+# PERFIL DE DESENVOLVIMENTO (DOCKER - PostgreSQL local)
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/teamfoundry_db
+    username: teamfoundry_user
+    password: teamfoundry_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: never
+
+---
+
+# PERFIL DE PRODUÇÃO
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://<HOST_DO_PROFESSOR>:5432/<NOME_DA_BASE>
+    username: <USERNAME>
+    password: <PASSWORD>
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: never
 server:
-  port: 8081
+  port: 8080

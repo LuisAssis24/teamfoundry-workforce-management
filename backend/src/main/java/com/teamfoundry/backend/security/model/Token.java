@@ -2,32 +2,29 @@ package com.teamfoundry.backend.security.model;
 
 import com.teamfoundry.backend.account.model.Account;
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
+import lombok.Data;
+import java.sql.Timestamp;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@MappedSuperclass
-public abstract class Token {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "token")
+public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_user", nullable = false)
+    private Account user;
 
     @Column(nullable = false, unique = true)
     private String token;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private Account user;
-
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Timestamp createdAt;
 
-    @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt;
-
-    @Column(nullable = false)
-    private boolean active;
+    @Column(name = "expire_at", nullable = false)
+    private Timestamp expireAt;
 }

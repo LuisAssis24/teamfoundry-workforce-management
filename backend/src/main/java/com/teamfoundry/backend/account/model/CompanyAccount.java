@@ -1,6 +1,5 @@
 package com.teamfoundry.backend.account.model;
 
-import com.teamfoundry.backend.account.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 

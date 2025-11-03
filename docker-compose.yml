@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  teamfoundry_postgres:
+    image: postgres:16
+    container_name: teamfoundry_postgres
+    environment:
+      POSTGRES_USER: teamfoundry_user
+      POSTGRES_PASSWORD: teamfoundry_pass
+      POSTGRES_DB: teamfoundry_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - teamfoundry_network
+
+  teamfoundry_backend:
+    build:
+      context: ./backend
+    container_name: teamfoundry_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://teamfoundry_postgres:5432/teamfoundry_db
+      SPRING_DATASOURCE_USERNAME: teamfoundry_user
+      SPRING_DATASOURCE_PASSWORD: teamfoundry_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - teamfoundry_postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - teamfoundry_network
+    profiles:
+      - manual
+    deploy:
+      replicas: 0
+
+  teamfoundry_frontend:
+    build:
+      context: ./frontend
+    container_name: teamfoundry_frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - teamfoundry_network
+    profiles:
+      - manual
+    deploy:
+      replicas: 0
+
+volumes:
+  postgres_data:
+
+networks:
+  teamfoundry_network:
+    driver: bridge
