@@ -8,17 +8,17 @@
     color-scheme: light;
 
     /* === Base === */
-    --color-base-100: #ffffff;
-    --color-base-content: #0f172a;
-    --color-base-muted: #f5f5f5;
+    --color-base-100: #f5f5f5;
+    --color-base-content: #111827;
+
 
     /* === Brand === */
     --color-primary: #1f2959;
     --color-primary-hover: #2c3a74;
-    --color-secondary: #60678E;
+    --color-secondary: #7780AE;
     --color-secondary-hover: #8a93c2;
     --color-accent: #C8D1FF;
-    --color-neutral: #9ca3af;
+    --color-neutral: #b1b9c7;
     --color-neutral-light: #f0f0f0;
 
     /* === Feedback === */
@@ -60,39 +60,49 @@
     --fw-regular: 400;
 
     /* Text colors */
-    --text-primary: var(--color-primary);
-    --text-secondary: #0f172a;
-    --text-muted: #9ca3af;
-    --text-inverse: #ffffff;
+    --text-primary: var(--color-base-content);
+    --text-secondary: var(--color-primary);
+    --text-inverse: var(--color-base-100);
 
     /* DaisyUI theme tokens */
+    /* Primário */
     --p: var(--color-primary);
     --pf: var(--color-primary-hover);
     --pc: var(--text-inverse);
+    /* Secundário */
     --s: var(--color-secondary);
     --sf: var(--color-secondary-hover);
-    --sc: var(--text-inverse);
+    --sc: var(--text-primary);
+    /* Terciário */
     --a: var(--color-accent);
-    --ac: var(--text-inverse);
+    --ac: var(--text-primary);
+    /* Neutro */
     --n: var(--color-neutral);
     --nc: var(--text-secondary);
+    /* Bases */
     --b1: var(--color-base-100);
     --b2: var(--color-neutral-light);
-    --b3: #e2e8f0;
-    --bc: var(--color-base-content);
+    --bc: var(--text-primary);
+    /* Feedback */
     --in: var(--color-info);
     --su: var(--color-success);
     --wa: var(--color-warning);
     --er: var(--color-error);
+    /* Bordas e raios */
     --rounded-box: var(--radius-box);
     --rounded-btn: var(--radius-btn);
     --rounded-badge: var(--radius-badge);
     --tab-radius: var(--radius-field);
   }
+  /*Tira sombra interna dos botoes*/
+  [data-theme="foundry"] .btn {
+    text-shadow: none !important;
+  }
+
 
   html {
     font-family: var(--font-body), sans-serif;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     background-color: var(--color-neutral-light);
   }
 
@@ -141,6 +151,5 @@
     font-size: var(--fs-label);
     font-weight: var(--fw-medium);
     line-height: var(--lh-label);
-    color: var(--text-muted);
   }
 }
