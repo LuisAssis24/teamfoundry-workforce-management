@@ -1,9 +1,9 @@
-import ThemePreview from './components/ThemePreview.jsx'
+import LoginCandidate from "./pages/login-pages/LoginCandidate/LoginCandidate.jsx";
 
 function App() {
   return (
     <>
-    <main data-theme="foundry"><ThemePreview /></main>
+        <LoginCandidate />
     </>
         
   )

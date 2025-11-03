@@ -1,6 +1,7 @@
 // src/components/__tests__/SampleComponent.test.jsx
 import { render, screen } from "@testing-library/react";
 import SampleComponent from "./SampleComponent.jsx";
+import * as test from "node:test";
 
 
 test("findNameReturnsValueFromRepository", async () => {

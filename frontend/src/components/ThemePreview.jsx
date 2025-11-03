@@ -22,7 +22,7 @@ const ThemePreview = () => {
           <div className="flex flex-wrap gap-3">
             <button className="btn btn-primary">Alocar equipe</button>
             <button className="btn btn-secondary ">Gerar relatório</button>
-            <button className="btn btn-outline btn-primary">Ver logs</button>
+            <button className="btn btn-outline btn-accent">Ver logs</button>
           </div>
 
           <div className="stats stats-vertical gap-4 rounded-box bg-base-200 shadow md:stats-horizontal">
@@ -96,6 +96,9 @@ const ThemePreview = () => {
           </div>
 
           <div role="alert" className="alert alert-success">
+            <span>Meta semanal de produtividade alcançada!</span>
+          </div>
+          <div role="alert" className="alert alert-error">
             <span>Meta semanal de produtividade alcançada!</span>
           </div>
 
