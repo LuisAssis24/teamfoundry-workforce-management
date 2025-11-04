@@ -2,7 +2,7 @@ import React from "react";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 
-export default function LoginCandidate() {
+export default function CandidateLogin() {
     return (
         <main className="min-h-screen flex items-center justify-center bg-base-200">
             <div className="card w-full max-w-md shadow-md bg-base-100">

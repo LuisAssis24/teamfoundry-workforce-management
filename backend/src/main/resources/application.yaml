@@ -1,9 +1,9 @@
-# CONFIGURAÇÃO GLOBAL PADRÃO
+# CONFIGURACAO GLOBAL PADRAO
 spring:
   application:
     name: teamfoundry
   profiles:
-    active: docker  # perfil ativo por padrão
+    active: docker
   jpa:
     properties:
       hibernate:
@@ -11,9 +11,19 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-password: changeit
+    key-alias: teamfoundry-local
+
 ---
 
-#  PERFIL DE TESTES (H2 - memória)
+# PERFIL DE TESTES (H2 - memoria)
 spring:
   config:
     activate:
@@ -62,7 +72,7 @@ spring:
 
 ---
 
-# PERFIL DE PRODUÇÃO
+# PERFIL DE PRODUCAO
 spring:
   config:
     activate:
@@ -82,5 +92,3 @@ spring:
   sql:
     init:
       mode: never
-server:
-  port: 8080
