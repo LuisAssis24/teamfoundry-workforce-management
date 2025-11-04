@@ -1,9 +1,12 @@
-# CONFIGURACAO GLOBAL PADRAO
+# CONFIGURAÇÃO GLOBAL PADRÃO
+jwt:
+  secret: ${JWT_SECRET:change-me-256-bit-secret-string-change-me}
+  expiration-seconds: 3600
 spring:
   application:
     name: teamfoundry
   profiles:
-    active: docker
+    active: docker  # perfil ativo por padrão
   jpa:
     properties:
       hibernate:
@@ -23,7 +26,7 @@ server:
 
 ---
 
-# PERFIL DE TESTES (H2 - memoria)
+#  PERFIL DE TESTES (H2 - memória)
 spring:
   config:
     activate:
@@ -72,7 +75,7 @@ spring:
 
 ---
 
-# PERFIL DE PRODUCAO
+# PERFIL DE PRODUÇÃO
 spring:
   config:
     activate:
@@ -92,3 +95,10 @@ spring:
   sql:
     init:
       mode: never
+server:
+  port: 8080
+
+# JWT configuration
+jwt:
+  secret: ${JWT_SECRET:change-me-32-bytes-minimum-change-me-change-me}
+  expiration-seconds: 3600
