@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
+import { login } from "../../../api/auth.js";
 
 export default function LoginCandidate() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const handleLogin = async () => {
+        setLoading(true);
+        setError("");
+        setSuccess(false);
+        try {
+            const data = await login(email, password);
+            console.log("Login OK:", data);
+            setSuccess(true);
+            // redirecionar aqui se houver roteamento (ex.: react-router)
+        } catch (e) {
+            setError(e.message || "Falha no login");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <main className="min-h-screen flex items-center justify-center bg-base-200">
             <div className="card w-full max-w-md shadow-md bg-base-100">
@@ -11,11 +34,16 @@ export default function LoginCandidate() {
                         Login
                     </h2>
 
+                    {error && <div className="alert alert-error">{error}</div>}
+                    {success && <div className="alert alert-success">Login efetuado com sucesso!</div>}
+
                     <InputField
                         label="Email"
                         placeholder="Insira o seu email"
                         icon={<i className="bi bi-envelope"></i>}
                         type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
 
                     <InputField
@@ -23,9 +51,11 @@ export default function LoginCandidate() {
                         placeholder="Insira a sua password"
                         icon={<i className="bi bi-lock"></i>}
                         type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <Button label="Entrar" variant="primary" />
+                    <Button label={loading ? "Entrando..." : "Entrar"} variant="primary" onClick={handleLogin} />
 
                     <div className="divider">Ou</div>
 
