@@ -1,0 +1,165 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"reset projeto\">\r\n      <change beforePath=\"$PROJECT_DIR$/.env\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gitignore\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/.gitignore\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/modules.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/teamfoundry-workforce-management.iml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/vcs.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/README.md\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/.dockerignore\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/.gitattributes\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/Dockerfile\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/build.gradle\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.jar\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.properties\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/gradlew\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/gradlew.bat\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/settings.gradle\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/resources/application-local.yml.example\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/resources/application.yml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/BackendApplicationTests.java\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/docker-compose.yml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.dockerignore\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.editorconfig\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.github/copilot-instructions.md\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.postcssrc.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.vscode/extensions.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.vscode/launch.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/.vscode/tasks.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/Dockerfile\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/README.md\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/angular.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/karma.conf.js\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/nginx.conf\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package-lock.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/public/favicon.ico\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.config.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.css\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.html\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.routes.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.spec.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/app/app.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/index.html\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/main.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/styles.css\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/test.ts\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/tsconfig.app.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/tsconfig.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/tsconfig.spec.json\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/package-lock.json\" beforeDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"LuisAssis24\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/LuisAssis24/teamfoundry-workforce-management\",\r\n    \"accountId\": \"12441c29-c5d1-4e50-a12a-a968d2f46c29\"\r\n  }\r\n}]]></component>\r\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"PHP\" />\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"associatedIndex\": 8\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"34vCubPTpiW0fbRzlf0VXysOloh\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.26775.23\" />\r\n        <option value=\"bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.26775.23\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"\" />\r\n      <created>1762084882236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762084882236</updated>\r\n      <workItem from=\"1762084883878\" duration=\"21000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision ead8e2838601cbf602d4c6302e97732b06ab5c33)
++++ b/.idea/workspace.xml	(date 1762088864482)
+@@ -1,63 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ChangeListManager">
+-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="reset projeto">
+-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/teamfoundry-workforce-management.iml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/.dockerignore" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/.gitattributes" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/Dockerfile" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/gradlew" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/gradlew.bat" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/settings.gradle" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application-local.yml.example" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/BackendApplicationTests.java" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.dockerignore" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.editorconfig" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.github/copilot-instructions.md" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.postcssrc.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.vscode/extensions.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.vscode/launch.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/.vscode/tasks.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/Dockerfile" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/karma.conf.js" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/nginx.conf" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.config.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.css" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.html" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.spec.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/index.html" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/main.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/styles.css" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/test.ts" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.app.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.spec.json" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+-    </list>
++    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="reset projeto" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -69,22 +13,22 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+-  "lastFilter": {
+-    "state": "OPEN",
+-    "assignee": "LuisAssis24"
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;LuisAssis24&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="GithubPullRequestsUISettings"><![CDATA[{
+   "selectedUrlAndAccountId": {
+-    "url": "https://github.com/LuisAssis24/teamfoundry-workforce-management",
+-    "accountId": "12441c29-c5d1-4e50-a12a-a968d2f46c29"
++    "url": "https://github.com/LuisAssis24/teamfoundry-workforce-management.git",
++    "accountId": "eb883989-17ec-43e6-aea6-922f48415ba1"
+   }
+ }]]></component>
+   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 8
+-}]]></component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 8
++}</component>
+   <component name="ProjectId" id="34vCubPTpiW0fbRzlf0VXysOloh" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+@@ -93,16 +37,28 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.git.unshallow": "true",
+     "git-widget-placeholder": "main",
++    "junie.onboarding.icon.badge.shown": "true",
++    "last_opened_file_path": "C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management",
+     "nodejs_package_manager_path": "npm",
++    "to.speed.mode.migration.done": "true",
+     "vue.rearranger.settings.migration": "true"
+   }
+ }]]></component>
++  <component name="ReactDesignerToolWindowState">
++    <option name="myId2Visible">
++      <map>
++        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
++        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
++      </map>
++    </option>
++  </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.26775.23" />
+-        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.26775.23" />
++        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
++        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -115,10 +71,24 @@
+       <option name="presentableId" value="Default" />
+       <updated>1762084882236</updated>
+       <workItem from="1762084883878" duration="21000" />
++      <workItem from="1762088616808" duration="247000" />
+     </task>
++    <task id="LOCAL-00001" summary="reset projeto">
++      <option name="closed" value="true" />
++      <created>1762088674464</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1762088674464</updated>
++    </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="reset projeto" />
++    <option name="LAST_COMMIT_MESSAGE" value="reset projeto" />
++  </component>
+ </project>
+\ No newline at end of file
