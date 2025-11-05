@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 @Configuration
+@Profile("!test")
 public class ProfileOptionsSeeder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfileOptionsSeeder.class);

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
+@Profile("!test")
 public class EmployeeAccountInitializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeAccountInitializer.class);
