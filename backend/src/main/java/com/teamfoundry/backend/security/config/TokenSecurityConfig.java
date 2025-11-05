@@ -1,11 +1,15 @@
 package com.teamfoundry.backend.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamfoundry.backend.common.dto.ApiErrorResponse;
 import com.teamfoundry.backend.security.filter.JwtAuthenticationFilter;
 import com.teamfoundry.backend.security.service.AccountDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,6 +24,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
@@ -31,19 +37,31 @@ public class TokenSecurityConfig {
     private final AccountDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((req, res, e) ->
-                                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
-                        .accessDeniedHandler((req, res, e) ->
-                                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            try {
+                                writeJson(res, objectMapper, ApiErrorResponse.of(HttpStatus.UNAUTHORIZED, "Authentication required"));
+                            } catch (IOException ignored) {
+                                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                            }
+                        })
+                        .accessDeniedHandler((req, res, e) -> {
+                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            try {
+                                writeJson(res, objectMapper, ApiErrorResponse.of(HttpStatus.FORBIDDEN, "Access denied"));
+                            } catch (IOException ignored) {
+                                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+                            }
+                        })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/auth/**", "/api/admin/login", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Opcional: permitir H2 console em dev/test
@@ -82,5 +100,13 @@ public class TokenSecurityConfig {
         UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
         src.registerCorsConfiguration("/**", cfg);
         return src;
+    }
+
+    private void writeJson(HttpServletResponse response,
+                           ObjectMapper objectMapper,
+                           ApiErrorResponse payload) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        objectMapper.writeValue(response.getWriter(), payload);
     }
 }
