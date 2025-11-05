@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import CandidateLogin from "./pages/login-pages/CandidateLogin/Login.jsx";
 import AdminLogin from "./pages/login-pages/AdminLogin/AdminLogin.jsx";
-import Credenciais from "./pages/SuperAdmin/Credenciais.jsx";
-import GestaoTrabalho from "./pages/SuperAdmin/GestaoTrabalho.jsx";
-import GestaoSite from "./pages/SuperAdmin/GestaoSite.jsx";
-import Metricas from "./pages/SuperAdmin/Metricas.jsx";
+import Credenciais from "./pages/SuperAdmin-pages/Credenciais.jsx";
+import GestaoTrabalho from "./pages/SuperAdmin-pages/GestaoTrabalho.jsx";
+import GestaoSite from "./pages/SuperAdmin-pages/GestaoSite.jsx";
+import Metricas from "./pages/SuperAdmin-pages/Metricas.jsx";
 import SuperAdminLayout from "./components/layout/SuperAdminLayout.jsx";
 
 function App() {
