@@ -29,6 +29,6 @@ export default function Button({
 Button.propTypes = {
     label: PropTypes.string.isRequired,
     icon: PropTypes.node,
-    variant: PropTypes.oneOf(["primary", "secondary", "accent", "neutral", "outline"]),
+    variant: PropTypes.oneOf(["primary", "secondary", "accent", "neutral", "outline", "warning", "success"]),
     className: PropTypes.string,
 };
