@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="small changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,8 +42,12 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management&quot;,
-    &quot;accountId&quot;: &quot;12441c29-c5d1-4e50-a12a-a968d2f46c29&quot;
+    &quot;accountId&quot;: &quot;744e2a3a-bde5-4768-bf04-afd756c9b8e6&quot;
   }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
 }</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
   <component name="ProjectColorInfo">{
@@ -61,6 +67,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -102,8 +109,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.26775.23" />
-        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.26775.23" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -127,6 +134,8 @@
       <workItem from="1762343724969" duration="31000" />
       <workItem from="1762343772875" duration="5000" />
       <workItem from="1762344150441" duration="327000" />
+      <workItem from="1762345186853" duration="419000" />
+      <workItem from="1762358190210" duration="4167000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -144,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762342221517</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="small changes">
+      <option name="closed" value="true" />
+      <created>1762345285968</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762345285968</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

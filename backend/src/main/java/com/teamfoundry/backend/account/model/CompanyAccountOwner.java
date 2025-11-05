@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "responsavel_conta")
+@Table(name = "responsavel_conta_empresa")
 public class CompanyAccountOwner {
 
     @Id
