@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import CandidateLogin from "./pages/login-pages/CandidateLogin/CandidateLogin.jsx";
+import CandidateLogin from "./pages/login-pages/CandidateLogin/Login.jsx";
 import AdminLogin from "./pages/login-pages/AdminLogin/AdminLogin.jsx";
 
 function App() {

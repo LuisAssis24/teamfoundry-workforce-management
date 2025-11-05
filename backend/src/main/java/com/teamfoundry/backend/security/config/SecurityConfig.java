@@ -31,7 +31,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class TokenSecurityConfig {
+public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
     private final AccountDetailsService userDetailsService;
