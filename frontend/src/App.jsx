@@ -3,10 +3,10 @@ import CandidateLogin from "./pages/login-pages/CommunLogin/Login.jsx";
 import AdminLogin from "./pages/login-pages/AdminLogin/AdminLogin.jsx";
 import ForgotPassword from "./pages/login-pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/login-pages/ResetPassword/ResetPassword.jsx";
-import Credenciais from "./pages/login-pages/superAdmin/credenciais.jsx";
-import GestaoTrabalho from "./pages/login-pages/superAdmin/gestaoTrabalho.jsx";
-import GestaoSite from "./pages/login-pages/superAdmin/gestaoSite.jsx";
-import Metricas from "./pages/login-pages/superAdmin/metricas.jsx";
+import Credenciais from "./pages/SuperAdmin-pages/Credenciais.jsx";
+import GestaoTrabalho from "./pages/SuperAdmin-pages/GestaoTrabalho.jsx";
+import GestaoSite from "./pages/SuperAdmin-pages/GestaoSite.jsx";
+import Metricas from "./pages/SuperAdmin-pages/Metricas.jsx";
 import SuperAdminLayout from "./components/layout/SuperAdminLayout.jsx";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <Route path="/admin" element={<AdminLogin />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      
+
     
       <Route path="/credenciais" element={<Navigate to="/super-admin/credenciais" replace />} />
 
