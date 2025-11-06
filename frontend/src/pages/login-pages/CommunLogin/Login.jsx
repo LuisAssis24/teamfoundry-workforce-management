@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
@@ -54,7 +55,9 @@ export default function LoginCandidate() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-
+                    <p className="text-xs text-accent text-right mt-0">
+                        <Link to="/forgot-password" className="link link-accent">Esqueceu-se?</Link>
+                    </p>
                     <Button label={loading ? "Entrando..." : "Entrar"} variant="primary" onClick={handleLogin}/>
 
                     <div className="divider">Ou</div>
@@ -77,6 +80,10 @@ export default function LoginCandidate() {
                         Login with LinkedIn
                     </button>
 
+                    <p className="text-xs text-gray-500 text-center !mt-0">
+                        <i className="bi bi-exclamation-octagon text-gray-400 mr-1"></i>
+                        Opções disponíveis apenas para candidatos.
+                    </p>
                 </div>
             </div>
         </main>
