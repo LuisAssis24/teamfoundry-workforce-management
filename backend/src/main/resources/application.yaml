@@ -2,6 +2,10 @@
 jwt:
   secret: ${JWT_SECRET:change-me-256-bit-secret-string-change-me}
   expiration-seconds: 3600
+
+app:
+  mail:
+    from: ${APP_MAIL_FROM:duscrias5@gmail.com}
 spring:
   application:
     name: teamfoundry
@@ -13,6 +17,17 @@ spring:
         format_sql: true
   main:
     allow-bean-definition-overriding: true
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp-relay.brevo.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:9b1ad8001@smtp-brevo.com}
+    password: ${SPRING_MAIL_PASSWORD:xsmtpsib-d7b4835ca148eae123c6e0a27c30f1c00cbc2980fbc1dd17b454eb3d02cc977b-yPYP94A462Ez70rC}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 8443

@@ -23,7 +23,7 @@ public class AccountDetailsService implements UserDetailsService {
         Account acc = repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<GrantedAuthority> auth = List.of(new SimpleGrantedAuthority("ROLE_" + acc.getRole().name()));
-        return new User(acc.getEmail(), acc.getPassword(), auth);
+        return new User(acc.getEmail(), acc.getPassword(), acc.isActive(), true, true, true, auth);
     }
 }
 

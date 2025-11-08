@@ -1,72 +1,95 @@
 package com.teamfoundry.backend.security.service;
+
+import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.Account;
-import com.teamfoundry.backend.account.repository.AccountRepository;
-import com.teamfoundry.backend.security.dto.AuthResponse;
+import com.teamfoundry.backend.account.model.AdminAccount;
+import com.teamfoundry.backend.account.model.CompanyAccount;
+import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.account.repository.AdminAccountRepository;
+import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
+import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.security.dto.LoginRequest;
-import com.teamfoundry.backend.security.dto.RefreshRequest;
-import com.teamfoundry.backend.security.model.AuthToken;
-import com.teamfoundry.backend.security.repository.AuthTokenRepository;
+import com.teamfoundry.backend.security.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.core.AuthenticationException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
-    private final AuthenticationManager authenticationManager;
-    private final AccountRepository accountRepository;
-    private final JwtService jwtService;
-    private final AuthTokenRepository authTokenRepository;
 
-    public AuthResponse login(LoginRequest req) {
-        try{
-            Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(req.email(), req.password()));
-        }catch(AuthenticationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+    private final AdminAccountRepository adminAccountRepository;
+    private final CompanyAccountRepository companyAccountRepository;
+    private final EmployeeAccountRepository employeeAccountRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public LoginResponse login(LoginRequest request) {
+        String identifier = request.email().trim();
+        String normalizedEmail = identifier.toLowerCase();
+
+        log.info("Tentativa de login recebida para {}", identifier);
+
+        Optional<LoginResponse> admin = adminAccountRepository.findByUsernameIgnoreCase(identifier)
+                .map(account -> validateAdmin(account, request.password()));
+
+        if (admin.isPresent()) {
+            return admin.get();
         }
 
-        Account acc = accountRepository.findByEmail(req.email())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials"));
-
-        String access = jwtService.generateToken(acc.getEmail(), acc.getRole().name(), acc.getId());
-        String refresh = UUID.randomUUID().toString();
-        Timestamp now = Timestamp.from(Instant.now());
-        Timestamp refreshExp = Timestamp.from(Instant.now().plus(30, ChronoUnit.DAYS));
-
-        AuthToken at = new AuthToken();
-        at.setUser(acc);
-        at.setToken(refresh);
-        at.setCreatedAt(now);
-        at.setExpireAt(refreshExp);
-        authTokenRepository.save(at);
-
-        return new AuthResponse(access, refresh, jwtService.getExpirationSeconds(), acc.getRole().name());
-    }
-
-    public AuthResponse refresh(RefreshRequest req) {
-        AuthToken token = authTokenRepository.findByToken(req.refreshToken())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token"));
-        if (token.getExpireAt().before(Timestamp.from(Instant.now()))) {
-            authTokenRepository.delete(token);
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired");
+        Optional<LoginResponse> company = companyAccountRepository.findByEmail(normalizedEmail)
+                .map(account -> validateAccount(account, request.password()));
+        if (company.isPresent()) {
+            return company.get();
         }
-        Account acc = token.getUser();
-        String access = jwtService.generateToken(acc.getEmail(), acc.getRole().name(), acc.getId());
-        return new AuthResponse(access, token.getToken(), jwtService.getExpirationSeconds(), acc.getRole().name());
+
+        Optional<LoginResponse> employee = employeeAccountRepository.findByEmail(normalizedEmail)
+                .map(account -> validateEmployee(account, request.password()));
+        if (employee.isPresent()) {
+            return employee.get();
+        }
+
+        log.warn("Login falhou para {}: utilizador não encontrado", identifier);
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
     }
 
-    public void logout(String refreshToken) {
-        authTokenRepository.deleteByToken(refreshToken);
+    private LoginResponse validateAdmin(AdminAccount adminAccount, String rawPassword) {
+        if (!passwordEncoder.matches(rawPassword, adminAccount.getPassword())) {
+            log.warn("Password incorreta para administrador {}", adminAccount.getUsername());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
+        }
+
+        return new LoginResponse(UserType.ADMIN.name(), "Login efetuado com sucesso");
+    }
+
+    private LoginResponse validateAccount(Account account, String rawPassword) {
+        ensurePasswordMatches(account, rawPassword);
+        ensureAccountIsActive(account);
+        return new LoginResponse(account.getRole().name(), "Login efetuado com sucesso");
+    }
+
+    private LoginResponse validateEmployee(EmployeeAccount employeeAccount, String rawPassword) {
+        ensurePasswordMatches(employeeAccount, rawPassword);
+        ensureAccountIsActive(employeeAccount);
+        return new LoginResponse(employeeAccount.getRole().name(), "Login efetuado com sucesso");
+    }
+
+    private void ensurePasswordMatches(Account account, String rawPassword) {
+        if (!passwordEncoder.matches(rawPassword, account.getPassword())) {
+            log.warn("Password incorreta para {}", account.getEmail());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
+        }
+    }
+
+    private void ensureAccountIsActive(Account account) {
+        if (!account.isActive()) {
+            log.warn("Conta {} ainda não está ativa", account.getEmail());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Conta ainda não foi verificada");
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import CompanyCredentialsList from "../../components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx";
-import Button from "../../components/ui/Button/Button.jsx";
+import CompanyCredentialsList from "../../../components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx";
+import Button from "../../../components/ui/Button/Button.jsx";
 
 export default function Credenciais() {
   const [businessCompanies] = useState([

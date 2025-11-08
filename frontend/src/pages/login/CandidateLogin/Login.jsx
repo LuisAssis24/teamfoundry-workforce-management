@@ -1,24 +1,41 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
 
+/**
+ * Tela de login usada por candidatos (mas aceita qualquer userType retornado pelo backend).
+ * Mostra erros devolvidos pela API e redireciona pelo tipo do utilizador.
+ */
 export default function LoginCandidate() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
+    const isFormValid = useMemo(() => email.trim() !== "" && password.trim() !== "", [email, password]);
+
+    /**
+     * Dispara o login contra o backend. O backend devolve { userType, message }.
+     * Conforme o tipo, navegamos para a área correspondente (podes ajustar os paths se existirem outros dashboards).
+     */
     const handleLogin = async () => {
+        if (!isFormValid || loading) return;
         setLoading(true);
         setError("");
-        setSuccess(false);
+        setSuccessMessage("");
         try {
-            const data = await login(email, password);
-            console.log("Login OK:", data);
-            setSuccess(true);
-            // redirecionar aqui se houver roteamento (ex.: react-router)
+            const data = await login(email.trim(), password);
+            setSuccessMessage(data.message);
+            const redirectMap = {
+                ADMIN: "/super-admin",
+                COMPANY: "/company/dashboard",
+                EMPLOYEE: "/candidate/dashboard",
+            };
+            navigate(redirectMap[data.userType] || "/");
         } catch (e) {
             setError(e.message || "Falha no login");
         } finally {
@@ -35,7 +52,7 @@ export default function LoginCandidate() {
                     </h2>
 
                     {error && <div className="alert alert-error">{error}</div>}
-                    {success && <div className="alert alert-success">Login efetuado com sucesso!</div>}
+                    {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
                     <InputField
                         label="Email"
@@ -55,7 +72,12 @@ export default function LoginCandidate() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <Button label={loading ? "Entrando..." : "Entrar"} variant="primary" onClick={handleLogin}/>
+                    <Button
+                        label={loading ? "Entrando..." : "Entrar"}
+                        variant="primary"
+                        onClick={handleLogin}
+                        disabled={loading || !isFormValid}
+                    />
 
                     <div className="divider">Ou</div>
 
@@ -77,6 +99,9 @@ export default function LoginCandidate() {
                         Login with LinkedIn
                     </button>
 
+                    <p className="text-sm text-center text-base-content/60">
+                        Opções disponíveis apenas para candidatos
+                    </p>
                 </div>
             </div>
         </main>
