@@ -98,13 +98,7 @@ public class CandidateRegistrationService {
         account.setActive(false);
 
         EmployeeAccount savedAccount = employeeAccountRepository.save(account);
-
-        authTokenRepository.deleteAllByUser(savedAccount);
-
-        AuthToken verificationToken = buildVerificationToken(savedAccount);
-        authTokenRepository.save(verificationToken);
-
-        log.info("Generated verification code {} for candidate {}", verificationToken.getToken(), savedAccount.getEmail());
+        issueVerificationCode(savedAccount);
 
         return GenericResponse.success("Conta criada com sucesso. Código enviado para o email.");
     }
@@ -191,6 +185,7 @@ public class CandidateRegistrationService {
         AuthToken token = buildVerificationToken(account);
         authTokenRepository.save(token);
         verificationEmailService.sendVerificationCode(account.getEmail(), token.getToken());
+        log.info("Generated verification code {} for candidate {}", token.getToken(), account.getEmail());
     }
 
     private AuthToken buildVerificationToken(EmployeeAccount account) {

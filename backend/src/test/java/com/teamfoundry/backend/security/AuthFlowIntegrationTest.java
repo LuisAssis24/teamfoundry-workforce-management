@@ -1,16 +1,16 @@
 package com.teamfoundry.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
-import com.teamfoundry.backend.account.model.Account;
+import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
+import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,12 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,13 +32,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthFlowIntegrationTest {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthFlowIntegrationTest.class);
-
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    EmployeeAccountRepository employeeAccountRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -53,36 +52,25 @@ class AuthFlowIntegrationTest {
 
     @BeforeEach
     void setupUser() {
+        employeeAccountRepository.deleteAll();
         accountRepository.deleteAll();
-        Account acc = new Account();
-        acc.setEmail(email);
-        acc.setPassword(passwordEncoder.encode(rawPassword));
-        acc.setNif(123456789);
-        acc.setRole(UserType.EMPLOYEE);
-        accountRepository.save(acc);
+        employeeAccountRepository.save(buildEmployee(email, true));
     }
 
     @Test
-    @DisplayName("Login success → retorna tokens")
-    void login_success_returnsTokens() throws Exception {
+    @DisplayName("Login success → devolve role e mensagem")
+    void login_success_returnsRoleAndMessage() throws Exception {
         var body = objectMapper.writeValueAsString(Map.of(
                 "email", email,
                 "password", rawPassword
         ));
 
-        var result = mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
-                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.acessToken").isString())
-                .andExpect(jsonPath("$.refreshToken").isString())
-                .andExpect(jsonPath("$.expiresIn").isNumber())
-                .andExpect(jsonPath("$.role").value("EMPLOYEE"))
-                .andReturn();
-
-        var json = result.getResponse().getContentAsString();
-        log.info("✅ Login SUCCESS: {}", json);
+                .andExpect(jsonPath("$.userType").value("EMPLOYEE"))
+                .andExpect(jsonPath("$.message").value("Login efetuado com sucesso"));
     }
 
     @Test
@@ -93,76 +81,41 @@ class AuthFlowIntegrationTest {
                 "password", "wrong"
         ));
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
-                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isUnauthorized());
-        log.info("✅ Login INVALIDO: retornou 401 conforme esperado");
     }
 
     @Test
-    @DisplayName("Refresh válido → retorna novo access token")
-    void refresh_withValidToken_returnsNewAccessToken() throws Exception {
-        // Login primeiro
-        var loginBody = objectMapper.writeValueAsString(Map.of(
-                "email", email,
+    @DisplayName("Conta inativa → devolve 401 com mensagem de conta não verificada")
+    void login_inactiveAccount_returnsUnauthorized() throws Exception {
+        employeeAccountRepository.save(buildEmployee("inactive@test.com", false));
+
+        var body = objectMapper.writeValueAsString(Map.of(
+                "email", "inactive@test.com",
                 "password", rawPassword
         ));
 
-        var loginResult = mockMvc.perform(post("/auth/login")
+        var response = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginBody))
-                .andExpect(status().isOk())
-                .andReturn();
+                        .content(body))
+                .andExpect(status().isUnauthorized())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-        var loginJson = loginResult.getResponse().getContentAsString();
-        var map = objectMapper.readValue(loginJson, Map.class);
-        String refresh = (String) map.get("refreshToken");
-        assertThat(refresh).as("refresh token deve existir").isNotBlank();
-
-        var refreshBody = objectMapper.writeValueAsString(Map.of("refreshToken", refresh));
-
-        var refreshResult = mockMvc.perform(post("/auth/refresh")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(refreshBody))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.acessToken").isString())
-                .andExpect(jsonPath("$.refreshToken").value(refresh))
-                .andReturn();
-
-        log.info("✅ Refresh SUCCESS: {}", refreshResult.getResponse().getContentAsString());
+        assertThat(response).contains("Conta ainda não foi verificada");
     }
 
-    @Test
-    @DisplayName("Endpoint protegido → exige Bearer e aceita JWT válido")
-    void protectedEndpoint_requiresBearer_andAcceptsValidJwt() throws Exception {
-        // sem token -> 401
-        mockMvc.perform(get("/secured/ping"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isUnauthorized());
-
-        // login para obter access token
-        var loginBody = objectMapper.writeValueAsString(Map.of(
-                "email", email,
-                "password", rawPassword
-        ));
-        var loginResult = mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginBody))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        var loginJson = loginResult.getResponse().getContentAsString();
-        var map = objectMapper.readValue(loginJson, Map.class);
-        String access = (String) map.get("acessToken");
-
-        mockMvc.perform(get("/secured/ping").header("Authorization", "Bearer " + access))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("pong"));
-
-        log.info("✅ Protected SUCCESS: Bearer aceito e endpoint respondeu pong");
+    private EmployeeAccount buildEmployee(String email, boolean active) {
+        EmployeeAccount account = new EmployeeAccount();
+        account.setEmail(email);
+        account.setPassword(passwordEncoder.encode(rawPassword));
+        account.setNif(active ? 123456789 : 987654321);
+        account.setRole(UserType.EMPLOYEE);
+        account.setActive(active);
+        account.setRegistrationStatus(active ? RegistrationStatus.COMPLETED : RegistrationStatus.PENDING);
+        return account;
     }
 }

@@ -5,6 +5,7 @@ import com.teamfoundry.backend.account.dto.VerificationResendRequest;
 import com.teamfoundry.backend.account.service.CandidateRegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Endpoints relacionados com a verificação via código (reenviar e validar).
  */
 @RestController
-@RequestMapping("/api/candidate/verification")
+@RequestMapping(value = "/api/candidate/verification", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CandidateVerificationController {
 

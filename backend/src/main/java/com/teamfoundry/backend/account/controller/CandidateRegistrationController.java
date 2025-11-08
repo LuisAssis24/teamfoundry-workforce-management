@@ -10,6 +10,7 @@ import com.teamfoundry.backend.account.service.exception.CandidateRegistrationEx
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/candidate/register")
+@RequestMapping(value = "/api/candidate/register", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CandidateRegistrationController {
 
