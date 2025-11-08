@@ -1,5 +1,6 @@
 package com.teamfoundry.backend.account.model;
 
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,13 +15,13 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true, nullable = false)
-    private int nif;
+    @Column(unique = true)
+    private Integer nif;
 
     @Column(nullable = false)
     private String password;
@@ -28,5 +29,11 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType role;
-}
 
+    @Column(nullable = false)
+    private boolean active = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "registration_status", nullable = false)
+    private RegistrationStatus registrationStatus = RegistrationStatus.PENDING;
+}
