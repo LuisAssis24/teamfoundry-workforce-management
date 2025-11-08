@@ -34,7 +34,7 @@ export default function ForgotPassword() {
           {error && <div className="alert alert-error">{error}</div>}
           {success && (
             <div className="alert alert-success">
-              Se o email existir, enviaremos instruções para recuperar a password.
+              Se o email existir, enviámos um código para redefinir a password.
             </div>
           )}
 

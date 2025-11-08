@@ -2,8 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import CandidateLogin from "./pages/login/CandidateLogin/Login.jsx";
 import AdminLogin from "./pages/login/AdminLogin/AdminLogin.jsx";
-import ForgotPassword from "./pages/login/ForgotPassword/ForgotPassword.jsx";
-import ResetPassword from "./pages/login/ResetPassword/ResetPassword.jsx";
+import ForgotPassword from "./pages/login/CandidateLogin/ForgotPassword.jsx";
+import ResetPassword from "./pages/login/CandidateLogin/ResetPassword.jsx";
 
 import RegisterLayout from "./layout/RegisterLayout.jsx";
 import RegisterStep1 from "./pages/register/RegisterStep1.jsx";

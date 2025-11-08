@@ -9,38 +9,37 @@ import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
+import com.teamfoundry.backend.account.service.VerificationEmailService;
 import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
 import com.teamfoundry.backend.security.model.PasswordResetToken;
 import com.teamfoundry.backend.security.repository.PasswordResetTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
-
     private final AdminAccountRepository adminAccountRepository;
     private final CompanyAccountRepository companyAccountRepository;
     private final EmployeeAccountRepository employeeAccountRepository;
     private final AccountRepository accountRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final VerificationEmailService verificationEmailService;
     private final PasswordEncoder passwordEncoder;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public LoginResponse login(LoginRequest request) {
         String identifier = request.email().trim();
@@ -50,7 +49,6 @@ public class AuthService {
 
         Optional<LoginResponse> admin = adminAccountRepository.findByUsernameIgnoreCase(identifier)
                 .map(account -> validateAdmin(account, request.password()));
-
         if (admin.isPresent()) {
             return admin.get();
         }
@@ -76,7 +74,6 @@ public class AuthService {
             log.warn("Password incorreta para administrador {}", adminAccount.getUsername());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciais inválidas");
         }
-
         return new LoginResponse(UserType.ADMIN.name(), "Login efetuado com sucesso");
     }
 
@@ -107,36 +104,43 @@ public class AuthService {
     }
 
     public void requestPasswordReset(String email) {
-        accountRepository.findByEmail(email).ifPresent(acc -> {
-            // Clean previous tokens for this user (optional but tidy)
+        accountRepository.findByEmail(email.trim().toLowerCase()).ifPresent(acc -> {
             passwordResetTokenRepository.deleteByUser(acc);
 
-            PasswordResetToken prt = new PasswordResetToken();
-            prt.setUser(acc);
-            prt.setToken(UUID.randomUUID().toString());
-            prt.setCreatedAt(Timestamp.from(Instant.now()));
-            prt.setExpireAt(Timestamp.from(Instant.now().plus(1, ChronoUnit.HOURS)));
-            passwordResetTokenRepository.save(prt);
+            PasswordResetToken token = new PasswordResetToken();
+            token.setUser(acc);
+            token.setToken(generateNumericCode(6));
+            token.setCreatedAt(Timestamp.from(Instant.now()));
+            token.setExpireAt(Timestamp.from(Instant.now().plus(1, ChronoUnit.HOURS)));
+            passwordResetTokenRepository.save(token);
 
-            // No email service configured; log token for integration/testing
-            LOGGER.info("Password reset token for {}: {} (expires in 1h)", acc.getEmail(), prt.getToken());
+            verificationEmailService.sendPasswordResetCode(acc.getEmail(), token.getToken());
+            log.info("Password reset code emitido para {}", acc.getEmail());
         });
-        // Always respond the same to avoid user enumeration
     }
 
-    public void resetPassword(String token, String newPassword) {
-        PasswordResetToken prt = passwordResetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset token"));
-        if (prt.getExpireAt().before(Timestamp.from(Instant.now()))) {
-            passwordResetTokenRepository.delete(prt);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token expired");
+    public void resetPassword(String email, String code, String newPassword) {
+        Account account = accountRepository.findByEmail(email.trim().toLowerCase())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email não encontrado"));
+
+        PasswordResetToken token = passwordResetTokenRepository.findByUserAndToken(account, code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código inválido"));
+
+        if (token.getExpireAt().before(Timestamp.from(Instant.now()))) {
+            passwordResetTokenRepository.delete(token);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código expirado");
         }
 
-        var user = prt.getUser();
-        user.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(user);
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+        passwordResetTokenRepository.deleteByUser(account);
+    }
 
-        // Invalidate used token(s)
-        passwordResetTokenRepository.deleteByUser(user);
+    private String generateNumericCode(int length) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            builder.append(secureRandom.nextInt(10));
+        }
+        return builder.toString();
     }
 }

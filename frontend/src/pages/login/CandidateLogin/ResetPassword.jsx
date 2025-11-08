@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { resetPassword } from "../../../api/auth.js";
 
 export default function ResetPassword() {
-  const [params] = useSearchParams();
-  const token = params.get("token") || "";
-
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,8 +18,8 @@ export default function ResetPassword() {
     setError("");
     setSuccess(false);
 
-    if (!token) {
-      setError("Token em falta ou inválido");
+    if (!email.trim() || !code.trim()) {
+      setError("Informe email e código recebidos.");
       return;
     }
     if (!newPassword || newPassword !== confirmPassword) {
@@ -30,7 +29,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      await resetPassword(token, newPassword);
+      await resetPassword(email.trim(), code.trim(), newPassword);
       setSuccess(true);
     } catch (e) {
       setError(e.message || "Falha ao redefinir password");
@@ -51,6 +50,28 @@ export default function ResetPassword() {
               Password redefinida com sucesso. Já pode iniciar sessão.
             </div>
           )}
+
+          <InputField
+            label="Email"
+            type="email"
+            placeholder="Insira o email da conta"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={<i className="bi bi-envelope"></i>}
+            disabled={success}
+            required
+          />
+
+          <InputField
+            label="Código recebido"
+            type="text"
+            placeholder="Código de 6 dígitos"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\\D/g, "").slice(0, 6))}
+            icon={<i className="bi bi-key"></i>}
+            disabled={success}
+            required
+          />
 
           <InputField
             label="Nova password"

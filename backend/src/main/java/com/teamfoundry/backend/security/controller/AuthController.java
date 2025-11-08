@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest req) {
-        authService.resetPassword(req.token(), req.newPassword());
+        authService.resetPassword(req.email(), req.code(), req.newPassword());
         return ResponseEntity.noContent().build();
     }
 }
