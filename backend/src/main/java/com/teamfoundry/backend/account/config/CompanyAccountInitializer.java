@@ -1,5 +1,6 @@
 package com.teamfoundry.backend.account.config;
 
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
@@ -53,6 +54,8 @@ public class CompanyAccountInitializer {
             company.setWebsite("https://www.blueorbitlabs.com");
             company.setDescription("Growth-stage HR analytics platform providing workforce insights.");
             company.setStatus(true);
+            company.setActive(true);
+            company.setRegistrationStatus(RegistrationStatus.COMPLETED);
 
             CompanyAccount savedCompany = accountRepository.save(company);
             LOGGER.info("Seeded default company account {}.", savedCompany.getEmail());
