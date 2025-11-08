@@ -2,6 +2,9 @@ package com.teamfoundry.backend.security.controller;
 
 import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
+import com.teamfoundry.backend.security.dto.RefreshRequest;
+import com.teamfoundry.backend.security.dto.ForgotPasswordRequest;
+import com.teamfoundry.backend.security.dto.ResetPasswordRequest;
 import com.teamfoundry.backend.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +24,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequest req) {
+        authService.requestPasswordReset(req.email());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest req) {
+        authService.resetPassword(req.token(), req.newPassword());
+        return ResponseEntity.noContent().build();
     }
 }

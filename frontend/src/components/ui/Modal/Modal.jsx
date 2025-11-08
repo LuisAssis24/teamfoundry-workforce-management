@@ -1,0 +1,39 @@
+import PropTypes from "prop-types";
+
+export default function Modal({ open, title, onClose, children, actions }) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        className="absolute inset-0 bg-black/30"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="relative bg-base-100 text-base-content rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+        {title && (
+          <h3 className="text-xl font-semibold mb-4 text-primary">{title}</h3>
+        )}
+        <div>{children}</div>
+        {actions && <div className="mt-6 flex justify-end gap-3">{actions}</div>}
+        <button
+          type="button"
+          className="absolute top-3 right-3 btn btn-ghost btn-sm"
+          onClick={onClose}
+          aria-label="Fechar"
+        >
+          <i className="bi bi-x-lg" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+Modal.propTypes = {
+  open: PropTypes.bool,
+  title: PropTypes.string,
+  onClose: PropTypes.func,
+  children: PropTypes.node,
+  actions: PropTypes.node,
+};
+

@@ -53,3 +53,30 @@ export function registerStep4(payload) {
 export function resendVerificationCode(email) {
   return httpPost("/api/candidate/verification/send", { email });
 }
+export async function forgotPassword(email) {
+  const resp = await apiFetch('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  }, { autoRefresh: false });
+
+  if (!resp.ok) {
+    const msg = await safeText(resp);
+    throw new Error(msg || 'Falha ao solicitar redefinição');
+  }
+}
+
+export async function resetPassword(token, newPassword) {
+  const resp = await apiFetch('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, newPassword })
+  }, { autoRefresh: false });
+
+  if (!resp.ok) {
+    const msg = await safeText(resp);
+    throw new Error(msg || 'Falha ao redefinir password');
+  }
+}
+
+async function safeText(resp) {
+  try { return await resp.text(); } catch { return ''; }
+}
