@@ -6,13 +6,13 @@ export default function Modal({ open, title, onClose, children, actions }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="absolute inset-0 bg-black/30"
+        className="absolute inset-0 bg-[#111827]/80 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
       <div className="relative bg-base-100 text-base-content rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
         {title && (
-          <h3 className="text-xl font-semibold mb-4 text-primary">{title}</h3>
+          <h3 className="text-3xl font-semibold mb-4 text-primary">{title}</h3>
         )}
         <div>{children}</div>
         {actions && <div className="mt-6 flex justify-end gap-3">{actions}</div>}
