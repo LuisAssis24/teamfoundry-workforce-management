@@ -9,6 +9,7 @@ import com.teamfoundry.backend.account.dto.VerificationResendRequest;
 import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.AuthTokenRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +59,7 @@ import java.util.Optional;
 public class CandidateRegistrationService {
 
     private final EmployeeAccountRepository employeeAccountRepository;
+    private final AccountRepository accountRepository;
     private final AuthTokenRepository authTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final FunctionRepository functionRepository;
@@ -79,6 +82,15 @@ public class CandidateRegistrationService {
     @Transactional
     public GenericResponse handleStep1(Step1Request request) {
         String normalizedEmail = request.getEmail().trim().toLowerCase();
+
+        accountRepository.findByEmail(normalizedEmail)
+                .filter(existing -> !(existing instanceof EmployeeAccount))
+                .ifPresent(existing -> {
+                    throw new CandidateRegistrationException(
+                            "O email informado já está associado a outro tipo de conta.",
+                            HttpStatus.CONFLICT
+                    );
+                });
         Optional<EmployeeAccount> existingAccountOpt = employeeAccountRepository.findByEmail(normalizedEmail);
 
         EmployeeAccount account = existingAccountOpt.orElseGet(EmployeeAccount::new);
@@ -97,10 +109,17 @@ public class CandidateRegistrationService {
         account.setRegistrationStatus(RegistrationStatus.PENDING);
         account.setActive(false);
 
-        EmployeeAccount savedAccount = employeeAccountRepository.save(account);
-        issueVerificationCode(savedAccount);
+        try {
+            employeeAccountRepository.save(account);
+        } catch (DataIntegrityViolationException ex) {
+            log.error("Violação de integridade ao criar conta para {}", normalizedEmail, ex);
+            throw new CandidateRegistrationException(
+                    "O email informado já está associado a outra conta.",
+                    HttpStatus.CONFLICT
+            );
+        }
 
-        return GenericResponse.success("Conta criada com sucesso. Código enviado para o email.");
+        return GenericResponse.success("Conta criada com sucesso. Continue para o passo 2.");
     }
 
     @Transactional

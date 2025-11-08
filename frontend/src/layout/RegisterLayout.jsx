@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import registerIllustration from "../../assets/images/logo/teamFoundry_LogoPrimary.png";
-import { RegistrationProvider, useRegistration } from "../../context/RegistrationContext.jsx";
+import registerIllustration from "../assets/images/logo/teamFoundry_LogoPrimary.png";
+import { RegistrationProvider, useRegistration } from "../context/RegistrationContext.jsx";
 
 const registerSteps = [
     { id: "step1", path: "/register/step1", label: "Credenciais" },

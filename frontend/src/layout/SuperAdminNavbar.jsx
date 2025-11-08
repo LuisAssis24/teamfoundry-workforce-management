@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import logo from "../..//assets/images/logo/teamFoundry_LogoPrimary.png";
+import logo from "../assets/images/logo/teamFoundry_LogoPrimary.png";
 
 const NAV_LINKS = [
   { to: "/super-admin/credenciais", label: "Credenciais" },

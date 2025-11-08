@@ -2,7 +2,6 @@ package com.teamfoundry.backend.security.controller;
 
 import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
-import com.teamfoundry.backend.security.dto.RefreshRequest;
 import com.teamfoundry.backend.security.dto.ForgotPasswordRequest;
 import com.teamfoundry.backend.security.dto.ResetPasswordRequest;
 import com.teamfoundry.backend.security.service.AuthService;

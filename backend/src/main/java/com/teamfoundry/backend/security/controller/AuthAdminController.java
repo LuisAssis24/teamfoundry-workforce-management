@@ -1,9 +1,9 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.security.controller;
 
 import com.teamfoundry.backend.account.dto.AdminLoginRequest;
 import com.teamfoundry.backend.account.dto.AdminLoginResponse;
 import com.teamfoundry.backend.account.enums.UserType;
-import com.teamfoundry.backend.account.service.AdminAuthenticationService;
+import com.teamfoundry.backend.security.service.AdminAuthService;
 import com.teamfoundry.backend.common.dto.ApiErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/admin")
-public class AdminLoginController {
+public class AuthAdminController {
 
-    private final AdminAuthenticationService adminAuthenticationService;
+    private final AdminAuthService adminAuthenticationService;
 
-    public AdminLoginController(AdminAuthenticationService adminAuthenticationService) {
+    public AuthAdminController(AdminAuthService adminAuthenticationService) {
         this.adminAuthenticationService = adminAuthenticationService;
     }
 

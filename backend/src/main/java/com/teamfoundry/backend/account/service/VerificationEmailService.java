@@ -1,8 +1,10 @@
 package com.teamfoundry.backend.account.service;
 
+import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,6 +23,9 @@ public class VerificationEmailService {
     @Value("${app.mail.from:no-reply@teamfoundry.com}")
     private String fromAddress;
 
+    @Value("${app.mail.enabled:true}")
+    private boolean mailEnabled;
+
     /**
      * Envia um e-mail simples com o código numérico.
      *
@@ -28,6 +33,11 @@ public class VerificationEmailService {
      * @param code        código de 6 dígitos gerado pelo backend
      */
     public void sendVerificationCode(String destination, String code) {
+        if (!mailEnabled) {
+            log.warn("Envio de e-mail desativado (app.mail.enabled=false). Código {} para {}", code, destination);
+            return;
+        }
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromAddress);
         message.setTo(destination);
@@ -40,7 +50,10 @@ public class VerificationEmailService {
             log.info("Código de verificação enviado para {}", destination);
         } catch (MailException ex) {
             log.error("Falha ao enviar e-mail de verificação para {}", destination, ex);
-            throw ex;
+            throw new CandidateRegistrationException(
+                    "Não foi possível enviar o e-mail de verificação. Tente novamente mais tarde.",
+                    HttpStatus.SERVICE_UNAVAILABLE
+            );
         }
     }
 }

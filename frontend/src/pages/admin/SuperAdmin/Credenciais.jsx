@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import CompanyCredentialsList from "../../components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx";
-import Button from "../../components/ui/Button/Button.jsx";
-import Modal from "../../components/ui/Modal/Modal.jsx";
+import CompanyCredentialsList from "../../../components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx";
+import Button from "../../../components/ui/Button/Button.jsx";
+import Modal from "../../../components/ui/Modal/Modal.jsx";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },

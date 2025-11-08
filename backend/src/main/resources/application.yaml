@@ -6,6 +6,7 @@ jwt:
 app:
   mail:
     from: ${APP_MAIL_FROM:duscrias5@gmail.com}
+    enabled: ${APP_MAIL_ENABLED:true}
 spring:
   application:
     name: teamfoundry
@@ -21,7 +22,7 @@ spring:
     host: ${SPRING_MAIL_HOST:smtp-relay.brevo.com}
     port: ${SPRING_MAIL_PORT:587}
     username: ${SPRING_MAIL_USERNAME:9b1ad8001@smtp-brevo.com}
-    password: ${SPRING_MAIL_PASSWORD:xsmtpsib-d7b4835ca148eae123c6e0a27c30f1c00cbc2980fbc1dd17b454eb3d02cc977b-yPYP94A462Ez70rC}
+    password: ${SPRING_MAIL_PASSWORD:xsmtpsib-d7b4835ca148eae123c6e0a27c30f1c00cbc2980fbc1dd17b454eb3d02cc977b-CTb76DjNBHPbbtSx}
     properties:
       mail:
         smtp:
@@ -112,6 +113,10 @@ spring:
       mode: never
 server:
   port: 8080
+
+app:
+  mail:
+    enabled: true
 
 # JWT configuration
 jwt:

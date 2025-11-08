@@ -9,6 +9,7 @@ import com.teamfoundry.backend.account.service.CandidateRegistrationService;
 import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/candidate/register", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Slf4j
 public class CandidateRegistrationController {
 
     private final CandidateRegistrationService registrationService;
@@ -67,6 +69,7 @@ public class CandidateRegistrationController {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
+        log.warn("Erro de validação no registo: {}", errors);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(GenericResponse.failure(errors));
@@ -74,6 +77,7 @@ public class CandidateRegistrationController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GenericResponse> handleUnexpectedExceptions(Exception exception) {
+        log.error("Erro inesperado no fluxo de registo", exception);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(GenericResponse.failure("Ocorreu um erro inesperado. Tente novamente."));

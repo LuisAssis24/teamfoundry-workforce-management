@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
+import logo from "../assets/images/logo/teamFoundry_LogoWhite.png";
 
 const NAV_LINKS = [
   { to: "#industrias", label: "As Indústrias" },

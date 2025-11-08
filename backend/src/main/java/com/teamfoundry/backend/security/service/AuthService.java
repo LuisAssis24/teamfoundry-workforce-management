@@ -5,42 +5,41 @@ import com.teamfoundry.backend.account.model.Account;
 import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
-import com.teamfoundry.backend.security.dto.RefreshRequest;
-import com.teamfoundry.backend.security.model.AuthToken;
 import com.teamfoundry.backend.security.model.PasswordResetToken;
-import com.teamfoundry.backend.security.repository.AuthTokenRepository;
 import com.teamfoundry.backend.security.repository.PasswordResetTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
+
     private final AdminAccountRepository adminAccountRepository;
     private final CompanyAccountRepository companyAccountRepository;
     private final EmployeeAccountRepository employeeAccountRepository;
+    private final AccountRepository accountRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse login(LoginRequest request) {
@@ -60,20 +59,6 @@ public class AuthService {
                 .map(account -> validateAccount(account, request.password()));
         if (company.isPresent()) {
             return company.get();
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
-    private final AuthenticationManager authenticationManager;
-    private final AccountRepository accountRepository;
-    private final JwtService jwtService;
-    private final AuthTokenRepository authTokenRepository;
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public AuthResponse login(LoginRequest req) {
-        try{
-            Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(req.email(), req.password()));
-        }catch(AuthenticationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
         Optional<LoginResponse> employee = employeeAccountRepository.findByEmail(normalizedEmail)
