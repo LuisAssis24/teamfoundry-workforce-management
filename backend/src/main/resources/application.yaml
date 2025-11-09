@@ -3,13 +3,9 @@ jwt:
   secret: ${JWT_SECRET:change-me-256-bit-secret-string-change-me}
   expiration-seconds: 3600
 
-app:
-  mail:
-    from: ${APP_MAIL_FROM:no-reply@teamfoundry.com}
-    enabled: ${APP_MAIL_ENABLED:true}
-  password-reset:
-    url: ${APP_PASSWORD_RESET_URL:http://localhost:5173/reset-password}
 spring:
+  config:
+    import: optional:file:../.env[.properties]
   application:
     name: teamfoundry
   profiles:
@@ -31,6 +27,13 @@ spring:
           auth: true
           starttls:
             enable: true
+
+app:
+  mail:
+    from: ${APP_MAIL_FROM}
+    enabled: ${APP_MAIL_ENABLED}
+  password-reset:
+    url: ${APP_PASSWORD_RESET_URL}
 
 server:
   port: 8443
