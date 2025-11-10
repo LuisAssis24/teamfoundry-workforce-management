@@ -61,7 +61,7 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/admin/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/auth/**", "/api/candidate/register/**", "/api/candidate/verification/**", "/api/profile-options", "/api/debug/**", "/api/admin/login", "/api/dev/accounts/**", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Opcional: permitir H2 console em dev/test

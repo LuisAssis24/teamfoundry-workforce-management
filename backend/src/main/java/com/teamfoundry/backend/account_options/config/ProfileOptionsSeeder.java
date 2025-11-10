@@ -48,28 +48,32 @@ public class ProfileOptionsSeeder {
 
     private List<Function> defaultFunctions() {
         return List.of(
-                jobFunction("Tubista"),
+                jobFunction("Eletricista"),
+                jobFunction("Canalizador"),
                 jobFunction("Soldador"),
-                jobFunction("Estuprador"),
-                jobFunction("Chefe de Equipa")
+                jobFunction("Carpinteiro"),
+                jobFunction("Pedreiro")
         );
     }
 
     private List<Competence> defaultCompetences() {
         return List.of(
-                competence("Experiência com Liderança"),
-                competence("Experiência com grupos grandes"),
-                competence("Experiência com grupos multiculturais"),
-                competence("Experiência com Trabalho na neve")
+                competence("Eletricista"),
+                competence("Canalizador"),
+                competence("Soldador"),
+                competence("Técnico de AVAC"),
+                competence("Pintor")
         );
     }
 
     private List<GeoArea> defaultGeoAreas() {
         return List.of(
-                geoArea("Europa Ocidental"),
-                geoArea("Europa Oriental"),
-                geoArea("Norte de África"),
-                geoArea("Nacional")
+                geoArea("Lisboa"),
+                geoArea("Porto"),
+                geoArea("Braga"),
+                geoArea("Faro"),
+                geoArea("Madeira"),
+                geoArea("Açores")
         );
     }
 

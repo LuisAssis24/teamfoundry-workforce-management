@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="small changes">
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Implement password reset functionality and update email service">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/uploads/cv/cv_18_1762615734951.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +90,11 @@
       </map>
     </option>
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="findNameReturnsValueFromRepository" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
@@ -135,7 +143,18 @@
       <workItem from="1762343772875" duration="5000" />
       <workItem from="1762344150441" duration="327000" />
       <workItem from="1762345186853" duration="419000" />
-      <workItem from="1762358190210" duration="4167000" />
+      <workItem from="1762358190210" duration="6393000" />
+      <workItem from="1762436874748" duration="230000" />
+      <workItem from="1762438641421" duration="5000" />
+      <workItem from="1762441766047" duration="281000" />
+      <workItem from="1762442119332" duration="49000" />
+      <workItem from="1762442232719" duration="101000" />
+      <workItem from="1762443631079" duration="16000" />
+      <workItem from="1762512585602" duration="531000" />
+      <workItem from="1762515533644" duration="32000" />
+      <workItem from="1762627382488" duration="2600000" />
+      <workItem from="1762702866572" duration="121000" />
+      <workItem from="1762704320510" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -161,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762345285968</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implement password reset functionality and update email service">
+      <option name="closed" value="true" />
+      <created>1762628616017</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762628616017</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,6 +197,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="paleta certa" />
     <MESSAGE value="small changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="small changes" />
+    <MESSAGE value="Implement password reset functionality and update email service" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement password reset functionality and update email service" />
   </component>
 </project>

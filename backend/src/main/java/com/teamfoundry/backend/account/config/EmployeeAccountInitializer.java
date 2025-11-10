@@ -1,5 +1,6 @@
 package com.teamfoundry.backend.account.config;
 
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
@@ -59,29 +60,29 @@ public class EmployeeAccountInitializer {
             List<EmployeeSeed> seeds = List.of(
                     new EmployeeSeed("joao.silva@teamfoundry.com", 201234567, "Joao", "Silva",
                             "+351912345678", "Portugal", "MALE", LocalDate.of(1990, 5, 21), "password123",
-                            List.of("Tubista"),
-                            List.of("Experiência com Liderança", "Experiência com grupos grandes"),
-                            List.of("Europa Ocidental")),
+                            List.of("Eletricista"),
+                            List.of("Eletricista", "Técnico de AVAC"),
+                            List.of("Lisboa", "Porto")),
                     new EmployeeSeed("maria.sousa@teamfoundry.com", 209876543, "Maria", "Sousa",
                             "+351932222333", "Portugal", "FEMALE", LocalDate.of(1992, 3, 17), "password123",
-                            List.of("Soldador"),
-                            List.of("Experiência com grupos multiculturais"),
-                            List.of("Europa Oriental")),
+                            List.of("Canalizador"),
+                            List.of("Canalizador"),
+                            List.of("Braga")),
                     new EmployeeSeed("carlos.oliveira@teamfoundry.com", 301234567, "Carlos", "Oliveira",
                             "+351915667788", "Portugal", "MALE", LocalDate.of(1988, 11, 2), "password123",
-                            List.of("Chefe de Equipa"),
-                            List.of("Experiência com Liderança"),
-                            List.of("Nacional")),
+                            List.of("Soldador"),
+                            List.of("Soldador", "Pintor"),
+                            List.of("Faro")),
                     new EmployeeSeed("ana.martins@teamfoundry.com", 309876543, "Ana", "Martins",
                             "+351934556677", "Portugal", "FEMALE", LocalDate.of(1995, 7, 8), "password123",
-                            List.of("Tubista"),
-                            List.of("Experiência com grupos grandes", "Experiência com Trabalho na neve"),
-                            List.of("Norte de África")),
+                            List.of("Carpinteiro"),
+                            List.of("Pintor"),
+                            List.of("Madeira")),
                     new EmployeeSeed("ricardo.pires@teamfoundry.com", 401234567, "Ricardo", "Pires",
                             "+351918889900", "Portugal", "MALE", LocalDate.of(1993, 1, 29), "password123",
-                            List.of("Soldador"),
-                            List.of("Experiência com grupos multiculturais", "Experiência com Trabalho na neve"),
-                            List.of("Europa Ocidental", "Europa Oriental"))
+                            List.of("Pedreiro"),
+                            List.of("Eletricista"),
+                            List.of("Açores"))
             );
 
             List<EmployeeFunction> functionRelations = new ArrayList<>();
@@ -100,6 +101,8 @@ public class EmployeeAccountInitializer {
                 employee.setNationality(seed.nationality());
                 employee.setGender(seed.gender());
                 employee.setBirthDate(seed.birthDate());
+                employee.setActive(true);
+                employee.setRegistrationStatus(RegistrationStatus.COMPLETED);
 
                 EmployeeAccount savedEmployee = accountRepository.save(employee);
                 LOGGER.info("Seeded employee account {}.", seed.email());

@@ -5,6 +5,7 @@ import com.teamfoundry.backend.account.model.CompanyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
 import java.util.List;
 
 /**
@@ -38,4 +39,6 @@ public interface CompanyAccountRepository extends JpaRepository<CompanyAccount, 
             ORDER BY c.id DESC
             """)
     List<CompanyCredentialResponse> findPendingCompanyCredentials();
+
+    Optional<CompanyAccount> findByEmail(String email);
 }

@@ -39,6 +39,10 @@ backend/.nb-gradle/
 # VS Code
 backend/.vscode/
 
+# Environment files
+.env
+.env.local
+
 # --- Frontend (Node/Vite) ---
 frontend/logs
 frontend/*.log
