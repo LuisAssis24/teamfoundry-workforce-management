@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { apiFetch } from "../../api/client.js";
+import { apiFetch } from "../../../api/client.js";
 import CompanyCredentialsList from "../../../components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import Modal from "../../../components/ui/Modal/Modal.jsx";
