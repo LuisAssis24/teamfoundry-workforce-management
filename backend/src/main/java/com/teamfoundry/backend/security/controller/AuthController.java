@@ -4,9 +4,15 @@ import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
 import com.teamfoundry.backend.security.dto.ForgotPasswordRequest;
 import com.teamfoundry.backend.security.dto.ResetPasswordRequest;
+import com.teamfoundry.backend.security.dto.LoginResult;
 import com.teamfoundry.backend.security.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +27,24 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+        LoginResult result = authService.login(request);
+        if (result.refreshToken() != null) {
+            ResponseCookie cookie = ResponseCookie.from("refresh_token", result.refreshToken())
+                    .httpOnly(true)
+                    .secure(false) // defina true em produção com HTTPS
+                    .path("/")
+                    .sameSite("Lax")
+                    .maxAge(result.refreshMaxAgeSeconds())
+                    .build();
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        } else {
+            // Garantir que admins/super-admins não ficam com refresh cookie antigo
+            ResponseCookie expired = ResponseCookie.from("refresh_token", "")
+                    .httpOnly(true).secure(false).path("/").sameSite("Lax").maxAge(0).build();
+            response.addHeader(HttpHeaders.SET_COOKIE, expired.toString());
+        }
+        return ResponseEntity.ok(result.response());
     }
 
     @PostMapping("/forgot-password")
@@ -34,6 +56,33 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest req) {
         authService.resetPassword(req.email(), req.code(), req.newPassword());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(HttpServletRequest request) {
+        String refresh = null;
+        if (request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("refresh_token".equals(c.getName())) { refresh = c.getValue(); break; }
+            }
+        }
+        LoginResponse resp = authService.refresh(refresh);
+        return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        String refresh = null;
+        if (request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("refresh_token".equals(c.getName())) { refresh = c.getValue(); break; }
+            }
+        }
+        authService.revokeRefresh(refresh);
+        ResponseCookie expired = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true).secure(false).path("/").sameSite("Lax").maxAge(0).build();
+        response.addHeader(HttpHeaders.SET_COOKIE, expired.toString());
         return ResponseEntity.noContent().build();
     }
 }

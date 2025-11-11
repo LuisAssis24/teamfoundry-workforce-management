@@ -6,8 +6,8 @@ import { httpPost } from "./http.js";
  * @param {string} password
  * @returns {Promise<{userType:string,message:string}>}
  */
-export function login(email, password) {
-  return httpPost("/api/auth/login", { email, password });
+export function login(email, password, rememberMe = false) {
+  return httpPost("/api/auth/login", { email, password, rememberMe });
 }
 
 /**

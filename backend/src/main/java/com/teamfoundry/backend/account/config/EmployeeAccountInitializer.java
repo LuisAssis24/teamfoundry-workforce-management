@@ -48,6 +48,23 @@ public class EmployeeAccountInitializer {
                                            EmployeeCompetenceRepository employeeCompetenceRepository,
                                            EmployeeGeoAreaRepository employeeGeoAreaRepository) {
         return args -> {
+            // Normalize existing accounts to active=true and COMPLETED
+            try {
+                var all = accountRepository.findAll();
+                boolean changed = false;
+                for (var acc : all) {
+                    boolean updated = false;
+                    if (!acc.isActive()) { acc.setActive(true); updated = true; }
+                    if (acc.getRegistrationStatus() != RegistrationStatus.COMPLETED) { acc.setRegistrationStatus(RegistrationStatus.COMPLETED); updated = true; }
+                    changed = changed || updated;
+                }
+                if (changed) {
+                    accountRepository.saveAll(all);
+                    LOGGER.info("Updated existing accounts to active=true and registrationStatus=COMPLETED where needed.");
+                }
+            } catch (Exception e) {
+                LOGGER.warn("Could not normalize existing accounts defaults: {}", e.getMessage());
+            }
             if (accountRepository.countByRole(UserType.EMPLOYEE) > 0) {
                 LOGGER.debug("Employee accounts already present; skipping seed.");
                 return;

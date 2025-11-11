@@ -3,6 +3,7 @@ package com.teamfoundry.backend.account.config;
 import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.CompanyAccount;
+import com.teamfoundry.backend.account.model.Account;
 import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account_options.model.ActivitySectors;
 import com.teamfoundry.backend.account_options.model.CompanyActivitySectors;
@@ -35,6 +36,24 @@ public class CompanyAccountInitializer {
                                          ActivitySectorsRepository activitySectorsRepository,
                                          CompanyActivitySectorsRepository companyActivitySectorsRepository) {
         return args -> {
+            // Ensure all existing accounts are marked active/completed
+            try {
+                var all = accountRepository.findAll();
+                boolean changed = false;
+                for (Account acc : all) {
+                    boolean updated = false;
+                    if (!acc.isActive()) { acc.setActive(true); updated = true; }
+                    if (acc.getRegistrationStatus() != RegistrationStatus.COMPLETED) { acc.setRegistrationStatus(RegistrationStatus.COMPLETED); updated = true; }
+                    changed = changed || updated;
+                }
+                if (changed) {
+                    accountRepository.saveAll(all);
+                    LOGGER.info("Updated existing accounts to active=true and registrationStatus=COMPLETED where needed.");
+                }
+            } catch (Exception e) {
+                LOGGER.warn("Could not normalize existing accounts defaults: {}", e.getMessage());
+            }
+
             if (accountRepository.countByRole(UserType.COMPANY) > 0) {
                 LOGGER.debug("Company account already present; skipping seed.");
                 return;

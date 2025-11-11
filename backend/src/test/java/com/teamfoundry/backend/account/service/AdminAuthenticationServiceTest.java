@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.teamfoundry.backend.security.service.AdminAuthService;
 
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ class AdminAuthenticationServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private AdminAuthenticationService adminAuthenticationService;
+    private AdminAuthService adminAuthenticationService;
 
     @Test
     @DisplayName("authenticate devolve role quando user e password são válidos")

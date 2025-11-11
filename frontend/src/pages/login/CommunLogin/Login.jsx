@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
@@ -7,6 +7,7 @@ import { login } from "../../../api/auth.js";
 export default function LoginCandidate() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -16,7 +17,7 @@ export default function LoginCandidate() {
         setError("");
         setSuccess(false);
         try {
-            const data = await login(email, password);
+            const data = await login(email, password, rememberMe);
             console.log("Login OK:", data);
             setSuccess(true);
             // redirecionar aqui se houver roteamento (ex.: react-router)
@@ -55,10 +56,40 @@ export default function LoginCandidate() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <p className="text-xs text-accent text-right mt-0">
-                        <Link to="/forgot-password" className="link link-accent">Esqueceu-se?</Link>
-                    </p>
-                    <Button label={loading ? "Entrando..." : "Entrar"} variant="primary" onClick={handleLogin}/>
+                    {/* Lembrar-me */}
+                    <div className="flex items-center justify-center text-xs mt-0 space-x-1">
+                        <label className="label cursor-pointer gap-2">
+                            <input
+                                type="checkbox"
+                                className="checkbox checkbox-sm"
+                                checked={rememberMe}
+                                onChange={() => setRememberMe(!rememberMe)}
+                            />
+                            <span className="label-text text-xs">Lembrar-me</span>
+                        </label>
+                        <p className="text-xs text-accent text-right mt-0">
+                            <Link to="forgot-password" className="link link-accent">Esqueceu-se?</Link>
+                        </p>
+                    </div>
+
+
+
+                    <Button
+                        label={loading ? "Entrando..." : "Entrar"}
+                        variant="primary"
+                        onClick={handleLogin}
+                    />
+
+                    {/* Registe-se */}
+                    <div className="flex justify-center items-center text-xs mt-2 space-x-2 text-center">
+                        <span className="text-gray-500">Não possui conta?</span>
+                        <Link
+                            to="register"
+                            className="text-accent font-medium hover:underline inline-block"
+                        >
+                            Registe-se
+                        </Link>
+                    </div>
 
                     <div className="divider">Ou</div>
 
@@ -86,6 +117,7 @@ export default function LoginCandidate() {
                     </p>
                 </div>
             </div>
+            <Outlet />
         </main>
     );
 }

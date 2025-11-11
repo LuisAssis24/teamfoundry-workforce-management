@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import CandidateLogin from "./pages/login/CandidateLogin/Login.jsx";
+import CandidateLogin from "./pages/login/CommunLogin/Login.jsx";
 import AdminLogin from "./pages/login/AdminLogin/AdminLogin.jsx";
-import ForgotPassword from "./pages/login/CandidateLogin/ForgotPassword.jsx";
-import ResetPassword from "./pages/login/CandidateLogin/ResetPassword.jsx";
+import ForgotPassword from "./pages/login/CommunLogin/ForgotPassword.jsx";
+import ResetPassword from "./pages/login/CommunLogin/ResetPassword.jsx";
 
 import RegisterLayout from "./layout/RegisterLayout.jsx";
 import RegisterStep1 from "./pages/register/RegisterStep1.jsx";
@@ -31,7 +31,7 @@ import Metricas from "./pages/admin/SuperAdmin/Metricas.jsx";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<CandidateLogin />} />
+        {/*<Route path="/" element={<CommunLogin />} />*/}
       <Route path="/admin" element={<AdminLogin />} />
       <Route path="/register" element={<RegisterLayout />}>
         <Route index element={<Navigate to="step1" replace />} />
@@ -40,9 +40,11 @@ function App() {
         <Route path="step3" element={<RegisterStep3 />} />
         <Route path="step4" element={<RegisterStep4 />} />
       </Route>
-      
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route path="/login" element={<CandidateLogin />}>
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+        </Route>
 
       {/* Candidato */}
       <Route path="/candidato" element={<CandidateLayout />}>

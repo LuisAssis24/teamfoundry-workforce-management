@@ -93,7 +93,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of("http://localhost:5173"));
+        // Allow common localhost dev origins (Vite may choose a free port like 5173/5174)
+        cfg.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://localhost:*",
+                "http://127.0.0.1:*",
+                "https://127.0.0.1:*"
+        ));
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
         cfg.setAllowCredentials(true);
