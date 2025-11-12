@@ -1,7 +1,7 @@
-import ProfileHeader from "../../components/candidate/ProfileHeader.jsx";
+﻿import ProfileHeader from "../../components/candidate/ProfileHeader.jsx";
 import CandidateTabs from "../../components/candidate/CandidateTabs.jsx";
 
-export default function UltimosTrabalhos() {
+export default function RecentJobs() {
   return (
     <section>
       <ProfileHeader />
@@ -22,16 +22,16 @@ export default function UltimosTrabalhos() {
               </div>
             </div>
 
-            {/* Linha 2: Função */}
+            {/* Linha 2: FunÃ§Ã£o */}
             <div className="border-t border-base-300 px-4 py-3 flex items-center gap-3 text-sm">
               <i className="bi bi-briefcase" aria-hidden="true" />
-              <span className="text-base-content/90">Função: Trolhista</span>
+              <span className="text-base-content/90">FunÃ§Ã£o: Trolhista</span>
             </div>
 
             {/* Linha 3: Pagamento */}
             <div className="border-t border-base-300 px-4 py-3 flex items-center gap-3 text-sm">
               <i className="bi bi-cash-coin" aria-hidden="true" />
-              <span className="text-base-content/90">Pagamento: 17€/ hora</span>
+              <span className="text-base-content/90">Pagamento: 17â‚¬/ hora</span>
             </div>
           </div>
         </div>
@@ -39,3 +39,5 @@ export default function UltimosTrabalhos() {
     </section>
   );
 }
+
+

@@ -1,9 +1,9 @@
-import InputField from "../../components/ui/Input/InputField.jsx";
+﻿import InputField from "../../components/ui/Input/InputField.jsx";
 import Button from "../../components/ui/Button/Button.jsx";
 import CandidateTabs from "../../components/candidate/CandidateTabs.jsx";
 import ProfileHeader from "../../components/candidate/ProfileHeader.jsx";
 
-export default function DadosPessoais() {
+export default function PersonalDetails() {
   return (
     <section>
       <ProfileHeader />
@@ -15,7 +15,16 @@ export default function DadosPessoais() {
           <InputField label="Nome" placeholder="Introduza o nome" />
           <InputField label="Apelido" placeholder="Introduza o apelido" />
           <InputField label="Data de Nascimento" type="date" />
-          <InputField label="Género" placeholder="Masculino/Feminino/Outro" />
+          <InputField
+            label="Género"
+            as="select"
+            placeholder="Selecione o género"
+            defaultValue=""
+          >
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="outro">Outro</option>
+          </InputField>
           <InputField label="Nacionalidade" placeholder="Ex.: Portuguesa" />
           <InputField label="NIF" placeholder="123456789" />
           <div className="md:col-span-2">
@@ -32,3 +41,5 @@ export default function DadosPessoais() {
     </section>
   );
 }
+
+

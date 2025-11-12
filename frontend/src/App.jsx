@@ -14,13 +14,13 @@ import RegisterStep4 from "./pages/register/RegisterStep4.jsx";
 import CandidateLayout, {
   CandidateIndexRedirect,
 } from "./layout/CandidateLayout.jsx";
-import DadosPessoais from "./pages/candidate/DadosPessoais.jsx";
-import Formacao from "./pages/candidate/Formacao.jsx";
-import UltimosTrabalhos from "./pages/candidate/UltimosTrabalhos.jsx";
-import Preferencias from "./pages/candidate/Preferencias.jsx";
-import AlertasEmprego from "./pages/candidate/alertas/AlertasEmprego.jsx";
-import Documentos from "./pages/candidate/documentos/Documentos.jsx";
-import ProximosPassos from "./pages/candidate/proximos/ProximosPassos.jsx";
+import PersonalDetails from "./pages/candidate/PersonalDetails.jsx";
+import Education from "./pages/candidate/Education.jsx";
+import RecentJobs from "./pages/candidate/RecentJobs.jsx";
+import Preferences from "./pages/candidate/Preferences.jsx";
+import AlertasEmprego from "./pages/candidate/alerts/AlertasEmprego.jsx";
+import Documentos from "./pages/candidate/documents/Documentos.jsx";
+import ProximosPassos from "./pages/candidate/next-steps/ProximosPassos.jsx";
 
 import SuperAdminLayout from "./layout/SuperAdminLayout.jsx";
 import Credenciais from "./pages/admin/SuperAdmin/Credenciais.jsx";
@@ -49,10 +49,10 @@ function App() {
       {/* Candidato */}
       <Route path="/candidato" element={<CandidateLayout />}>
         <Route index element={<CandidateIndexRedirect />} />
-        <Route path="dados-pessoais" element={<DadosPessoais />} />
-        <Route path="formacao" element={<Formacao />} />
-        <Route path="ultimos-trabalhos" element={<UltimosTrabalhos />} />
-        <Route path="preferencias" element={<Preferencias />} />
+        <Route path="dados-pessoais" element={<PersonalDetails />} />
+        <Route path="formacao" element={<Education />} />
+        <Route path="ultimos-trabalhos" element={<RecentJobs />} />
+        <Route path="preferencias" element={<Preferences />} />
         {/* Secções fora do Perfil */}
         <Route path="alertas" element={<AlertasEmprego />} />
         <Route path="documentos" element={<Documentos />} />
