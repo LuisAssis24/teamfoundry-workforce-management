@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import CandidateLogin from "./pages/login/UserLogin/UserLogin.jsx";
 import AdminLogin from "./pages/login/AdminLogin/AdminLogin.jsx";
-import ForgotPassword from "./pages/login/UserLogin/components/ForgotPassword.jsx";
+import ForgotPassword from "./pages/login/UserLogin/ForgotPassword.jsx";
 import ResetPassword from "./pages/login/UserLogin/ResetPassword.jsx";
 
 import EmployeeRegisterLayout from "./pages/register/EmployeeRegister/EmployeeRegisterLayout.jsx";

@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.company.model;
+package com.teamfoundry.backend.admin.model;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import jakarta.persistence.*;

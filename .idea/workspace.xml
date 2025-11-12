@@ -4,55 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Backend inicia, server email com problemas">
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/sections/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/home/HomeNoLogin/HomeNoLogin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml" beforeDir="false" />
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Company Register Frontend, Refactor pesado">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step1Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step2Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step3Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step4Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/VerificationResendRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/candidate/CandidateTabs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileTabs.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/candidate/ProfileHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileHeader.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/CompanyCredentialsList/CompanyCredentialsCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Credentials/components/CompanyCredentialsCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/CompanyCredentialsList/CompanyCredentialsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Credentials/components/CompanyCredentialsList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectInput.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/context/RegistrationContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/EmployeeRegister/EmployeeRegisterContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/CandidateLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeLayout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/CandidateNavbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/sections/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/CandidateSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeSidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/RegisterLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/EmployeeRegister/EmployeeRegisterLayout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/SuperAdminLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/SuperAdminLayout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/SuperAdminNavbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/SuperAdminNavbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Credenciais.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Credentials/Credenciais.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/GestaoTrabalho.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Staffing/Staffing.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Metricas.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/SuperAdmin/Metrics/Metrics.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/Education.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Education.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/PersonalDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/Preferences.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/RecentJobs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/alerts/AlertasEmprego.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/JobAlerts/AlertasEmprego.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/documents/Documentos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Documents/Documentos.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/candidate/next-steps/ProximosPassos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/NextSteps/ProximosPassos.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/CommunLogin/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/components/ForgotPassword.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/CommunLogin/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/CommunLogin/ResetPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ResetPassword.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep1.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep2.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep3.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep4.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/components/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="EmplyeeRegister" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -135,11 +90,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\login\UserLogin" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Metrics" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Staffing" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Credentials\components" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Credentials" />
-      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin" />
     </key>
   </component>
   <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
@@ -171,7 +126,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Jest.findNameReturnsValueFromRepository" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Jest.findNameReturnsValueFromRepository" />
         <item itemvalue="Jest.findNameReturnsValueFromRepository" />
       </list>
     </recent_temporary>

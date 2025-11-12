@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.debug;
+package com.teamfoundry.backend.common;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.account.dto.login;
 
 import com.teamfoundry.backend.account.enums.UserType;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
-package com.teamfoundry.backend.company.model;
+package com.teamfoundry.backend.admin.model;
 
-import com.teamfoundry.backend.company.enums.State;
+import com.teamfoundry.backend.admin.enums.State;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import jakarta.persistence.*;
 import lombok.*;

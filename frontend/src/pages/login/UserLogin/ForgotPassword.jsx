@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "../../../../components/ui/Input/InputField.jsx";
-import Button from "../../../../components/ui/Button/Button.jsx";
-import Modal from "../../../../components/ui/Modal/Modal.jsx";
-import { forgotPassword } from "../../../../api/auth.js";
+import InputField from "../../../components/ui/Input/InputField.jsx";
+import Button from "../../../components/ui/Button/Button.jsx";
+import Modal from "../../../components/ui/Modal/Modal.jsx";
+import { forgotPassword } from "../../../api/auth.js";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
