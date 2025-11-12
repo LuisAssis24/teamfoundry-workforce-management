@@ -1,11 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import ProfileHeader from "../../components/candidate/ProfileHeader.jsx";
 import CandidateTabs from "../../components/candidate/CandidateTabs.jsx";
 import Button from "../../components/ui/Button/Button.jsx";
 import InputField from "../../components/ui/Input/InputField.jsx";
 import Modal from "../../components/ui/Modal/Modal.jsx";
 
-export default function Formacao() {
+export default function Education() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ nome: "", local: "", data: "", file: null });
 
@@ -40,19 +40,19 @@ export default function Formacao() {
                 <div className="h-8 w-8 rounded-md bg-base-200 flex items-center justify-center">
                   <i className="bi bi-mortarboard" />
                 </div>
-                <span className="font-semibold">Ensino Secundário</span>
+                <span className="font-semibold">Ensino SecundÃ¡rio</span>
               </div>
               <span className="px-3 py-1 rounded-full bg-primary text-primary-content text-xs">Certificado</span>
             </div>
             <div className="border-t border-base-300 px-4 py-3 flex items-center justify-between text-sm">
-              <span className="text-base-content/80">Instituição: Agrup. dos Nós</span>
+              <span className="text-base-content/80">InstituiÃ§Ã£o: Agrup. dos NÃ³s</span>
               <span className="text-base-content/80">24/12/2004</span>
             </div>
           </div>
 
           <div className="mt-6 flex justify-center">
             <div className="w-56">
-              <Button label="Adicionar Formação" onClick={() => setOpen(true)} />
+              <Button label="Adicionar FormaÃ§Ã£o" onClick={() => setOpen(true)} />
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function Formacao() {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title="Nova Formação"
+        title="Nova FormaÃ§Ã£o"
         actions={(
           <>
             <button type="button" className="btn btn-neutral" onClick={() => setOpen(false)}>
@@ -79,9 +79,9 @@ export default function Formacao() {
       >
         <div className="space-y-4">
           <InputField
-            label="Nome da Formação"
+            label="Nome da FormaÃ§Ã£o"
             name="nome"
-            placeholder="Ex.: Ensino Secundário"
+            placeholder="Ex.: Ensino SecundÃ¡rio"
             value={form.nome}
             onChange={handleChange}
           />
@@ -93,7 +93,7 @@ export default function Formacao() {
             onChange={handleChange}
           />
           <div>
-            <label className="label"><span className="label-text font-medium">Data de Conclusão</span></label>
+            <label className="label"><span className="label-text font-medium">Data de ConclusÃ£o</span></label>
             <input
               type="date"
               name="data"
@@ -125,3 +125,5 @@ export default function Formacao() {
     </section>
   );
 }
+
+
