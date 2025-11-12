@@ -1,18 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import logo from "../../../assets/images/logo/teamFoundry_LogoPrimary.png";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { clearTokens } from "../../../auth/tokenStorage.js";
+import logo from "../../../../src/assets/images/logo/teamFoundry_LogoPrimary.png";
 
 const NAV_LINKS = [
-  { to: "/super-admin/credenciais", label: "Credenciais" },
-  { to: "/super-admin/gestao-trabalho", label: "Gestao de trabalho" },
-  { to: "/super-admin/gestao-site", label: "Gestao do Site" },
-  { to: "/super-admin/metricas", label: "Metrics" },
+  { to: "/admin/super/credenciais", label: "Credenciais" },
+  { to: "/admin/super/gestao-trabalho", label: "Gestão de trabalho" },
+  { to: "/admin/super/gestao-site", label: "Gestão do Site" },
+  { to: "/admin/super/metricas", label: "Métricas" },
 ];
 
 export default function SuperAdminNavbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [underline, setUnderline] = useState({ width: 0, left: 0 });
   const location = useLocation();
+  const navigate = useNavigate();
   const profileRef = useRef(null);
   const navListRef = useRef(null);
 
@@ -45,6 +47,12 @@ export default function SuperAdminNavbar() {
     }
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isProfileOpen]);
+
+  const handleLogout = () => {
+    clearTokens();
+    setIsProfileOpen(false);
+    navigate("/admin", { replace: true });
+  };
 
   return (
       <header className="bg-base-100 border-b border-base-200 shadow-sm">
@@ -117,6 +125,7 @@ export default function SuperAdminNavbar() {
                   <button
                       type="button"
                       className="w-full text-left px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150"
+                      onClick={handleLogout}
                   >
                     Fazer logout
                   </button>

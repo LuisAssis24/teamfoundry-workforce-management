@@ -12,4 +12,7 @@ import lombok.Data;
 public class AdminLoginResponse {
 
     private UserType role;
+    private String accessToken;
+    private long expiresInSeconds;
+    private String refreshToken;
 }

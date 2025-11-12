@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.security.controller;
 
-import com.teamfoundry.backend.account.dto.AdminLoginRequest;
-import com.teamfoundry.backend.account.dto.AdminLoginResponse;
+import com.teamfoundry.backend.account.dto.login.AdminLoginRequest;
+import com.teamfoundry.backend.account.dto.login.AdminLoginResponse;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.security.service.AdminAuthService;
 import com.teamfoundry.backend.common.dto.ApiErrorResponse;
@@ -27,17 +27,13 @@ public class AuthAdminController {
         this.adminAuthenticationService = adminAuthenticationService;
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AdminLoginRequest request) {
-        return adminAuthenticationService
-                .authenticate(request.getUsername(), request.getPassword())
-                .<ResponseEntity<?>>map(this::buildSuccessResponse)
+        return adminAuthenticationService.authenticate(request.getUsername(), request.getPassword())
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(this::buildUnauthorizedResponse);
     }
 
-    private ResponseEntity<AdminLoginResponse> buildSuccessResponse(UserType role) {
-        return ResponseEntity.ok(new AdminLoginResponse(role));
-    }
 
     private ResponseEntity<ApiErrorResponse> buildUnauthorizedResponse() {
         return ResponseEntity

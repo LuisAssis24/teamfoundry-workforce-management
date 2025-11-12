@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.account.dto.credentials;
 
 import com.teamfoundry.backend.account.enums.UserType;
 import jakarta.validation.constraints.NotBlank;
@@ -18,5 +18,9 @@ public record AdminCredentialRequest(
         String password,
 
         @NotNull(message = "role é obrigatório")
-        UserType role
+        UserType role,
+
+        @NotBlank(message = "superAdminPassword é obrigatório")
+        String superAdminPassword
 ) {}
+
