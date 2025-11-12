@@ -1,10 +1,10 @@
 package com.teamfoundry.backend.account.controller;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
-import com.teamfoundry.backend.account.dto.Step1Request;
-import com.teamfoundry.backend.account.dto.Step2Request;
-import com.teamfoundry.backend.account.dto.Step3Request;
-import com.teamfoundry.backend.account.dto.Step4Request;
+import com.teamfoundry.backend.account.dto.register.Step1Request;
+import com.teamfoundry.backend.account.dto.register.Step2Request;
+import com.teamfoundry.backend.account.dto.register.Step3Request;
+import com.teamfoundry.backend.account.dto.register.Step4Request;
 import com.teamfoundry.backend.account.service.CandidateRegistrationService;
 import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
 import jakarta.validation.Valid;

@@ -1,11 +1,11 @@
 package com.teamfoundry.backend.account.service;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
-import com.teamfoundry.backend.account.dto.Step1Request;
-import com.teamfoundry.backend.account.dto.Step2Request;
-import com.teamfoundry.backend.account.dto.Step3Request;
-import com.teamfoundry.backend.account.dto.Step4Request;
-import com.teamfoundry.backend.account.dto.VerificationResendRequest;
+import com.teamfoundry.backend.account.dto.register.Step1Request;
+import com.teamfoundry.backend.account.dto.register.Step2Request;
+import com.teamfoundry.backend.account.dto.register.Step3Request;
+import com.teamfoundry.backend.account.dto.register.Step4Request;
+import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
 import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.EmployeeAccount;

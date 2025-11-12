@@ -11,7 +11,11 @@ import lombok.*;
 public class CompanyAccountOwner {
 
     @Id
+    @Column(name = "id_empresa")
+    private Integer id;
+
     @OneToOne
+    @MapsId
     @JoinColumn(name = "id_empresa", referencedColumnName = "id", nullable = false)
     private CompanyAccount companyAccount;
 

@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.account.controller;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
-import com.teamfoundry.backend.account.dto.VerificationResendRequest;
+import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
 import com.teamfoundry.backend.account.service.CandidateRegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
