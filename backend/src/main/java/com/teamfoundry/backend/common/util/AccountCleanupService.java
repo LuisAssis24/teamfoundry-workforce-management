@@ -2,11 +2,11 @@ package com.teamfoundry.backend.common.util;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
-import com.teamfoundry.backend.account.repository.AuthTokenRepository;
 import com.teamfoundry.backend.account_options.repository.CurriculumRepository;
 import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
 import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
 import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.security.repository.AuthTokenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.repository;
+package com.teamfoundry.backend.security.repository;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.security.model.AuthToken;

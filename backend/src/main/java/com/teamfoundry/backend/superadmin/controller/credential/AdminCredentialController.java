@@ -1,9 +1,9 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.superadmin.controller.credential;
 
-import com.teamfoundry.backend.account.dto.AdminCredentialRequest;
-import com.teamfoundry.backend.account.dto.AdminCredentialResponse;
-import com.teamfoundry.backend.account.dto.AdminCredentialUpdateRequest;
 import com.teamfoundry.backend.account.service.AdminCredentialService;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.superadmin.dto.credential;
 
 /**
  * Representa a resposta mínima necessária para exibir

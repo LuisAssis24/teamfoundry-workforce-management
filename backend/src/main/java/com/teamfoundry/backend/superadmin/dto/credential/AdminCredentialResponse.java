@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.superadmin.dto.credential;
 
 import com.teamfoundry.backend.account.enums.UserType;
 

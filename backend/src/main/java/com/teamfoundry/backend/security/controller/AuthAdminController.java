@@ -1,8 +1,9 @@
 package com.teamfoundry.backend.security.controller;
 
-import com.teamfoundry.backend.account.dto.AdminLoginRequest;
-import com.teamfoundry.backend.account.dto.AdminLoginResponse;
+
 import com.teamfoundry.backend.account.enums.UserType;
+import com.teamfoundry.backend.security.dto.login.AdminLoginRequest;
+import com.teamfoundry.backend.security.dto.login.AdminLoginResponse;
 import com.teamfoundry.backend.security.service.AdminAuthService;
 import com.teamfoundry.backend.common.dto.ApiErrorResponse;
 import jakarta.validation.Valid;

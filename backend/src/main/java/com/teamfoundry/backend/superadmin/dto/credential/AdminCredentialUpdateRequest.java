@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.superadmin.dto.credential;
 
 import com.teamfoundry.backend.account.enums.UserType;
 import jakarta.validation.constraints.NotBlank;
@@ -6,17 +6,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * Payload enviado pelo super admin ao criar um novo administrador.
+ * Payload usado para atualizar administradores.
+ * O campo password é opcional; é aplicado apenas se vier preenchido.
  */
-public record AdminCredentialRequest(
+public record AdminCredentialUpdateRequest(
         @NotBlank(message = "username é obrigatório")
         @Size(min = 3, max = 60)
         String username,
 
-        @NotBlank(message = "password é obrigatória")
-        @Size(min = 8, max = 120)
-        String password,
-
         @NotNull(message = "role é obrigatório")
-        UserType role
+        UserType role,
+
+        @Size(min = 8, max = 120, message = "password deve possuir entre 8 e 120 caracteres")
+        String password
 ) {}

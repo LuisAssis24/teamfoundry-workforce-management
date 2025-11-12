@@ -5,7 +5,7 @@ import com.teamfoundry.backend.account.dto.company.CompanyRegistrationRequest;
 import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.CompanyAccount;
-import com.teamfoundry.backend.account.model.CompanyAccountOwner;
+import com.teamfoundry.backend.account.model.CompanyAccountManager;
 import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountOwnerRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
@@ -71,7 +71,7 @@ public class CompanyRegistrationService {
 
         CompanyAccount savedCompany = companyAccountRepository.save(companyAccount);
 
-        CompanyAccountOwner owner = new CompanyAccountOwner();
+        CompanyAccountManager owner = new CompanyAccountManager();
         owner.setCompanyAccount(savedCompany);
         owner.setId(savedCompany.getId());
         owner.setName(request.responsibleName().trim());

@@ -1,6 +1,6 @@
 package com.teamfoundry.backend.account.repository;
 
-import com.teamfoundry.backend.account.dto.CompanyCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +20,7 @@ public interface CompanyAccountRepository extends JpaRepository<CompanyAccount, 
      * carregamentos adicionais na camada de serviço.
      */
     @Query("""
-            SELECT new com.teamfoundry.backend.account.dto.CompanyCredentialResponse(
+            SELECT new com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse(
                 c.id,
                 c.name,
                 c.email,
@@ -28,13 +28,13 @@ public interface CompanyAccountRepository extends JpaRepository<CompanyAccount, 
                 c.address,
                 c.nif,
                 c.country,
-                owner.name,
-                owner.email,
-                owner.phone,
-                owner.position
+                manager.name,
+                manager.email,
+                manager.phone,
+                manager.position
             )
             FROM CompanyAccount c
-            LEFT JOIN CompanyAccountOwner owner ON owner.companyAccount = c
+            LEFT JOIN CompanyAccountManager manager ON manager.companyAccount = c
             WHERE c.status = false
             ORDER BY c.id DESC
             """)

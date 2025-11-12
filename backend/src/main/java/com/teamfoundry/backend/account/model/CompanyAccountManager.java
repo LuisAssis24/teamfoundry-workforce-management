@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "responsavel_conta_empresa")
-public class CompanyAccountOwner {
+public class CompanyAccountManager {
 
     @Id
     @Column(name = "id_empresa")

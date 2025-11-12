@@ -1,6 +1,6 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.dto.CompanyCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

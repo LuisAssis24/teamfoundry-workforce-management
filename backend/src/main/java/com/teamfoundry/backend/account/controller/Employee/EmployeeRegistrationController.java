@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.account.controller.Employee;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
 import com.teamfoundry.backend.account.dto.register.Step1Request;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/candidate/register", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Slf4j
-public class CandidateRegistrationController {
+public class EmployeeRegistrationController {
 
     private final CandidateRegistrationService registrationService;
 

@@ -7,7 +7,7 @@ import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.repository.AccountRepository;
-import com.teamfoundry.backend.account.repository.AuthTokenRepository;
+import com.teamfoundry.backend.security.repository.AuthTokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

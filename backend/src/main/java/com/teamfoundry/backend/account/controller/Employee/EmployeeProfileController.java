@@ -1,7 +1,7 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.account.controller.Employee;
 
-import com.teamfoundry.backend.account.dto.CandidateProfileResponse;
-import com.teamfoundry.backend.account.dto.CandidateProfileUpdateRequest;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileResponse;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileUpdateRequest;
 import com.teamfoundry.backend.account.service.CandidateProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/candidate/profile", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class CandidateProfileController {
+public class EmployeeProfileController {
 
     private final CandidateProfileService candidateProfileService;
 
     @GetMapping
-    public CandidateProfileResponse getProfile(Authentication authentication) {
+    public EmployeeProfileResponse getProfile(Authentication authentication) {
         return candidateProfileService.getProfile(resolveEmail(authentication));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CandidateProfileResponse updateProfile(
-            @Valid @RequestBody CandidateProfileUpdateRequest request,
+    public EmployeeProfileResponse updateProfile(
+            @Valid @RequestBody EmployeeProfileUpdateRequest request,
             Authentication authentication) {
         return candidateProfileService.updateProfile(resolveEmail(authentication), request);
     }

@@ -1,6 +1,6 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.superadmin.controller.credential;
 
-import com.teamfoundry.backend.account.dto.CompanyCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse;
 import com.teamfoundry.backend.account.service.CompanyCredentialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

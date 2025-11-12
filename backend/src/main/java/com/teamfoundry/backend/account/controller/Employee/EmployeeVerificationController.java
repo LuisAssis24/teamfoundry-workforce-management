@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.account.controller.Employee;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
 import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/candidate/verification", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class CandidateVerificationController {
+public class EmployeeVerificationController {
 
     private final CandidateRegistrationService candidateRegistrationService;
 
