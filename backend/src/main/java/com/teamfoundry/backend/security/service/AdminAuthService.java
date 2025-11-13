@@ -1,14 +1,10 @@
 package com.teamfoundry.backend.security.service;
 
-import com.teamfoundry.backend.account.enums.UserType;
-import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
+import com.teamfoundry.backend.security.dto.login.AdminLoginResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.teamfoundry.backend.account.dto.login.AdminLoginResponse;
-
-
 
 import java.util.Optional;
 
