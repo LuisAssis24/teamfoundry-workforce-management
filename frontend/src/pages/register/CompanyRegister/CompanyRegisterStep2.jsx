@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import MultiSelectDropdown from "../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
 import { fetchCompanyOptions } from "../../../api/company.js";
+
+const DESCRIPTION_MAX_CHARS = 600;
 
 /**
  * Passo 2 do registo de empresa: dados institucionais.
@@ -20,6 +22,7 @@ export default function CompanyRegisterStep2() {
   const [errors, setErrors] = useState({});
   const [options, setOptions] = useState({ activitySectors: [], countries: [] });
   const [loadingOptions, setLoadingOptions] = useState(true);
+  const descriptionLength = description.length;
 
   useEffect(() => {
     let isMounted = true;
@@ -56,6 +59,15 @@ export default function CompanyRegisterStep2() {
     if (!country) newErrors.country = "Selecione um país.";
     if (!address.trim()) newErrors.address = "Informe a morada.";
     return newErrors;
+  };
+
+  const handleDescriptionChange = (event) => {
+    const value = event.target.value;
+    if (value.length <= DESCRIPTION_MAX_CHARS) {
+      setDescription(value);
+    } else {
+      setDescription(value.slice(0, DESCRIPTION_MAX_CHARS));
+    }
   };
 
   const handleSubmit = (event) => {
@@ -127,16 +139,19 @@ export default function CompanyRegisterStep2() {
 
         <InputField label="Morada" value={address} onChange={(e) => setAddress(e.target.value)} error={errors.address} />
 
-        <div className="form-control">
-          <label className="label">
+        <div className="form-control flex flex-col">
+          <label className="label justify-between items-center gap-2">
             <span className="label-text font-medium">Descrição</span>
+            <span className={`text-xs ${descriptionLength >= DESCRIPTION_MAX_CHARS ? "text-error" : "text-base-content/60"}`}>
+              {descriptionLength}/{DESCRIPTION_MAX_CHARS} caracteres
+            </span>
           </label>
           <textarea
-            className="textarea textarea-bordered"
+            className="textarea textarea-bordered w-full resize-none"
             rows={4}
             placeholder="Conte-nos sobre a empresa"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleDescriptionChange}
           />
         </div>
 

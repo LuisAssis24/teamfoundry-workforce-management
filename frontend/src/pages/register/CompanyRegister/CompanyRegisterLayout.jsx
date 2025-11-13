@@ -5,7 +5,7 @@ import { CompanyRegistrationProvider, useCompanyRegistration } from "./CompanyRe
 
 const steps = [
   { id: "step1", path: "/company-register/step1", label: "Credenciais" },
-  { id: "step2", path: "/company-register/step2", label: "Empresa" },
+  { id: "step2", path: "/company-register/step2", label: "Dados da empresa" },
   { id: "step3", path: "/company-register/step3", label: "Submissão" },
 ];
 
@@ -53,7 +53,7 @@ function CompanyRegisterLayoutInner() {
           </div>
 
           <div className="p-8 sm:p-10 lg:p-12 flex flex-col">
-            <nav className="flex flex-wrap items-center gap-2 text-sm">
+            <nav className="flex flex-wrap items-center justify-center gap-2 text-sm">
               {steps.map((step, index) => {
                 const isActive = index === currentStepIndex;
                 const isCompleted = completedSteps.includes(index + 1) && !isActive;
@@ -72,7 +72,8 @@ function CompanyRegisterLayoutInner() {
                       onClick={() => goToStep(index + 1)}
                       disabled={!canAccessStep(index + 1)}
                     >
-                      {`Passo ${index + 1}: ${step.label}`}
+                      <span aria-hidden="true">{index + 1}</span>
+                      <span className="sr-only">{step.label}</span>
                     </button>
                     {index < steps.length - 1 && (
                       <span className="text-base-content/40">

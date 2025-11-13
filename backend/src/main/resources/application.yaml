@@ -34,6 +34,12 @@ app:
     enabled: ${APP_MAIL_ENABLED}
   password-reset:
     url: ${APP_PASSWORD_RESET_URL}
+  registration:
+    cv-upload-dir: uploads/cv
+    verification:
+      expiration-minutes: 30
+    pending-retention-minutes: 60
+    pending-cleanup-interval-ms: 300000
 
 server:
   port: 8443
