@@ -1,8 +1,8 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialRequest;
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialResponse;
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialUpdateRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialUpdateRequest;
 import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import lombok.RequiredArgsConstructor;

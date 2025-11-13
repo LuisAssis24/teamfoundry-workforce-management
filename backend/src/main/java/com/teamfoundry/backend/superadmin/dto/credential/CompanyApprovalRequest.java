@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto.credentials;
+package com.teamfoundry.backend.superadmin.dto.credential;
 
 import jakarta.validation.constraints.NotBlank;
 

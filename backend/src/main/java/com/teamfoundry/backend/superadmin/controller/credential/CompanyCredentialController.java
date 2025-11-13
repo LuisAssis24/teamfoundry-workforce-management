@@ -1,7 +1,7 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.superadmin.controller.credential;
 
-import com.teamfoundry.backend.account.dto.credentials.CompanyApprovalRequest;
-import com.teamfoundry.backend.account.dto.credentials.CompanyCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyApprovalRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse;
 import com.teamfoundry.backend.account.service.CompanyCredentialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

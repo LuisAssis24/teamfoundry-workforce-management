@@ -1,7 +1,6 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.dto.credentials.CompanyApprovalRequest; // (se precisar em outro lugar)
-import com.teamfoundry.backend.account.dto.credentials.CompanyCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.CompanyCredentialResponse;
 import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;

@@ -1,9 +1,9 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.superadmin.controller.credential;
 
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialDisableRequest;
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialRequest;
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialResponse;
-import com.teamfoundry.backend.account.dto.credentials.AdminCredentialUpdateRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialDisableRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialRequest;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialResponse;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialUpdateRequest;
 import com.teamfoundry.backend.account.service.AdminCredentialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
