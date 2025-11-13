@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.account.dto.Employee;
 
 import lombok.Builder;
 import lombok.Value;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Value
 @Builder
-public class CandidateProfileResponse {
+public class EmployeeProfileResponse {
     String firstName;
     String lastName;
     String gender;

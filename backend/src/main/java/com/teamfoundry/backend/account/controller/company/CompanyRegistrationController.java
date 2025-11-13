@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.controller;
+package com.teamfoundry.backend.account.controller.company;
 
 import com.teamfoundry.backend.account.dto.GenericResponse;
 import com.teamfoundry.backend.account.dto.company.CompanyRegistrationRequest;

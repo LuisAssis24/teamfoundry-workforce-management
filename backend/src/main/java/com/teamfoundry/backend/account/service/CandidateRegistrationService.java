@@ -10,7 +10,6 @@ import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
-import com.teamfoundry.backend.account.repository.AuthTokenRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
 import com.teamfoundry.backend.account.service.exception.DuplicateEmailException;
@@ -29,6 +28,7 @@ import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaReposit
 import com.teamfoundry.backend.account_options.repository.FunctionRepository;
 import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
 import com.teamfoundry.backend.security.model.AuthToken;
+import com.teamfoundry.backend.security.repository.AuthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

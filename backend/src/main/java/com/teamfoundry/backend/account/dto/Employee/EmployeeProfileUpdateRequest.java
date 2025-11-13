@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.account.dto.Employee;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
  */
 @Getter
 @Setter
-public class CandidateProfileUpdateRequest {
+public class EmployeeProfileUpdateRequest {
 
     @NotBlank
     @Size(min = 2, max = 100)

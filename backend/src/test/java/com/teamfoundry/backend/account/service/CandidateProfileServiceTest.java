@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.dto.CandidateProfileResponse;
-import com.teamfoundry.backend.account.dto.CandidateProfileUpdateRequest;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileResponse;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileUpdateRequest;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ class CandidateProfileServiceTest {
         when(employeeAccountRepository.findByEmail("candidate@example.com"))
                 .thenReturn(Optional.of(sampleAccount));
 
-        CandidateProfileResponse response = candidateProfileService.getProfile("Candidate@Example.com  ");
+        EmployeeProfileResponse response = candidateProfileService.getProfile("Candidate@Example.com  ");
 
         assertThat(response.getFirstName()).isEqualTo("Joao");
         assertThat(response.getLastName()).isEqualTo("Silva");
@@ -75,7 +75,7 @@ class CandidateProfileServiceTest {
         when(employeeAccountRepository.save(any(EmployeeAccount.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        CandidateProfileUpdateRequest request = new CandidateProfileUpdateRequest();
+        EmployeeProfileUpdateRequest request = new EmployeeProfileUpdateRequest();
         request.setFirstName("Maria");
         request.setLastName("Sousa");
         request.setGender("female");
@@ -84,7 +84,7 @@ class CandidateProfileServiceTest {
         request.setNif(987654321);
         request.setPhone("+351999888777");
 
-        CandidateProfileResponse response = candidateProfileService.updateProfile("candidate@example.com", request);
+        EmployeeProfileResponse response = candidateProfileService.updateProfile("candidate@example.com", request);
 
         assertThat(response.getFirstName()).isEqualTo("Maria");
         assertThat(response.getLastName()).isEqualTo("Sousa");

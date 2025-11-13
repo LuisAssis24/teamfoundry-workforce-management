@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto.login;
+package com.teamfoundry.backend.security.dto.login;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
