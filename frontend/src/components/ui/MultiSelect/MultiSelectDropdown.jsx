@@ -13,6 +13,7 @@ export default function MultiSelectDropdown({
   selectedOptions,
   onChange,
   placeholder = "Selecione uma ou mais opções",
+  disabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -46,6 +47,12 @@ export default function MultiSelectDropdown({
   }, []);
 
   useEffect(() => {
+    if (disabled && isOpen) {
+      setIsOpen(false);
+    }
+  }, [disabled, isOpen]);
+
+  useEffect(() => {
     setHasOverflowed(false);
   }, [selectedOptions.length]);
 
@@ -72,6 +79,7 @@ export default function MultiSelectDropdown({
    * Adiciona ou remove uma opção mantendo o array controlado pelo pai.
    */
   const toggleOption = (value) => {
+    if (disabled) return;
     if (selectedOptions.includes(value)) {
       onChange(selectedOptions.filter((item) => item !== value));
     } else {
@@ -88,6 +96,7 @@ export default function MultiSelectDropdown({
   };
 
   const handleTriggerKeyDown = (event) => {
+    if (disabled) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setIsOpen((prev) => !prev);
@@ -106,11 +115,12 @@ export default function MultiSelectDropdown({
         <div
           role="button"
           tabIndex={0}
-          className={`input input-bordered w-full flex items-center justify-between gap-2 ${
+          className={`input input-bordered w-full flex items-center justify-between gap-2 ${disabled ? "opacity-60 cursor-not-allowed" : ""} ${
             selectedOptions.length === 0 ? "text-base-content/70" : ""
           }`}
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => !disabled && setIsOpen((prev) => !prev)}
           onKeyDown={handleTriggerKeyDown}
+          aria-disabled={disabled}
         >
           <div
             ref={chipsRef}
@@ -147,7 +157,7 @@ export default function MultiSelectDropdown({
             aria-hidden
           ></i>
         </div>
-        {isOpen && (
+        {isOpen && !disabled && (
           <ul className="absolute left-0 right-0 z-20 mt-2 menu menu-sm p-2 shadow bg-base-100 rounded-box border border-base-200">
             {normalizedOptions.map(({ value, label: optionLabel }) => (
               <li key={value}>
@@ -188,4 +198,5 @@ MultiSelectDropdown.propTypes = {
   selectedOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
+  disabled: PropTypes.bool,
 };

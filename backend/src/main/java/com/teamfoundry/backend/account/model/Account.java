@@ -4,6 +4,9 @@ import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -36,4 +39,8 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(name = "registration_status", nullable = false)
     private RegistrationStatus registrationStatus = RegistrationStatus.PENDING;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Instant createdAt;
 }

@@ -1,0 +1,36 @@
+Index: frontend/src/pages/login/CandidateLogin/Login.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from \"react\";\r\nimport { Link } from \"react-router-dom\";\r\nimport InputField from \"../../../components/ui/Input/InputField.jsx\";\r\nimport Button from \"../../../components/ui/Button/Button.jsx\";\r\nimport { login } from \"../../../api/auth.js\";\r\n\r\nexport default function LoginCandidate() {\r\n    const [email, setEmail] = useState(\"\");\r\n    const [password, setPassword] = useState(\"\");\r\n    const [loading, setLoading] = useState(false);\r\n    const [error, setError] = useState(\"\");\r\n    const [success, setSuccess] = useState(false);\r\n\r\n    const handleLogin = async () => {\r\n        setLoading(true);\r\n        setError(\"\");\r\n        setSuccess(false);\r\n        try {\r\n            const data = await login(email, password);\r\n            console.log(\"Login OK:\", data);\r\n            setSuccess(true);\r\n            // redirecionar aqui se houver roteamento (ex.: react-router)\r\n        } catch (e) {\r\n            setError(e.message || \"Falha no login\");\r\n        } finally {\r\n            setLoading(false);\r\n        }\r\n    };\r\n\r\n    return (\r\n        <main className=\"min-h-screen flex items-center justify-center bg-base-200\">\r\n            <div className=\"card w-full max-w-md shadow-md bg-base-100\">\r\n                <div className=\"card-body space-y-6\">\r\n                    <h2 className=\"text-center text-2xl font-bold text-primary mb-4\">\r\n                        Login\r\n                    </h2>\r\n\r\n                    {error && <div className=\"alert alert-error\">{error}</div>}\r\n                    {success && <div className=\"alert alert-success\">Login efetuado com sucesso!</div>}\r\n\r\n                    <InputField\r\n                        label=\"Email\"\r\n                        placeholder=\"Insira o seu email\"\r\n                        icon={<i className=\"bi bi-envelope\"></i>}\r\n                        type=\"email\"\r\n                        value={email}\r\n                        onChange={(e) => setEmail(e.target.value)}\r\n                    />\r\n\r\n                    <InputField\r\n                        label=\"Password\"\r\n                        placeholder=\"Insira a sua password\"\r\n                        icon={<i className=\"bi bi-lock\"></i>}\r\n                        type=\"password\"\r\n                        value={password}\r\n                        onChange={(e) => setPassword(e.target.value)}\r\n                    />\r\n                    <p className=\"text-xs text-accent text-right mt-0\">\r\n                        <Link to=\"/forgot-password\" className=\"link link-accent\">Esqueceu-se?</Link>\r\n                    </p>\r\n                    <Button label={loading ? \"Entrando...\" : \"Entrar\"} variant=\"primary\" onClick={handleLogin}/>\r\n\r\n                    <div className=\"divider\">Ou</div>\r\n\r\n                    {/* Email */}\r\n                    <button className=\"btn bg-white text-black border-[#e5e5e5]\">\r\n                        <svg aria-label=\"Email icon\" width=\"16\" height=\"16\" xmlns=\"http://www.w3.org/2000/svg\"\r\n                             viewBox=\"0 0 24 24\">\r\n                            <g strokeLinejoin=\"round\" strokeLinecap=\"round\" strokeWidth=\"2\" fill=\"none\" stroke=\"black\">\r\n                                <rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect>\r\n                                <path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path>\r\n                            </g>\r\n                        </svg>\r\n                        Login with Email\r\n                    </button>\r\n\r\n                    {/* LinkedIn*/}\r\n                    <button className=\"btn bg-[#0967C2] text-white border-[#0059b3]\">\r\n                        <svg aria-label=\"LinkedIn logo\" width=\"16\" height=\"16\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><path fill=\"white\" d=\"M26.111,3H5.889c-1.595,0-2.889,1.293-2.889,2.889V26.111c0,1.595,1.293,2.889,2.889,2.889H26.111c1.595,0,2.889-1.293,2.889-2.889V5.889c0-1.595-1.293-2.889-2.889-2.889ZM10.861,25.389h-3.877V12.87h3.877v12.519Zm-1.957-14.158c-1.267,0-2.293-1.034-2.293-2.31s1.026-2.31,2.293-2.31,2.292,1.034,2.292,2.31-1.026,2.31-2.292,2.31Zm16.485,14.158h-3.858v-6.571c0-1.802-.685-2.809-2.111-2.809-1.551,0-2.362,1.048-2.362,2.809v6.571h-3.718V12.87h3.718v1.686s1.118-2.069,3.775-2.069,4.556,1.621,4.556,4.975v7.926Z\" fillRule=\"evenodd\"></path></svg>\r\n                        Login with LinkedIn\r\n                    </button>\r\n\r\n                    <p className=\"text-xs text-gray-500 text-center !mt-0\">\r\n                        <i className=\"bi bi-exclamation-octagon text-gray-400 mr-1\"></i>\r\n                        Opções disponíveis apenas para candidatos.\r\n                    </p>\r\n                </div>\r\n            </div>\r\n        </main>\r\n    );\r\n}\r\n
+===================================================================
+diff --git a/frontend/src/pages/login/CandidateLogin/Login.jsx b/frontend/src/pages/login/CandidateLogin/Login.jsx
+--- a/frontend/src/pages/login/CandidateLogin/Login.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
++++ b/frontend/src/pages/login/CandidateLogin/Login.jsx	(date 1762879752488)
+@@ -28,7 +28,7 @@
+     };
+ 
+     return (
+-        <main className="min-h-screen flex items-center justify-center bg-base-200">
++        <main className="min-h-screen flex flex-col items-center justify-center bg-base-200 px-4 py-8 gap-4">
+             <div className="card w-full max-w-md shadow-md bg-base-100">
+                 <div className="card-body space-y-6">
+                     <h2 className="text-center text-2xl font-bold text-primary mb-4">
+@@ -84,8 +84,14 @@
+                         <i className="bi bi-exclamation-octagon text-gray-400 mr-1"></i>
+                         Opções disponíveis apenas para candidatos.
+                     </p>
+-                </div>
+-            </div>
+-        </main>
+-    );
++        </div>
++      </div>
++      <p className="mt-6 text-center text-sm text-base-content/80">
++        É responsável de uma empresa?{" "}
++        <Link to="/register/company/step1" className="link link-primary font-semibold">
++          Inicie o registo corporativo
++        </Link>
++      </p>
++    </main>
++  );
+ }

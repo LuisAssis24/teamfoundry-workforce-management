@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.dto.CandidateProfileResponse;
-import com.teamfoundry.backend.account.dto.CandidateProfileUpdateRequest;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileResponse;
+import com.teamfoundry.backend.account.dto.Employee.EmployeeProfileUpdateRequest;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ public class CandidateProfileService {
     private final EmployeeAccountRepository employeeAccountRepository;
 
     @Transactional(readOnly = true)
-    public CandidateProfileResponse getProfile(String email) {
+    public EmployeeProfileResponse getProfile(String email) {
         EmployeeAccount account = findByEmailOrThrow(email);
         return toResponse(account);
     }
 
     @Transactional
-    public CandidateProfileResponse updateProfile(String email, CandidateProfileUpdateRequest request) {
+    public EmployeeProfileResponse updateProfile(String email, EmployeeProfileUpdateRequest request) {
         EmployeeAccount account = findByEmailOrThrow(email);
 
         account.setName(request.getFirstName().trim());
@@ -47,8 +47,8 @@ public class CandidateProfileService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Perfil nao encontrado."));
     }
 
-    private CandidateProfileResponse toResponse(EmployeeAccount account) {
-        return CandidateProfileResponse.builder()
+    private EmployeeProfileResponse toResponse(EmployeeAccount account) {
+        return EmployeeProfileResponse.builder()
                 .firstName(account.getName())
                 .lastName(account.getSurname())
                 .gender(account.getGender())
