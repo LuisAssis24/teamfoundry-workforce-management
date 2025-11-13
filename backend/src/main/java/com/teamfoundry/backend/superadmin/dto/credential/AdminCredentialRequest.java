@@ -18,5 +18,9 @@ public record AdminCredentialRequest(
         String password,
 
         @NotNull(message = "role é obrigatório")
-        UserType role
+        UserType role,
+
+        @NotBlank(message = "superAdminPassword é obrigatório")
+        String superAdminPassword
 ) {}
+

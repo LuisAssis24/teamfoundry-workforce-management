@@ -12,6 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import com.teamfoundry.backend.account.enums.UserType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class AdminCredentialService {
 
     private final AdminAccountRepository adminAccountRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final String ADMIN_TOKEN_PREFIX = "admin:";
 
     public List<AdminCredentialResponse> listAdminCredentials() {
         return adminAccountRepository
@@ -36,6 +41,8 @@ public class AdminCredentialService {
 
     @Transactional
     public AdminCredentialResponse createAdmin(AdminCredentialRequest request) {
+        validateSuperAdminPassword(request.superAdminPassword());
+
         adminAccountRepository.findByUsername(request.username()).ifPresent(existing -> {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username já utilizado");
         });
@@ -51,6 +58,8 @@ public class AdminCredentialService {
 
     @Transactional
     public AdminCredentialResponse updateAdmin(int id, AdminCredentialUpdateRequest request) {
+        validateSuperAdminPassword(request.superAdminPassword());
+
         AdminAccount admin = adminAccountRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado"));
 
@@ -69,6 +78,59 @@ public class AdminCredentialService {
 
         AdminAccount saved = adminAccountRepository.save(admin);
         return toResponse(saved);
+    }
+
+    private void validateSuperAdminPassword(String rawPassword) {
+        String sanitized = rawPassword == null ? "" : rawPassword.trim();
+        if (sanitized.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password do super admin é obrigatória");
+        }
+
+        AdminAccount requester = resolveAuthenticatedAdmin();
+        if (requester.getRole() != UserType.SUPERADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Somente super admins podem alterar credenciais");
+        }
+
+        if (!passwordEncoder.matches(sanitized, requester.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Password do super admin inválida");
+        }
+    }
+
+    @Transactional
+    public void disableAdmin(int id, String superAdminPassword) {
+        validateSuperAdminPassword(superAdminPassword);
+
+        AdminAccount requester = resolveAuthenticatedAdmin();
+        AdminAccount admin = adminAccountRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado"));
+
+        if (admin.getId() == requester.getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível desativar a própria conta.");
+        }
+
+        if (admin.getRole() == UserType.SUPERADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Não é permitido desativar contas de super admin.");
+        }
+
+        adminAccountRepository.delete(admin);
+    }
+
+
+
+    private AdminAccount resolveAuthenticatedAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Autenticação requerida");
+        }
+
+        String principal = authentication.getName();
+        if (principal == null || !principal.startsWith(ADMIN_TOKEN_PREFIX)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Somente super admins podem alterar credenciais");
+        }
+
+        String username = principal.substring(ADMIN_TOKEN_PREFIX.length());
+        return adminAccountRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Conta do super admin não encontrada"));
     }
 
     private AdminCredentialResponse toResponse(AdminAccount admin) {

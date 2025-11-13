@@ -27,7 +27,7 @@ import Documentos from "./pages/profile/Employee/Documents/Documentos.jsx";
 import ProximosPassos from "./pages/profile/Employee/NextSteps/ProximosPassos.jsx";
 
 import SuperAdminLayout from "./pages/admin/SuperAdmin/SuperAdminLayout.jsx";
-import Credenciais from "./pages/admin/SuperAdmin/Credentials/Credenciais.jsx";
+import Credentials from "./pages/admin/SuperAdmin/Credentials/Credentials.jsx";
 import Staffing from "./pages/admin/SuperAdmin/Staffing/Staffing.jsx";
 import VariableManagement from "./pages/admin/SuperAdmin/VariableManagement/VariableManagement.jsx";
 import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
@@ -61,7 +61,7 @@ function App() {
 
       <Route path="/admin/super" element={<SuperAdminLayout />}>
         <Route index element={<Navigate to="credenciais" replace />} />
-        <Route path="credenciais" element={<Credenciais />} />
+        <Route path="credenciais" element={<Credentials />} />
         <Route path="gestao-trabalho" element={<Staffing />} />
         <Route path="gestao-site" element={<VariableManagement />} />
         <Route path="metricas" element={<Metrics />} />

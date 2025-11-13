@@ -28,17 +28,13 @@ public class AuthAdminController {
         this.adminAuthenticationService = adminAuthenticationService;
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AdminLoginRequest request) {
-        return adminAuthenticationService
-                .authenticate(request.getUsername(), request.getPassword())
-                .<ResponseEntity<?>>map(this::buildSuccessResponse)
+        return adminAuthenticationService.authenticate(request.getUsername(), request.getPassword())
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(this::buildUnauthorizedResponse);
     }
 
-    private ResponseEntity<AdminLoginResponse> buildSuccessResponse(UserType role) {
-        return ResponseEntity.ok(new AdminLoginResponse(role));
-    }
 
     private ResponseEntity<ApiErrorResponse> buildUnauthorizedResponse() {
         return ResponseEntity

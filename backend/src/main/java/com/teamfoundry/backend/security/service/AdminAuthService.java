@@ -6,6 +6,9 @@ import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.teamfoundry.backend.account.dto.login.AdminLoginResponse;
+
+
 
 import java.util.Optional;
 
@@ -18,16 +21,24 @@ public class AdminAuthService {
 
     private final AdminAccountRepository adminAccountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public AdminAuthService(AdminAccountRepository adminAccountRepository,
-                            PasswordEncoder passwordEncoder) {
+                            PasswordEncoder passwordEncoder,
+                            JwtService jwtService) {
         this.adminAccountRepository = adminAccountRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
-    public Optional<UserType> authenticate(String username, String rawPassword) {
-        return adminAccountRepository.findByUsername(username)
+    public Optional<AdminLoginResponse> authenticate(String username, String rawPassword) {
+        return adminAccountRepository.findByUsernameIgnoreCase(username)
                 .filter(account -> passwordEncoder.matches(rawPassword, account.getPassword()))
-                .map(AdminAccount::getRole);
+                .map(account -> {
+                    String access = jwtService.generateToken("admin:" + account.getUsername(),
+                            account.getRole().name(), account.getId());
+                    return new AdminLoginResponse(account.getRole(), access,
+                            jwtService.getExpirationSeconds(), null);
+                });
     }
 }

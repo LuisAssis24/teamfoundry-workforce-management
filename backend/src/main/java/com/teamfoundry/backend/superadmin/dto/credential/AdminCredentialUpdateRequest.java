@@ -18,5 +18,9 @@ public record AdminCredentialUpdateRequest(
         UserType role,
 
         @Size(min = 8, max = 120, message = "password deve possuir entre 8 e 120 caracteres")
-        String password
+        String password,
+
+        @NotBlank(message = "superAdminPassword é obrigatório")
+        String superAdminPassword
 ) {}
+

@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
+import {useNavigate} from "react-router-dom";
+import {setTokens} from "../../../auth/tokenStorage.js";
 
 /**
  * Tela de login para administradores com validacao usando HTTPS e senha com hash.
  */
 export default function AdminLogin() {
-    const [credentials, setCredentials] = useState({ username: "", password: "" });
-    const [feedback, setFeedback] = useState({ type: "", message: "" });
+    const navigate = useNavigate();
+    const [credentials, setCredentials] = useState({username: "", password: ""});
+    const [feedback, setFeedback] = useState({type: "", message: ""});
     const [isSubmitting, setIsSubmitting] = useState(false);
     // Permite definir um endpoint HTTPS via VITE_API_BASE_URL.
     const envApiUrl = (import.meta.env.VITE_API_BASE_URL ?? "").trim().replace(/\/$/, "");
@@ -24,13 +27,13 @@ export default function AdminLogin() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setFeedback({ type: "", message: "" });
+        setFeedback({type: "", message: ""});
         setIsSubmitting(true);
 
         try {
             const response = await fetch(loginEndpoint, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(credentials),
             });
 
@@ -48,7 +51,7 @@ export default function AdminLogin() {
                 const apiMessage = payload?.error;
                 const localizedMessage =
                     apiMessage === "Invalid credentials"
-                        ? "Credenciais invalidas. Tente novamente."
+                        ? "Credentials invalidas. Tente novamente."
                         : apiMessage || "Falha no login. Tente novamente.";
                 throw new Error(localizedMessage);
             }
@@ -58,12 +61,20 @@ export default function AdminLogin() {
             }
 
             const roleLabel = payload.role === "SUPERADMIN" ? "Superadmin" : "Admin";
-            setFeedback({ type: "success", message: `Bem-vindo, ${roleLabel}` });
+            setFeedback({type: "success", message: `Bem-vindo, ${roleLabel}`});
+            
+            if (payload.accessToken) {
+                setTokens({ accessToken: payload.accessToken, refreshToken: payload.refreshToken });
+            }
+            if (payload.role === "SUPERADMIN") {
+                navigate("/admin/super/credenciais", {replace: true});
+            } 
+            
         } catch (error) {
             // Converte qualquer erro em mensagem amigavel.
             setFeedback({
                 type: "error",
-                message: error.message || "Credenciais invalidas. Tente novamente.",
+                message: error.message || "Credentials invalidas. Tente novamente.",
             });
         } finally {
             setIsSubmitting(false);

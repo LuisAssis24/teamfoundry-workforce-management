@@ -4,7 +4,7 @@ import registerIllustration from "../../../assets/images/logo/teamFoundry_LogoPr
 import { RegistrationProvider, useRegistration } from "./EmployeeRegisterContext.jsx";
 
 const registerSteps = [
-    { id: "step1", path: "/employee-register/step1", label: "Credenciais" },
+    { id: "step1", path: "/employee-register/step1", label: "Credentials" },
     { id: "step2", path: "/employee-register/step2", label: "Dados pessoais" },
     { id: "step3", path: "/employee-register/step3", label: "Preferências" },
     { id: "step4", path: "/employee-register/step4", label: "Confirmar identidade" },

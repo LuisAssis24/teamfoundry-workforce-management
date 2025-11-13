@@ -1,9 +1,10 @@
 package com.teamfoundry.backend.superadmin.controller.credential;
 
-import com.teamfoundry.backend.account.service.AdminCredentialService;
+import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialDisableRequest;
 import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialRequest;
 import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialResponse;
 import com.teamfoundry.backend.superadmin.dto.credential.AdminCredentialUpdateRequest;
+import com.teamfoundry.backend.account.service.AdminCredentialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,4 +38,13 @@ public class AdminCredentialController {
                                                @Valid @RequestBody AdminCredentialUpdateRequest request) {
         return adminCredentialService.updateAdmin(id, request);
     }
+
+    @DeleteMapping("/admins/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disableAdmin(@PathVariable int id,
+                             @Valid @RequestBody AdminCredentialDisableRequest request) {
+        adminCredentialService.disableAdmin(id, request.superAdminPassword());
+    }
+
+
 }

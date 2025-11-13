@@ -15,7 +15,7 @@ export default function CompanyCredentialsList({
                                                    onViewMore,
                                                    onAccept,
                                                    onSearch,
-                                                   title = "Credenciais",
+                                                   title = "Credentials",
                                                    fieldConfig,
                                                    viewLabel = "Ver Mais",
                                                    acceptLabel = "Aceitar",
