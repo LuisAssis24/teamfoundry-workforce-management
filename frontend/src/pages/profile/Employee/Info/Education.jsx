@@ -8,6 +8,7 @@ import {
   createCandidateEducation,
   listCandidateEducation,
 } from "../../../../api/candidateEducation.js";
+import { fetchCandidateProfile } from "../../../../api/candidateProfile.js";
 
 const initialForm = {
   name: "",
@@ -27,6 +28,7 @@ export default function Education() {
   const [saving, setSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [displayName, setDisplayName] = useState("Nome Sobrenome");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -38,20 +40,28 @@ export default function Education() {
         setEducations(Array.isArray(data) ? data : []);
       } catch (error) {
         if (isMounted) {
-          setErrorMessage(error.message || "Não foi possível carregar as formações.");
+          setErrorMessage(error.message || "Nuo foi poss??vel carregar as forma????es.");
         }
       } finally {
         if (isMounted) setLoading(false);
       }
     }
 
+    async function loadProfileName() {
+      try {
+        const profile = await fetchCandidateProfile();
+        if (!isMounted) return;
+        setDisplayName(formatName(profile?.firstName, profile?.lastName));
+      } catch {
+      }
+    }
+
     loadEducation();
+    loadProfileName();
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  const handleChange = (event) => {
+  }, []);  const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -127,7 +137,7 @@ export default function Education() {
 
   return (
     <section>
-      <ProfileHeader />
+      <ProfileHeader name={displayName} />
       <ProfileTabs />
 
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">
@@ -301,6 +311,12 @@ function EmptyState() {
   );
 }
 
+function formatName(firstName, lastName) {
+  const trimmedFirst = firstName?.trim();
+  const trimmedLast = lastName?.trim();
+  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
+  return full || "Nome Sobrenome";
+}
 async function buildPayload(form) {
   const certificateFile = form.file ? await fileToBase64(form.file) : null;
   return {
@@ -331,3 +347,5 @@ function formatDate(date) {
     return date;
   }
 }
+
+
