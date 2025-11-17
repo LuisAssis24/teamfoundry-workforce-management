@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.teamfoundry.backend.security.service.AdminAuthService;
+import com.teamfoundry.backend.security.dto.login.AdminLoginResponse;
+import com.teamfoundry.backend.security.service.JwtService;
+
 
 import java.util.Optional;
 
@@ -32,26 +35,37 @@ class AdminAuthenticationServiceTest {
     @InjectMocks
     private AdminAuthService adminAuthenticationService;
 
+    @Mock
+    private JwtService jwtService;
+
+
     @Test
-    @DisplayName("authenticate devolve role quando user e password são válidos")
-    void authenticateReturnsRoleWhenPasswordMatches() {
+    @DisplayName("authenticate devolve AdminLoginResponse quando credenciais são válidas")
+    void authenticateReturnsResponseWhenPasswordMatches() {
         AdminAccount account = new AdminAccount(1, "admin", "hash", UserType.ADMIN);
-        when(adminAccountRepository.findByUsername("admin")).thenReturn(Optional.of(account));
+        when(adminAccountRepository.findByUsernameIgnoreCase("ADMIN")).thenReturn(Optional.of(account));
         when(passwordEncoder.matches("secret", "hash")).thenReturn(true);
+        when(jwtService.generateToken("admin:admin", "ADMIN", 1)).thenReturn("access-token");
+        when(jwtService.getExpirationSeconds()).thenReturn(3600L);
 
-        Optional<UserType> result = adminAuthenticationService.authenticate("admin", "secret");
+        Optional<AdminLoginResponse> result = adminAuthenticationService.authenticate("ADMIN", "secret");
 
-        assertThat(result).contains(UserType.ADMIN);
+        assertThat(result).isPresent();
+        AdminLoginResponse response = result.get();
+        assertThat(response.getRole()).isEqualTo(UserType.ADMIN);
+        assertThat(response.getAccessToken()).isEqualTo("access-token");
+        assertThat(response.getExpiresInSeconds()).isEqualTo(3600L);
     }
+
 
     @Test
     @DisplayName("authenticate devolve vazio quando o hash não corresponde")
     void authenticateReturnsEmptyWhenPasswordDoesNotMatch() {
         AdminAccount account = new AdminAccount(1, "admin", "hash", UserType.ADMIN);
         when(adminAccountRepository.findByUsername("admin")).thenReturn(Optional.of(account));
-        when(passwordEncoder.matches("wrong", "hash")).thenReturn(false);
-
-        Optional<UserType> result = adminAuthenticationService.authenticate("admin", "wrong");
+        when(adminAccountRepository.findByUsernameIgnoreCase("admin")).thenReturn(Optional.of(account));
+        Optional<AdminLoginResponse> result = adminAuthenticationService.authenticate("admin", "wrong");
+        assertThat(result).isEmpty();
 
         assertThat(result).isEmpty();
     }
