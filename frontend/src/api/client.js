@@ -4,7 +4,10 @@ import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../auth
 async function doFetch(path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_URL}${path}`;
   const headers = new Headers(options.headers || {});
-  if (!headers.has('Content-Type') && options.body) headers.set('Content-Type', 'application/json');
+  const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
+  if (!headers.has('Content-Type') && options.body && !isFormData) {
+    headers.set('Content-Type', 'application/json');
+  }
 
   const access = getAccessToken();
   if (access && !headers.has('Authorization')) {

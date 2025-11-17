@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
 
 const NAV_LINKS = [
@@ -8,7 +9,19 @@ const NAV_LINKS = [
   { to: "#sobre", label: "Sobre nós" },
 ];
 
-export default function Navbar() {
+const PUBLIC_ACTIONS = [
+  { to: "/login", label: "Login", variant: "ghost" },
+  { to: "/company-register", label: "Sou empresa", variant: "primary" },
+];
+
+export default function Navbar({
+  variant = "private",
+  homePath = "/candidato",
+  links = NAV_LINKS,
+  actions = PUBLIC_ACTIONS,
+  onLogout,
+}) {
+  const isPublic = variant === "public";
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const profileRef = useRef(null);
@@ -27,50 +40,118 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isProfileOpen]);
 
+  const wrapperClasses = isPublic
+    ? "bg-primary text-primary-content sticky top-0 z-30"
+    : "bg-primary text-primary-content";
+
+  const actionButtons = isPublic
+    ? (actions?.length ? actions : PUBLIC_ACTIONS)
+    : [];
+
+  const navItems = Array.isArray(links) ? links : NAV_LINKS;
+
   return (
-    <header className="bg-primary text-primary-content">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-6">
-        <Link to="/candidato" className="flex items-center gap-3 shrink-0 group">
-          <img src={logo} alt="TeamFoundry" className="h-10 w-10 object-contain" />
+    <header className={wrapperClasses}>
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-3 flex items-center justify-between gap-6">
+        <Link to={homePath} className="flex items-center gap-3 shrink-0 group">
+          <img
+            src={logo}
+            alt="TeamFoundry"
+            className={`object-contain ${isPublic ? "h-12 w-12" : "h-10 w-10"}`}
+          />
+          <span className={`font-semibold tracking-wide ${isPublic ? "text-primary" : "text-primary-content"}`}>
+            TeamFoundry
+          </span>
         </Link>
 
-        <nav className="flex-1 flex justify-center">
-          <ul className="flex items-center gap-8 font-medium">
-            {NAV_LINKS.map(({ to, label }) => (
-              <li key={label}>
-                <a href={to} className="hover:opacity-90">
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {(!isPublic && navItems.length > 0) && (
+          <nav className="hidden md:flex flex-1 justify-center">
+            <ul className="flex items-center gap-8 font-medium text-sm uppercase tracking-wide">
+              {navItems.map(({ to, label, internal }) => (
+                <li key={label}>
+                  {internal ? (
+                    <Link
+                      to={to}
+                      className="hover:opacity-90 transition"
+                      aria-label={label}
+                    >
+                      {label}
+                    </Link>
+                  ) : (
+                    <a href={to} className="hover:opacity-90 transition" aria-label={label}>
+                      {label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
 
-        <div className="relative" ref={profileRef}>
-          <button
-            type="button"
-            className="btn btn-ghost btn-circle h-12 w-12 text-3xl text-primary-content"
-            onClick={() => setIsProfileOpen((o) => !o)}
-            aria-haspopup="true"
-            aria-expanded={isProfileOpen}
-          >
-            <i className="bi bi-person-circle" aria-hidden="true" />
-            <span className="sr-only">Abrir menu do perfil</span>
-          </button>
-
-          {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-xl border border-base-300 bg-base-100 text-base-content shadow-lg z-50">
-              <button
-                type="button"
-                className="w-full text-left px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150"
+        {isPublic ? (
+          <div className="flex items-center gap-3">
+            {actionButtons.map(({ to, label, variant }) => (
+              <Link
+                key={label}
+                to={to}
+                className={
+                  variant === "primary"
+                    ? "btn btn-outline btn-sm border-white/80 text-white hover:bg-white/10"
+                    : "btn btn-ghost btn-sm text-white"
+                }
               >
-                Fazer logout
-              </button>
-            </div>
-          )}
-        </div>
+                {label}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="relative" ref={profileRef}>
+            <button
+              type="button"
+              className="btn btn-ghost btn-circle h-12 w-12 text-3xl text-primary-content"
+              onClick={() => setIsProfileOpen((o) => !o)}
+              aria-haspopup="true"
+              aria-expanded={isProfileOpen}
+            >
+              <i className="bi bi-person-circle" aria-hidden="true" />
+              <span className="sr-only">Abrir menu do perfil</span>
+            </button>
+
+            {isProfileOpen && (
+              <div className="absolute right-0 mt-2 w-48 rounded-xl border border-base-300 bg-base-100 text-base-content shadow-lg z-50">
+                <button
+                  type="button"
+                  className="w-full text-left px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150"
+                  onClick={onLogout}
+                >
+                  Fazer logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );
 }
+
+Navbar.propTypes = {
+  variant: PropTypes.oneOf(["private", "public"]),
+  homePath: PropTypes.string,
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
+      to: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      internal: PropTypes.bool,
+    })
+  ),
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      to: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      variant: PropTypes.oneOf(["ghost", "primary"]),
+    })
+  ),
+  onLogout: PropTypes.func,
+};
 
