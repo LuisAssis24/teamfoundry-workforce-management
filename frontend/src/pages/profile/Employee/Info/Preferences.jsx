@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
-import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
+import MultiSelectDropdown from "../../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
 import { fetchProfileOptions } from "../../../../api/profileOptions.js";
 import {
   fetchCandidatePreferences,
@@ -26,6 +26,7 @@ export default function Preferences() {
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+
   useEffect(() => {
     let isMounted = true;
 
@@ -35,12 +36,14 @@ export default function Preferences() {
       try {
         try {
           const profile = await fetchCandidateProfile();
-          if (!isMounted) return;
-          setDisplayName(formatName(profile?.firstName, profile?.lastName));
-          setCandidatePreferencesEmail(profile?.email);
+          if (isMounted) {
+            setDisplayName(formatName(profile?.firstName, profile?.lastName));
+            setCandidatePreferencesEmail(profile?.email ?? null);
+          }
         } catch {
-          if (!isMounted) return;
-          setCandidatePreferencesEmail(null);
+          if (isMounted) {
+            setCandidatePreferencesEmail(null);
+          }
         }
 
         const [optionsData, preferencesData] = await Promise.all([
@@ -63,7 +66,7 @@ export default function Preferences() {
         });
       } catch (err) {
         if (isMounted) {
-          setError(err.message || "N�o foi poss�vel carregar as prefer�ncias.");
+          setError(err.message || "Nao foi possivel carregar as preferencias.");
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -84,12 +87,6 @@ export default function Preferences() {
     return list;
   }, [options.functions, form.role]);
 
-  const handleRoleChange = (event) => {
-    const { value } = event.target;
-    setForm((prev) => ({ ...prev, role: value }));
-    clearFieldError("role");
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFeedback("");
@@ -108,9 +105,9 @@ export default function Preferences() {
         areas: form.areas,
         skills: form.skills,
       });
-      setFeedback("Preferências atualizadas com sucesso.");
+      setFeedback("Preferencias atualizadas com sucesso.");
     } catch (err) {
-      setError(err.message || "Não foi possível guardar as preferências.");
+      setError(err.message || "Nao foi possivel guardar as preferencias.");
     } finally {
       setSaving(false);
     }
@@ -122,17 +119,23 @@ export default function Preferences() {
     if (feedback) setFeedback("");
   };
 
-  const addSelection = (field, value) => {
-    if (!value) return;
-    setForm((prev) => ({ ...prev, [field]: [...prev[field], value] }));
-    clearFieldError(field);
+  const handleRoleDropdownChange = (values) => {
+    const normalized = Array.isArray(values) ? values.filter(Boolean) : [];
+    const lastSelected = normalized[normalized.length - 1] || "";
+    setForm((prev) => ({ ...prev, role: lastSelected }));
+    clearFieldError("role");
   };
 
-  const removeSelection = (field, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((item) => item !== value),
-    }));
+  const handleAreasChange = (values) => {
+    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
+    setForm((prev) => ({ ...prev, areas: normalized }));
+    clearFieldError("areas");
+  };
+
+  const handleSkillsChange = (values) => {
+    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
+    setForm((prev) => ({ ...prev, skills: normalized }));
+    clearFieldError("skills");
   };
 
   return (
@@ -144,44 +147,46 @@ export default function Preferences() {
         <form onSubmit={handleSubmit}>
           <div className="p-6 max-w-3xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField
-                label="Função preferencial"
-                as="select"
-                placeholder="Selecione a função"
-                value={form.role}
-                onChange={handleRoleChange}
-                disabled={loading || saving || functionOptions.length === 0}
-                error={fieldErrors.role}
-              >
-                {functionOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </InputField>
+              <div>
+                <MultiSelectDropdown
+                  label="Funcao preferencial"
+                  options={functionOptions}
+                  selectedOptions={form.role ? [form.role] : []}
+                  onChange={handleRoleDropdownChange}
+                  placeholder="Selecione a funcao"
+                  disabled={loading || saving || functionOptions.length === 0}
+                />
+                {fieldErrors.role && (
+                  <p className="mt-2 text-sm text-error">{fieldErrors.role}</p>
+                )}
+              </div>
 
-              <MultiValueSelector
-                label="Área(s) Geográfica(s)"
-                placeholder="Adicionar área geográfica"
-                selected={form.areas}
-                options={options.geoAreas}
-                onAdd={(value) => addSelection("areas", value)}
-                onRemove={(value) => removeSelection("areas", value)}
-                disabled={loading || saving}
-                error={fieldErrors.areas}
-              />
+              <div>
+                <MultiSelectDropdown
+                  label="Area(s) Geograficas"
+                  options={options.geoAreas}
+                  selectedOptions={form.areas}
+                  onChange={handleAreasChange}
+                  placeholder="Adicionar area geografica"
+                  disabled={loading || saving}
+                />
+                {fieldErrors.areas && (
+                  <p className="mt-2 text-sm text-error">{fieldErrors.areas}</p>
+                )}
+              </div>
 
               <div className="md:col-span-2">
-                <MultiValueSelector
-                  label="Competências"
-                  placeholder="Adicionar competência"
-                  selected={form.skills}
+                <MultiSelectDropdown
+                  label="Competencias"
                   options={options.competences}
-                  onAdd={(value) => addSelection("skills", value)}
-                  onRemove={(value) => removeSelection("skills", value)}
+                  selectedOptions={form.skills}
+                  onChange={handleSkillsChange}
+                  placeholder="Adicionar competencia"
                   disabled={loading || saving}
-                  error={fieldErrors.skills}
                 />
+                {fieldErrors.skills && (
+                  <p className="mt-2 text-sm text-error">{fieldErrors.skills}</p>
+                )}
               </div>
             </div>
           </div>
@@ -211,85 +216,16 @@ export default function Preferences() {
   );
 }
 
-function MultiValueSelector({
-  label,
-  placeholder,
-  selected,
-  options = [],
-  onAdd,
-  onRemove,
-  disabled,
-  error,
-}) {
-  const availableOptions = Array.isArray(options)
-    ? options.filter((option) => !selected.includes(option))
-    : [];
-  const hasSelections = selected.length > 0;
-  const selectDisabled = disabled || availableOptions.length === 0;
-
-  return (
-    <div>
-      <label className="label">
-        <span className="label-text font-medium">{label}</span>
-      </label>
-      <div className="input input-bordered w-full min-h-12 flex items-center gap-2 flex-wrap py-2 px-3">
-        {hasSelections ? (
-          selected.map((item) => (
-            <span key={item} className="px-2 py-1 rounded-md bg-base-200 text-sm flex items-center gap-1">
-              {item}
-              <button
-                type="button"
-                className="text-base-content/70 hover:text-error transition-colors"
-                onClick={() => onRemove(item)}
-                disabled={disabled}
-                aria-label={`Remover ${item}`}
-              >
-                <i className="bi bi-x" aria-hidden="true" />
-              </button>
-            </span>
-          ))
-        ) : (
-          <span className="text-sm text-base-content/70">Nenhuma opção selecionada.</span>
-        )}
-      </div>
-
-      <select
-        className="select select-bordered w-full mt-3"
-        value=""
-        onChange={(event) => {
-          const value = event.target.value;
-          if (value) {
-            onAdd(value);
-            event.target.value = "";
-          }
-        }}
-        disabled={selectDisabled}
-      >
-        <option value="">
-          {selectDisabled ? "Todas as opções adicionadas" : placeholder}
-        </option>
-        {availableOptions.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-
-      {error && <p className="mt-2 text-sm text-error">{error}</p>}
-    </div>
-  );
-}
-
 function validateForm(form) {
   const errors = {};
   if (!form.role) {
-    errors.role = "Selecione uma função.";
+    errors.role = "Selecione uma funcao.";
   }
   if (!Array.isArray(form.areas) || form.areas.length === 0) {
-    errors.areas = "Selecione pelo menos uma área geográfica.";
+    errors.areas = "Selecione pelo menos uma area geografica.";
   }
   if (!Array.isArray(form.skills) || form.skills.length === 0) {
-    errors.skills = "Selecione pelo menos uma competência.";
+    errors.skills = "Selecione pelo menos uma competencia.";
   }
   return errors;
 }
@@ -300,5 +236,3 @@ function formatName(firstName, lastName) {
   const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
   return full || "Nome Sobrenome";
 }
-
-
