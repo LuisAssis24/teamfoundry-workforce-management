@@ -1,4 +1,6 @@
 // Permite configurar a API via .env. Se não houver valor, usamos caminhos relativos (útil em dev com proxy Vite).
+import { getAccessToken, clearTokens } from "../auth/tokenStorage.js";
+
 const envBase = (import.meta.env.VITE_API_BASE_URL ?? "").trim().replace(/\/$/, "");
 const API_BASE = envBase;
 
@@ -34,10 +36,20 @@ async function request(path, options = {}) {
     headers.set("Content-Type", "application/json");
   }
 
+  if (!headers.has("Authorization")) {
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+  }
+
   const response = await fetch(url, { ...options, headers, credentials: "include" });
   const data = await parseBody(response);
 
   if (!response.ok) {
+    if (response.status === 401) {
+      clearTokens();
+    }
     throw new Error(data?.error || `HTTP ${response.status}`);
   }
 

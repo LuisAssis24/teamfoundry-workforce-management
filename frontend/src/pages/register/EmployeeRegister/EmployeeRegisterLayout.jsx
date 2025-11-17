@@ -4,7 +4,7 @@ import registerIllustration from "../../../assets/images/logo/teamFoundry_LogoPr
 import { RegistrationProvider, useRegistration } from "./EmployeeRegisterContext.jsx";
 
 const registerSteps = [
-    { id: "step1", path: "/employee-register/step1", label: "Credentials" },
+    { id: "step1", path: "/employee-register/step1", label: "Credenciais" },
     { id: "step2", path: "/employee-register/step2", label: "Dados pessoais" },
     { id: "step3", path: "/employee-register/step3", label: "Preferências" },
     { id: "step4", path: "/employee-register/step4", label: "Confirmar identidade" },
@@ -68,7 +68,7 @@ function RegisterLayoutInner() {
                     </div>
 
                     <div className="p-8 sm:p-10 lg:p-12 flex flex-col">
-                        <nav className="flex flex-wrap items-center gap-2 text-sm">
+                        <nav className="flex flex-wrap items-center justify-center gap-2 text-sm">
                             {registerSteps.map((step, index) => {
                                 const isActive = index === currentStepIndex;
                                 const isCompleted = completedSteps.includes(index + 1) && !isActive;
@@ -88,7 +88,8 @@ function RegisterLayoutInner() {
                                             onClick={() => goToStep(index + 1)}
                                             disabled={!canAccessStep(index + 1)}
                                         >
-                                            {`Passo ${index + 1}: ${step.label}`}
+                                            <span aria-hidden="true">{index + 1}</span>
+                                            <span className="sr-only">{step.label}</span>
                                         </button>
                                         {index < registerSteps.length - 1 && (
                                             <span className="text-base-content/40">

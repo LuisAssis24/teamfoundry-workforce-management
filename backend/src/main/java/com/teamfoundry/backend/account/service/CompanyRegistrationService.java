@@ -59,7 +59,7 @@ public class CompanyRegistrationService {
         companyAccount.setEmail(normalizedEmail);
         companyAccount.setPassword(passwordEncoder.encode(request.password()));
         companyAccount.setRole(UserType.COMPANY);
-        companyAccount.setRegistrationStatus(RegistrationStatus.PENDING);
+        companyAccount.setRegistrationStatus(RegistrationStatus.COMPLETED);
         companyAccount.setActive(false);
         companyAccount.setName(request.companyName().trim());
         companyAccount.setNif(request.nif());
@@ -73,7 +73,6 @@ public class CompanyRegistrationService {
 
         CompanyAccountManager owner = new CompanyAccountManager();
         owner.setCompanyAccount(savedCompany);
-        owner.setId(savedCompany.getId());
         owner.setName(request.responsibleName().trim());
         owner.setEmail(normalizedResponsibleEmail);
         owner.setPhone(normalizedResponsiblePhone);
@@ -82,7 +81,7 @@ public class CompanyRegistrationService {
 
         attachActivitySectors(savedCompany, request.activitySectors());
 
-        log.info("Empresa {} registada com estado PENDING", request.companyName());
+        log.info("Empresa {} registada com estado COMPLETED", request.companyName());
         return GenericResponse.success("Registo submetido. Entraremos em contacto após validação.");
     }
 

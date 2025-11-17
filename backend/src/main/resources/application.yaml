@@ -38,6 +38,15 @@ app:
     media:
       storage-dir: ${APP_SITE_MEDIA_DIR:uploads/site}
       public-path: /media/site
+  candidate:
+    certificates-upload-dir: ${APP_CERTIFICATES_UPLOAD_DIR:uploads/certificates}
+    payslips-upload-dir: ${APP_PAYSLIPS_UPLOAD_DIR:uploads/payslips}
+  registration:
+    cv-upload-dir: uploads/cv
+    verification:
+      expiration-minutes: 30
+    pending-retention-minutes: 60
+    pending-cleanup-interval-ms: 300000
 
 server:
   port: 8443

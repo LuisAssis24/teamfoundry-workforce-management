@@ -4,6 +4,8 @@ import com.teamfoundry.backend.account.model.EmployeeAccount;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +24,16 @@ public class Certifications {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String institution;
+
+    @Column
+    private String location;
+
+    @Column(name = "completion_date")
+    private LocalDate completionDate;
+
+    @Column
     private String description;
 
     @Column(name = "certificate_url")

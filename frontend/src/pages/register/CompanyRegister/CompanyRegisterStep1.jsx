@@ -28,7 +28,7 @@ export default function CompanyRegisterStep1() {
   const [responsibleEmail, setResponsibleEmail] = useState(companyData.credentials?.responsibleEmail || "");
   const [responsiblePhone, setResponsiblePhone] = useState(companyData.credentials?.responsiblePhone || "");
   const [errors, setErrors] = useState({});
-  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const passwordChecks = useMemo(
@@ -107,20 +107,38 @@ export default function CompanyRegisterStep1() {
           error={errors.credentialEmail}
         />
 
-        <InputField
-          label="Password"
-          type="password"
-          placeholder="Crie uma password"
-          icon={<i className="bi bi-lock" />}
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-            if (!passwordTouched) {
-              setPasswordTouched(true);
-            }
-          }}
-          error={errors.password}
-        />
+        <div className="relative">
+          <InputField
+            label="Password"
+            type="password"
+            placeholder="Crie uma password"
+            icon={<i className="bi bi-lock" />}
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+            onFocus={() => setPasswordFocused(true)}
+            onBlur={() => setPasswordFocused(false)}
+            error={errors.password}
+          />
+
+          {passwordFocused && password.length > 0 && !isPasswordValid && (
+            <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-base-200 bg-base-100 p-4 shadow-lg z-20">
+              <p className="text-sm font-semibold text-base-content">A password deve incluir:</p>
+              <ul className="mt-2 space-y-1">
+                {passwordChecks.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`flex items-center gap-2 text-sm ${item.valid ? "text-success" : "text-error"}`}
+                  >
+                    <i className={`bi ${item.valid ? "bi-check-circle-fill" : "bi-x-circle-fill"}`} />
+                    <span>{item.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
         <InputField
           label="Confirmar password"
@@ -132,22 +150,7 @@ export default function CompanyRegisterStep1() {
           error={errors.confirmPassword}
         />
 
-        {passwordTouched && (
-          <div className="rounded-2xl border border-base-200 bg-base-100 p-4 shadow-sm">
-            <p className="text-sm font-semibold text-base-content">A password deve incluir:</p>
-            <ul className="mt-2 space-y-1">
-              {passwordChecks.map((item) => (
-                <li
-                  key={item.id}
-                  className={`flex items-center gap-2 text-sm ${item.valid ? "text-success" : "text-error"}`}
-                >
-                  <i className={`bi ${item.valid ? "bi-check-circle-fill" : "bi-x-circle-fill"}`} />
-                  <span>{item.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField

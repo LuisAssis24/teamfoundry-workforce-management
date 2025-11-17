@@ -1,4 +1,5 @@
 import { httpPost } from "./http.js";
+import { setTokens, clearTokens } from "../auth/tokenStorage.js";
 
 /**
  * Envia credenciais ao backend e retorna o tipo do utilizador autenticado.
@@ -6,8 +7,17 @@ import { httpPost } from "./http.js";
  * @param {string} password
  * @returns {Promise<{userType:string,message:string}>}
  */
-export function login(email, password, rememberMe = false) {
-  return httpPost("/api/auth/login", { email, password, rememberMe });
+export async function login(email, password, rememberMe = false) {
+  try {
+    const data = await httpPost("/api/auth/login", { email, password, rememberMe });
+    if (data?.accessToken) {
+      setTokens({ accessToken: data.accessToken });
+    }
+    return data;
+  } catch (error) {
+    clearTokens();
+    throw error;
+  }
 }
 
 /**

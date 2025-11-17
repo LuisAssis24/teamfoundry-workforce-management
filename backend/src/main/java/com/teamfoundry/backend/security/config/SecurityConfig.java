@@ -66,6 +66,7 @@ public class SecurityConfig {
                                 "/auth/**",
                                 "/api/candidate/register/**",
                                 "/api/candidate/verification/**",
+                                "/api/candidate/preferences/**",
                                 "/api/company/register/**",
                                 "/api/company/options/**",
                                 "/api/profile-options",
