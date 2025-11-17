@@ -71,9 +71,13 @@ public class SecurityConfig {
                                 "/api/company/options/**",
                                 "/api/profile-options",
                                 "/api/debug/**",
+                                "/api/site/**",
+                                "/media/**",
                                 "/api/admin/login",
                                 "/api/dev/accounts/**",
                                 "/h2-console/**").permitAll()
+                        .requestMatchers("/api/super-admin/**").hasRole("SUPERADMIN")
+                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                         .anyRequest().authenticated()
                 )
                 // Opcional: permitir H2 console em dev/test

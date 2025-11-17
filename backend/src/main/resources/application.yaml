@@ -34,6 +34,10 @@ app:
     enabled: ${APP_MAIL_ENABLED}
   password-reset:
     url: ${APP_PASSWORD_RESET_URL}
+  site:
+    media:
+      storage-dir: ${APP_SITE_MEDIA_DIR:uploads/site}
+      public-path: /media/site
   candidate:
     certificates-upload-dir: ${APP_CERTIFICATES_UPLOAD_DIR:uploads/certificates}
     payslips-upload-dir: ${APP_PAYSLIPS_UPLOAD_DIR:uploads/payslips}
