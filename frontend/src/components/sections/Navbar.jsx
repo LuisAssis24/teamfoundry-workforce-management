@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
+import Button from "../ui/Button/Button";
 import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
 
 const NAV_LINKS = [
@@ -9,10 +10,7 @@ const NAV_LINKS = [
   { to: "#sobre", label: "Sobre nós" },
 ];
 
-const PUBLIC_ACTIONS = [
-  { to: "/login", label: "Login", variant: "ghost" },
-  { to: "/company-register", label: "Sou empresa", variant: "primary" },
-];
+const PUBLIC_ACTIONS = [{ to: "/login", label: "Entrar", variant: "secondary" }];
 
 export default function Navbar({
   variant = "private",
@@ -91,17 +89,18 @@ export default function Navbar({
         {isPublic ? (
           <div className="flex items-center gap-3">
             {actionButtons.map(({ to, label, variant }) => (
-              <Link
+              <Button
                 key={label}
+                as={Link}
                 to={to}
-                className={
+                label={label}
+                variant={variant}
+                className={`w-auto btn-sm ${
                   variant === "primary"
-                    ? "btn btn-outline btn-sm border-white/80 text-white hover:bg-white/10"
-                    : "btn btn-ghost btn-sm text-white"
-                }
-              >
-                {label}
-              </Link>
+                    ? "btn-outline border-white/80 text-white hover:bg-white/10"
+                    : ""
+                }`}
+              />
             ))}
           </div>
         ) : (
@@ -149,9 +148,17 @@ Navbar.propTypes = {
     PropTypes.shape({
       to: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-      variant: PropTypes.oneOf(["ghost", "primary"]),
+      variant: PropTypes.oneOf([
+        "primary",
+        "secondary",
+        "accent",
+        "neutral",
+        "outline",
+        "ghost",
+        "warning",
+        "success",
+      ]),
     })
   ),
   onLogout: PropTypes.func,
 };
-

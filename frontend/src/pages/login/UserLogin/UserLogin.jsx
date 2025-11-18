@@ -69,7 +69,7 @@ export default function LoginCandidate() {
                                 <span className="label-text text-xs">Lembrar-me</span>
                             </label>
                             <p className="text-xs text-accent text-right mt-0">
-                                <Link to="forgot-password" className="link link-accent">Esqueceu-se?</Link>
+                                <Link to="/forgot-password" className="link link-accent">Esqueceu-se?</Link>
                             </p>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ export default function LoginCandidate() {
                         <div className="flex justify-center items-center text-xs mt-2 space-x-2 text-center">
                             <span className="text-gray-500">Não possui conta?</span>
                             <Link
-                                to="register"
+                                to="/employee-register/step1"
                                 className="text-accent font-medium hover:underline inline-block"
                             >
                                 Registe-se
