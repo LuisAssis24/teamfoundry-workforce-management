@@ -3,12 +3,16 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import registerIllustration from "../../../assets/images/logo/teamFoundry_LogoPrimary.png";
 import { CompanyRegistrationProvider, useCompanyRegistration } from "./CompanyRegisterContext.jsx";
 
+// Configura o wizard da empresa (3 etapas).
 const steps = [
   { id: "step1", path: "/company-register/step1", label: "Credenciais" },
   { id: "step2", path: "/company-register/step2", label: "Dados da empresa" },
   { id: "step3", path: "/company-register/step3", label: "Submissão" },
 ];
 
+/**
+ * Responsável por proteger a navegação e fornecer o contexto do registo de empresa.
+ */
 function CompanyRegisterLayoutInner() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,6 +31,7 @@ function CompanyRegisterLayoutInner() {
     return foundIndex >= 0 ? foundIndex : 0;
   }, [location.pathname]);
 
+  // Garante que não há saltos de rota para passos ainda não preenchidos.
   useEffect(() => {
     const currentStepNumber = steps.findIndex((step) => location.pathname.startsWith(step.path)) + 1;
     if (currentStepNumber === 0) {
@@ -105,6 +110,9 @@ function CompanyRegisterLayoutInner() {
   );
 }
 
+/**
+ * Wrapper que injeta o provider esperado por todos os passos.
+ */
 export default function CompanyRegisterLayout() {
   return (
     <CompanyRegistrationProvider>

@@ -5,6 +5,10 @@ import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
 import ForgotPassword from "./ForgotPassword.jsx";
 
+/**
+ * Ecrã de login dos utilizadores (colaboradores e empresas).
+ * Centraliza as credenciais, CTA para os fluxos de registo e o modal de recuperação de palavra-passe.
+ */
 export default function LoginCandidate() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,12 +19,17 @@ export default function LoginCandidate() {
     const [showForgotModal, setShowForgotModal] = useState(false);
     const location = useLocation();
 
+    // Sempre que alguém navega para /login com state { openForgotModal: true } abrimos o modal automaticamente.
     useEffect(() => {
         if (location.state?.openForgotModal) {
             setShowForgotModal(true);
         }
     }, [location.state]);
 
+    /**
+     * Envia as credenciais para o backend e apresenta feedback visual de sucesso/erro.
+     * Os tokens são guardados automaticamente através do helper em api/auth.
+     */
     const handleLogin = async () => {
         setLoading(true);
         setError("");

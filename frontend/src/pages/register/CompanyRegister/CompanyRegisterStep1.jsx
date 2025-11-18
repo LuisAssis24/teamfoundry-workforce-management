@@ -31,6 +31,7 @@ export default function CompanyRegisterStep1() {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Reaproveita o mesmo check visual do registo de colaboradores.
   const passwordChecks = useMemo(
     () => passwordRequirements.map((req) => ({ ...req, valid: req.test(password) })),
     [password],
@@ -38,6 +39,7 @@ export default function CompanyRegisterStep1() {
 
   const isPasswordValid = passwordChecks.every((item) => item.valid);
 
+  // Valida credenciais e dados do responsável antes de persistir.
   const validate = () => {
     const newErrors = {};
     if (!credentialEmail.trim() || !emailRegex.test(credentialEmail.trim())) {
@@ -66,6 +68,7 @@ export default function CompanyRegisterStep1() {
     return newErrors;
   };
 
+  // Apenas guarda no contexto local; o envio para backend ocorre no passo final.
   const handleSubmit = (event) => {
     event.preventDefault();
     const validationErrors = validate();

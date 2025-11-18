@@ -13,6 +13,7 @@ export default function CompanyRegisterStep3() {
   const [feedback, setFeedback] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
+  // Consolida todos os dados e envia o pedido de registo ao backend.
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (loading || submitted) return;
@@ -48,6 +49,7 @@ export default function CompanyRegisterStep3() {
     }
   };
 
+  // Permite iniciar outro registo sem necessidade de recarregar a página.
   const handleNewRegistration = () => {
     resetFlow();
     setFeedback(null);

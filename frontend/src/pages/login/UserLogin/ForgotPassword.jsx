@@ -8,12 +8,14 @@ import { forgotPassword, resetPassword, verifyResetCode } from "../../../api/aut
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 45;
 
+// Finite state machine para os 3 passos do modal.
 const STEPS = {
   EMAIL: "email",
   CODE: "code",
   RESET: "reset",
 };
 
+// Ajuda a mascarar o email no copy do código sem expor totalmente o endereço.
 const maskEmail = (email = "") => {
   if (!email.includes("@")) return email;
   const [local, domain] = email.split("@");
@@ -22,6 +24,7 @@ const maskEmail = (email = "") => {
   return `${visible}${local.length > 2 ? "***" : ""}@${domain}`;
 };
 
+// Mesmo conjunto de regras usado no registo de colaboradores/empresas.
 const passwordRequirements = [
   { id: "length", label: "Pelo menos 8 caracteres", test: (value) => value.length >= 8 },
   { id: "uppercase", label: "Uma letra maiúscula", test: (value) => /[A-Z]/.test(value) },
@@ -66,6 +69,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     [passwordChecks]
   );
 
+  // Controla o countdown para reenvio de código.
   useEffect(() => {
     let interval;
     if (resendCooldown > 0) {
@@ -78,6 +82,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     return () => clearInterval(interval);
   }, [resendCooldown]);
 
+  // Sempre que o modal fecha limpamos o estado completo.
   useEffect(() => {
     if (!open) {
       resetModalState();
@@ -86,12 +91,14 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     }
   }, [open, initialEmail]);
 
+  // Foca automaticamente o primeiro campo da OTP sempre que entramos na etapa de código.
   useEffect(() => {
     if (step === STEPS.CODE && inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
   }, [step]);
 
+  // Restabelece todos os campos e mensagens para o estado inicial.
   const resetModalState = () => {
     setStep(STEPS.EMAIL);
     setEmail(initialEmail || "");
@@ -108,6 +115,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     setCodeError("");
   };
 
+  // Passo 1: valida o email, chama o endpoint e avança para o passo de código.
   const handleRequestCode = async (event) => {
     event?.preventDefault?.();
     if (!email.trim()) {
@@ -133,6 +141,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     }
   };
 
+  // Passo 2: valida os 6 dígitos junto ao backend antes de permitir trocar a password.
   const handleCodeSubmit = async (event) => {
     event?.preventDefault?.();
     if (!isCodeComplete) {
@@ -157,6 +166,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     }
   };
 
+  // Passo 3: aplica exatamente as mesmas regras de password do registo e envia o update.
   const handleResetPassword = async (event) => {
     event?.preventDefault?.();
     if (!isPasswordValid) {
@@ -182,6 +192,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     }
   };
 
+  // Permite reenviar o código respeitando o cooldown e preservando o email informado.
   const handleResendCode = async () => {
     if (resendCooldown > 0 || loading) return;
     if (!email.trim()) {
@@ -206,6 +217,7 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
     }
   };
 
+  // Helpers de usabilidade do input OTP (mudança, setas, paste etc.).
   const handleCodeChange = (index, value) => {
     const sanitized = value.replace(/\D/g, "");
     setCodeDigits((prev) => {

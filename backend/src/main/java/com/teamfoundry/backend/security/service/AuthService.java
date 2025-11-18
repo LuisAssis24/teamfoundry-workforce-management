@@ -54,6 +54,10 @@ public class AuthService {
     private final VerificationEmailService verificationEmailService;
     private final SecureRandom secureRandom = new SecureRandom();
 
+    /**
+     * Procura um utilizador em todos os contextos (admin, empresa, colaborador) e gera o par de tokens
+     * que o frontend precisa para iniciar sessão.
+     */
     public LoginResult login(LoginRequest request) {
         String identifier = request.email().trim();
         String normalizedEmail = identifier.toLowerCase();
@@ -141,6 +145,9 @@ public class AuthService {
         }
     }
 
+    /**
+     * Passo 1 do fluxo de recuperação: valida se a conta é elegível e gera um novo código descartando os anteriores.
+     */
     @Transactional
     public void requestPasswordReset(String email) {
         String normalizedEmail = email.trim().toLowerCase();
@@ -161,6 +168,9 @@ public class AuthService {
         verificationEmailService.sendPasswordResetCode(account.getEmail(), code);
     }
 
+    /**
+     * Passo 3 do fluxo: valida que o código está ativo, aplica a nova password e expira os tokens antigos.
+     */
     @Transactional
     public void resetPassword(String email, String code, String newPassword) {
         String normalizedEmail = email.trim().toLowerCase();
@@ -186,6 +196,9 @@ public class AuthService {
         passwordResetTokenRepository.deleteByUser(user);
     }
 
+    /**
+     * Passo 2 do fluxo: confirma via backend se o código ainda é válido antes de abrir o formulário de password.
+     */
     @Transactional(readOnly = true)
     public void validateResetCode(String email, String code) {
         String normalizedEmail = email.trim().toLowerCase();
@@ -204,6 +217,9 @@ public class AuthService {
         return String.format("%06d", secureRandom.nextInt(1_000_000));
     }
 
+    /**
+     * Garante que apenas contas completamente registadas e aprovadas (quando aplicável) podem redefinir password.
+     */
     private void ensureAccountEligibleForReset(Account account) {
         if (account.getRegistrationStatus() != RegistrationStatus.COMPLETED) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Esta conta ainda não concluiu o registo.");
