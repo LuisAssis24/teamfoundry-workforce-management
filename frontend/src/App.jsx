@@ -2,8 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import CandidateLogin from "./pages/login/UserLogin/UserLogin.jsx";
 import AdminLogin from "./pages/login/AdminLogin/AdminLogin.jsx";
-import ForgotPassword from "./pages/login/UserLogin/ForgotPassword.jsx";
-import ResetPassword from "./pages/login/UserLogin/ResetPassword.jsx";
 
 import EmployeeRegisterLayout from "./pages/register/EmployeeRegister/EmployeeRegisterLayout.jsx";
 import EmployeeRegisterStep1 from "./pages/register/EmployeeRegister/EmployeeRegisterStep1.jsx";
@@ -39,8 +37,10 @@ function App() {
       <Route path="/" element={<HomeNoLogin />} />
 
       <Route path="/login" element={<CandidateLogin />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+        path="/forgot-password"
+        element={<Navigate to="/login" state={{ openForgotModal: true }} replace />}
+      />
 
       <Route path="/employee-register" element={<EmployeeRegisterLayout />}>
         <Route index element={<Navigate to="step1" replace />} />

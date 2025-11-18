@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import registerIllustration from "../../../assets/images/logo/teamFoundry_LogoPrimary.png";
 import { RegistrationProvider, useRegistration } from "./EmployeeRegisterContext.jsx";
 
+// Representação declarativa das etapas visíveis no cabeçalho/guardas de rota.
 const registerSteps = [
     { id: "step1", path: "/employee-register/step1", label: "Credenciais" },
     { id: "step2", path: "/employee-register/step2", label: "Dados pessoais" },
@@ -10,6 +11,10 @@ const registerSteps = [
     { id: "step4", path: "/employee-register/step4", label: "Confirmar identidade" },
 ];
 
+/**
+ * Orquestração visual + guards de rota para o fluxo de registo do colaborador.
+ * Mantém o estado de cada passo e expõe utilitários via context para os filhos.
+ */
 function RegisterLayoutInner() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -29,6 +34,7 @@ function RegisterLayoutInner() {
         return foundIndex >= 0 ? foundIndex : 0;
     }, [location.pathname]);
 
+    // Guarda os dados de cada secção num único objeto para reutilizar entre passos.
     const updateStepData = (key, value) => {
         setRegisterData((prev) => ({
             ...prev,
@@ -39,6 +45,7 @@ function RegisterLayoutInner() {
         }));
     };
 
+    // Impede saltos diretos para passos ainda não concluídos e normaliza a navegação.
     useEffect(() => {
         const currentStepNumber = registerSteps.findIndex((step) => location.pathname.startsWith(step.path)) + 1;
         if (currentStepNumber === 0) {
@@ -120,6 +127,9 @@ function RegisterLayoutInner() {
     );
 }
 
+/**
+ * Wrapper público do layout que injeta o RegistrationProvider requerido pelos passos.
+ */
 export default function EmployeeRegisterLayout() {
     return (
         <RegistrationProvider>

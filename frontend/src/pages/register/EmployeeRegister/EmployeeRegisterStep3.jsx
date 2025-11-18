@@ -36,6 +36,7 @@ export default function EmployeeRegisterStep3() {
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState("");
 
+    // Repõe as seleções guardadas caso o utilizador regresse ao passo 3.
     useEffect(() => {
         setSelectedRoles(registerData.preferences?.roles ||
             (registerData.preferences?.role ? [registerData.preferences.role] : []));
@@ -45,6 +46,7 @@ export default function EmployeeRegisterStep3() {
         setTermsAccepted(registerData.preferences?.termsAccepted || false);
     }, [registerData.preferences]);
 
+    // Busca opções dinâmicas do backend (com fallbacks) logo que o componente monta.
     useEffect(() => {
         let isMounted = true;
 
@@ -84,6 +86,7 @@ export default function EmployeeRegisterStep3() {
         return selectedRoles.length > 0 && selectedAreas.length > 0 && selectedCompetences.length > 0 && termsAccepted;
     }, [selectedRoles, selectedAreas, selectedCompetences, termsAccepted]);
 
+    // Mantém mensagens de erro coerentes com as validações visuais.
     const validateFields = () => {
         const newErrors = {};
 
@@ -106,6 +109,7 @@ export default function EmployeeRegisterStep3() {
         return newErrors;
     };
 
+    // Envia preferências/termos e só avança se o backend confirmar o payload.
     const handleSubmit = async (event) => {
         event.preventDefault();
         setServerError("");

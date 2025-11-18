@@ -34,6 +34,7 @@ export default function EmployeeRegisterStep4() {
     const [isResending, setIsResending] = useState(false);
     const inputRefs = useRef([]);
 
+    // Se o utilizador regressar a este passo, repõe o código previamente digitado.
     useEffect(() => {
         const storedCode = registerData.verification?.code || "";
         if (storedCode) {
@@ -52,6 +53,7 @@ export default function EmployeeRegisterStep4() {
         }
     };
 
+    // Countdown para evitar spam no endpoint de reenvio.
     useEffect(() => {
         if (resendCooldown <= 0) {
             return;
@@ -121,6 +123,7 @@ export default function EmployeeRegisterStep4() {
         }
     };
 
+    // Valida o código final e, se aprovado, marca o registo como completo.
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!isComplete) {
@@ -138,6 +141,7 @@ export default function EmployeeRegisterStep4() {
         }
     };
 
+    // Reutiliza o email capturado no passo 1 para reenviar o OTP.
     const handleResend = async () => {
         if (resendCooldown > 0 || isResending) {
             return;

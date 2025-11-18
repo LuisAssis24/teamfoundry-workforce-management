@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState, useCall
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
+// Mantém o progresso do wizard de colaborador (passos concluídos e proibição de saltos).
 const EmployeeRegisterContext = createContext(null);
 
 export function RegistrationProvider({ children }) {
@@ -9,6 +10,7 @@ export function RegistrationProvider({ children }) {
   const [pendingStep, setPendingStep] = useState(null);
   const navigate = useNavigate();
 
+  // Marca um passo como concluído e opcionalmente agenda a navegação para o próximo.
   const completeStep = (stepNumber, nextStepNumber = null) => {
     setCompletedSteps((prev) =>
       prev.includes(stepNumber)
@@ -20,17 +22,20 @@ export function RegistrationProvider({ children }) {
     }
   };
 
+  // Um passo só fica acessível depois do imediatamente anterior estar concluído.
   const canAccessStep = useCallback((stepNumber) => {
     if (stepNumber === 1) return true;
     return completedSteps.includes(stepNumber - 1);
   }, [completedSteps]);
 
+  // Encapula a navegação garantindo que respeita o guard acima.
   const goToStep = useCallback((stepNumber) => {
     if (canAccessStep(stepNumber)) {
       navigate(`/employee-register/step${stepNumber}`);
     }
   }, [canAccessStep, navigate]);
 
+  // Depois que `completeStep` define o próximo passo, esta effect executa a navegação real.
   useEffect(() => {
     if (!pendingStep) {
       return;

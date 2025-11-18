@@ -4,6 +4,7 @@ import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
 import com.teamfoundry.backend.security.dto.ForgotPasswordRequest;
 import com.teamfoundry.backend.security.dto.ResetPasswordRequest;
+import com.teamfoundry.backend.security.dto.VerifyResetCodeRequest;
 import com.teamfoundry.backend.security.dto.LoginResult;
 import com.teamfoundry.backend.security.service.AuthService;
 import jakarta.servlet.http.Cookie;
@@ -26,6 +27,9 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Endpoint de login público. Devolve o access token e escreve o refresh token em cookie HttpOnly.
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
         LoginResult result = authService.login(request);
@@ -47,18 +51,36 @@ public class AuthController {
         return ResponseEntity.ok(result.response());
     }
 
+    /**
+     * Passo 1 da recuperação: gera e envia o código.
+     */
     @PostMapping("/forgot-password")
     public ResponseEntity<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequest req) {
         authService.requestPasswordReset(req.email());
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Passo 3 da recuperação: valida código + nova password e conclui o processo.
+     */
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest req) {
         authService.resetPassword(req.email(), req.code(), req.newPassword());
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Passo 2 da recuperação: confirma que o código ainda é válido antes de mostrar o formulário final.
+     */
+    @PostMapping("/reset-password/verify")
+    public ResponseEntity<Void> verifyResetCode(@RequestBody @Valid VerifyResetCodeRequest req) {
+        authService.validateResetCode(req.email(), req.code());
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Reemite um novo access token com base no refresh token guardado em cookie.
+     */
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(HttpServletRequest request) {
         String refresh = null;
@@ -71,6 +93,9 @@ public class AuthController {
         return ResponseEntity.ok(resp);
     }
 
+    /**
+     * Termina sessão invalidando o refresh token e apagando o cookie no browser.
+     */
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         String refresh = null;

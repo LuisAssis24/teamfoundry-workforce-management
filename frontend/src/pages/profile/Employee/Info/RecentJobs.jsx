@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
 import { listCandidateJobs } from "../../../../api/candidateJobs.js";
+import { fetchCandidateProfile } from "../../../../api/candidateProfile.js";
 
 export default function RecentJobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [displayName, setDisplayName] = useState("Nome Sobrenome");
 
   useEffect(() => {
     let isMounted = true;
@@ -16,21 +18,29 @@ export default function RecentJobs() {
         if (!isMounted) return;
         setJobs(data?.content ?? []);
       } catch (err) {
-        if (isMounted) setError(err.message || "Não foi possível carregar os últimos trabalhos.");
+        if (isMounted) setError(err.message || "Nuo foi poss??vel carregar os gltimos trabalhos.");
       } finally {
         if (isMounted) setLoading(false);
       }
     }
 
+    async function loadProfileName() {
+      try {
+        const profile = await fetchCandidateProfile();
+        if (!isMounted) return;
+        setDisplayName(formatName(profile?.firstName, profile?.lastName));
+      } catch {
+      }
+    }
+
     loadJobs();
+    loadProfileName();
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  return (
+  }, []);  return (
     <section>
-      <ProfileHeader />
+      <ProfileHeader name={displayName} />
       <ProfileTabs />
 
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">
@@ -112,6 +122,12 @@ function EmptyState() {
   );
 }
 
+function formatName(firstName, lastName) {
+  const trimmedFirst = firstName?.trim();
+  const trimmedLast = lastName?.trim();
+  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
+  return full || "Nome Sobrenome";
+}
 function formatDateRange(start, end) {
   const options = { year: "numeric", month: "short" };
   const format = (date) => (date ? new Date(date).toLocaleDateString("pt-PT", options) : "—");
@@ -133,3 +149,5 @@ function toStatusLabel(status) {
   };
   return labels[status] || status;
 }
+
+

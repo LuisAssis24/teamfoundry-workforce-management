@@ -49,6 +49,7 @@ export default function EmployeeRegisterStep1() {
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState("");
 
+    // Se o utilizador voltar ao passo 1, repovoamos os campos com os dados guardados no contexto.
     useEffect(() => {
         setEmail(registerData.credentials?.email || "");
         setPassword(registerData.credentials?.password || "");
@@ -64,6 +65,7 @@ export default function EmployeeRegisterStep1() {
 
     const isPasswordValid = useMemo(() => passwordChecks.every((item) => item.valid), [passwordChecks]);
 
+    // Valida email/password/confirmPassword antes de chamar o backend.
     const validateFields = () => {
         const newErrors = {};
 
@@ -88,6 +90,7 @@ export default function EmployeeRegisterStep1() {
         return newErrors;
     };
 
+    // Envia o primeiro passo do registo e, em caso de sucesso, vai para o passo 2.
     const handleSubmit = async (event) => {
         event.preventDefault();
         setServerError("");

@@ -24,6 +24,7 @@ export default function CompanyRegisterStep2() {
   const [loadingOptions, setLoadingOptions] = useState(true);
   const descriptionLength = description.length;
 
+  // Carrega opções remotas (setores/países) logo no mount e mostra fallback caso falhe.
   useEffect(() => {
     let isMounted = true;
     setLoadingOptions(true);
@@ -61,6 +62,7 @@ export default function CompanyRegisterStep2() {
     return newErrors;
   };
 
+  // Controla limite de caracteres e impede resize manual via CSS.
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
     if (value.length <= DESCRIPTION_MAX_CHARS) {
@@ -70,6 +72,7 @@ export default function CompanyRegisterStep2() {
     }
   };
 
+  // Guarda os dados da empresa para reutilizar no passo final.
   const handleSubmit = (event) => {
     event.preventDefault();
     const validationErrors = validate();

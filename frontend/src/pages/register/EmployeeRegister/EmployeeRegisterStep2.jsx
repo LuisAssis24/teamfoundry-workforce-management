@@ -30,6 +30,7 @@ export default function EmployeeRegisterStep2() {
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState("");
 
+    // Mantém o formulário sincronizado com o que já foi preenchido caso o utilizador volte atrás.
     useEffect(() => {
         setFormData({
             firstName: registerData.personal?.firstName || "",
@@ -52,10 +53,12 @@ export default function EmployeeRegisterStep2() {
         registerData.personal?.cvFileName,
     ]);
 
+    // Helper genérico para inputs controlados.
     const updateField = (field) => (event) => {
         setFormData((prev) => ({ ...prev, [field]: event.target.value }));
     };
 
+    // Converte o CV para base64 e guarda o nome original para mostrar/reenviar.
     const handleCvChange = async (event) => {
         const file = event.target.files?.[0];
         if (!file) {
@@ -76,6 +79,7 @@ export default function EmployeeRegisterStep2() {
             reader.readAsDataURL(file);
         });
 
+    // Regras mínimas para garantir que os dados são coerentes antes de enviar ao backend.
     const validateFields = () => {
         const newErrors = {};
 
@@ -110,6 +114,7 @@ export default function EmployeeRegisterStep2() {
         return newErrors;
     };
 
+    // Persiste os dados pessoais e avança para o passo seguinte se o backend confirmar.
     const handleSubmit = async (event) => {
         event.preventDefault();
         setServerError("");
