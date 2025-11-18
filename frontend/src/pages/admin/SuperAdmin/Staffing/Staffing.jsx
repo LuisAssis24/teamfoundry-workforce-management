@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import WorkRequestCard from '../../../../components/ui/WorkManagement/WorkRequestCard';
 import AssignAdminModal from '../../../../components/ui/WorkManagement/AssignAdminModal';
-import { employeeRequestsAPI } from '../../../../api/employeeRequests';
+import { teamRequestsAPI } from '../../../../api/teamRequests';
 
 export default function GestaoTrabalho() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,96 +9,35 @@ export default function GestaoTrabalho() {
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Mock data para administradores
-  const [adminList] = useState([
-    { id: 1, name: 'Admin01', requestCount: 6 },
-    { id: 2, name: 'admin02', requestCount: 8 },
-    { id: 3, name: 'admin03', requestCount: 9 },
-    { id: 4, name: 'admin04', requestCount: 14 },
-    { id: 5, name: 'admin05', requestCount: 7 },
-    { id: 6, name: 'admin06', requestCount: 10 },
-  ]);
-
+  const [adminList] = useState([]);
   const [workRequests, setWorkRequests] = useState([]);
 
-  // Mock data de exemplo para testes
-  const mockWorkRequests = [
-    {
-      id: 1,
-      companyName: "Clebin Ltda",
-      jobRole: "Tubista",
-      workforceCount: 3,
-      administrator: "N/A",
-      startDate: "10/11/2025",
-      endDate: "20/12/2025",
-      status: "Por fazer"
-    },
-    {
-      id: 2,
-      companyName: "Tech Green Solutions",
-      jobRole: "Desenvolvedor Full Stack",
-      workforceCount: 5,
-      administrator: "admin02",
-      startDate: "01/11/2025",
-      endDate: "15/12/2025",
-      status: "Em andamento"
-    },
-    {
-      id: 3,
-      companyName: "Innova Labs",
-      jobRole: "Designer Gráfico",
-      workforceCount: 2,
-      administrator: "N/A",
-      startDate: "15/11/2025",
-      endDate: "25/01/2026",
-      status: "Por fazer"
-    },
-    {
-      id: 4,
-      companyName: "StartUp Azul",
-      jobRole: "Analista de Dados",
-      workforceCount: 4,
-      administrator: "admin04",
-      startDate: "05/11/2025",
-      endDate: "10/02/2026",
-      status: "Em andamento"
-    }
-  ];
-
-  // Buscar requisições da API ao montar o componente
+  // Buscar requisicoes da API ao montar o componente
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         setLoading(true);
-        const data = await employeeRequestsAPI.getAll();
-        
-        // Se não houver dados na API, usar mock data
-        let transformedData = [];
-        if (data && data.length > 0) {
-          // Transformar os dados da API para o formato esperado pelo componente
-          transformedData = data.map(request => ({
-            id: request.id,
-            companyName: request.companyId ? `Empresa ${request.companyId}` : 'N/A',
-            jobRole: request.requestedRole,
-            workforceCount: 1, // Placeholder - ajustar conforme necessário
-            administrator: 'N/A', // Placeholder - ajustar quando tiver administrador atribuído
-            startDate: request.createdAt ? new Date(request.createdAt).toLocaleDateString('pt-PT') : 'N/A',
-            endDate: 'dd/mm/aaaa', // Placeholder - ajustar conforme necessário
-            status: request.state === 'PENDING' ? 'Por fazer' : request.state === 'IN_PROGRESS' ? 'Em andamento' : 'Concluído'
-          }));
-        } else {
-          // Usar mock data quando não houver dados na API
-          transformedData = mockWorkRequests;
-        }
-        
+        const data = await teamRequestsAPI.getAll();
+        const transformedData =
+          data && data.length > 0
+            ? data.map((request) => ({
+                id: request.id,
+                company: request.company || null,
+                teamName: request.teamName || 'N/A',
+                description: request.description || 'N/A',
+                state: request.state || 'PENDING',
+                responsibleAdminId: request.responsibleAdminId,
+                startDate: request.startDate || null,
+                endDate: request.endDate || null,
+                createdAt: request.createdAt || null,
+              }))
+            : [];
+
         setWorkRequests(transformedData);
         setError(null);
       } catch (err) {
-        console.error('Erro ao buscar requisições:', err);
-        // Em caso de erro, usar mock data para não quebrar a experiência
-        setWorkRequests(mockWorkRequests);
-        setError(null);
+        console.error('Erro ao buscar requisicoes:', err);
+        setError('Erro ao buscar requisicoes de equipa.');
       } finally {
         setLoading(false);
       }
@@ -122,17 +61,19 @@ export default function GestaoTrabalho() {
   };
 
   const handleAssignAdminConfirm = (admin) => {
-    // Aqui você implementará a lógica para atribuir o admin à requisição
-    console.log(`Atribuindo admin ${admin.name} à requisição ${selectedRequestId}`);
+    console.log(`Atribuindo admin ${admin.name} a requisicao ${selectedRequestId}`);
     handleCloseModal();
   };
+
+  const filteredRequests = workRequests.filter((request) => {
+    const teamName = (request.teamName || '').toLowerCase();
+    return teamName.includes(searchTerm.toLowerCase());
+  });
 
   return (
     <section className="space-y-6">
       <header>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-primary">
-            Gestão de Trabalho
-          </h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-primary">Gestao de Trabalho</h1>
         <p className="text-body text-base-content/70 mt-2">
           Configure fluxos de trabalho, cargos e equipes empresariais.
         </p>
@@ -140,14 +81,14 @@ export default function GestaoTrabalho() {
 
       <section className="bg-base-100 border border-base-200 rounded-3xl shadow-xl p-8 space-y-6 md:p-10">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-primary">Requisições</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-primary">Requisicoes</h2>
 
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4 w-full md:w-auto md:justify-end">
             <label className="input input-bordered flex items-center gap-2 w-full md:w-72">
               <input
                 type="search"
                 className="grow"
-                placeholder="Pesquisar requisição"
+                placeholder="Pesquisar requisicao"
                 value={searchTerm}
                 onChange={handleSearch}
               />
@@ -182,23 +123,24 @@ export default function GestaoTrabalho() {
           </div>
         )}
 
-        {!loading && workRequests.length === 0 && (
+        {!loading && filteredRequests.length === 0 && (
           <div className="alert alert-info shadow-md">
-            <span className="text-body">Nenhuma requisição encontrada.</span>
+            <span className="text-body">Nenhuma requisicao encontrada.</span>
           </div>
         )}
 
         <div className="space-y-4">
-          {workRequests.map((request) => (
+          {filteredRequests.map((request) => (
             <WorkRequestCard
               key={request.id}
-              companyName={request.companyName}
-              jobRole={request.jobRole}
-              workforceCount={request.workforceCount}
-              administrator={request.administrator}
+              company={request.company}
+              teamName={request.teamName}
+              description={request.description}
+              state={request.state}
+              responsibleAdminId={request.responsibleAdminId}
               startDate={request.startDate}
               endDate={request.endDate}
-              status={request.status}
+              createdAt={request.createdAt}
               onAssignAdmin={() => handleAssignAdmin(request.id)}
             />
           ))}
@@ -214,4 +156,3 @@ export default function GestaoTrabalho() {
     </section>
   );
 }
-

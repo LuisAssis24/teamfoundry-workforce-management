@@ -1,6 +1,7 @@
 package com.teamfoundry.backend.admin.model;
 
 import com.teamfoundry.backend.admin.enums.State;
+import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,8 +19,8 @@ public class EmployeeRequest {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "id_empresa", nullable = false)
-    private CompanyAccount company;
+    @JoinColumn(name = "id_team_request", nullable = false)
+    private TeamRequest teamRequest;
 
     @Column(name = "requested_role", nullable = false)
     private String requestedRole;
@@ -28,6 +29,6 @@ public class EmployeeRequest {
     @Column(nullable = false)
     private State state;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "date_accepted", nullable = false)
+    private LocalDateTime acceptedDate;
 }
