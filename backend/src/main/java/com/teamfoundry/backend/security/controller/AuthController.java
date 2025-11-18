@@ -4,6 +4,7 @@ import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
 import com.teamfoundry.backend.security.dto.ForgotPasswordRequest;
 import com.teamfoundry.backend.security.dto.ResetPasswordRequest;
+import com.teamfoundry.backend.security.dto.VerifyResetCodeRequest;
 import com.teamfoundry.backend.security.dto.LoginResult;
 import com.teamfoundry.backend.security.service.AuthService;
 import jakarta.servlet.http.Cookie;
@@ -56,6 +57,12 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest req) {
         authService.resetPassword(req.email(), req.code(), req.newPassword());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reset-password/verify")
+    public ResponseEntity<Void> verifyResetCode(@RequestBody @Valid VerifyResetCodeRequest req) {
+        authService.validateResetCode(req.email(), req.code());
         return ResponseEntity.noContent().build();
     }
 

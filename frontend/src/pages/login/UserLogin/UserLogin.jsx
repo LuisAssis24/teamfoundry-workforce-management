@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
+import ForgotPassword from "./ForgotPassword.jsx";
 
 export default function LoginCandidate() {
     const [email, setEmail] = useState("");
@@ -11,6 +12,14 @@ export default function LoginCandidate() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+    const [showForgotModal, setShowForgotModal] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.openForgotModal) {
+            setShowForgotModal(true);
+        }
+    }, [location.state]);
 
     const handleLogin = async () => {
         setLoading(true);
@@ -69,7 +78,13 @@ export default function LoginCandidate() {
                                 <span className="label-text text-xs">Lembrar-me</span>
                             </label>
                             <p className="text-xs text-accent text-right mt-0">
-                                <Link to="/forgot-password" className="link link-accent">Esqueceu-se?</Link>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowForgotModal(true)}
+                                    className="link link-accent"
+                                >
+                                    Esqueceu-se?
+                                </button>
                             </p>
                         </div>
                     </div>
@@ -82,13 +97,20 @@ export default function LoginCandidate() {
                         />
 
                         {/* Registe-se */}
-                        <div className="flex justify-center items-center text-xs mt-2 space-x-2 text-center">
-                            <span className="text-gray-500">Não possui conta?</span>
+                        <div className="flex flex-wrap justify-center items-center text-xs mt-2 gap-2 text-center">
+                            <span className="text-gray-500">Registe-se como</span>
                             <Link
                                 to="/employee-register/step1"
-                                className="text-accent font-medium hover:underline inline-block"
+                                className="text-accent font-medium hover:underline"
                             >
-                                Registe-se
+                                Funcionário
+                            </Link>
+                            <span className="text-gray-500">ou</span>
+                            <Link
+                                to="/company-register/step1"
+                                className="text-accent font-medium hover:underline"
+                            >
+                                Empresa
                             </Link>
                         </div>
                     </div>
@@ -117,11 +139,16 @@ export default function LoginCandidate() {
 
                     <p className="text-xs text-gray-500 text-center !mt-0">
                         <i className="bi bi-exclamation-octagon text-gray-400 mr-1"></i>
-                        Opções disponíveis apenas para candidatos.
+                        Opções disponíveis apenas para Funcionários.
                     </p>
                 </div>
             </div>
             <Outlet />
+            <ForgotPassword
+                open={showForgotModal}
+                initialEmail={email}
+                onClose={() => setShowForgotModal(false)}
+            />
         </main>
     );
 }

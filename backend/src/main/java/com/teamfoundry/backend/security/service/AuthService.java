@@ -1,13 +1,16 @@
 package com.teamfoundry.backend.security.service;
 
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
 import com.teamfoundry.backend.account.enums.UserType;
 import com.teamfoundry.backend.account.model.Account;
 import com.teamfoundry.backend.account.model.AdminAccount;
+import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
+import com.teamfoundry.backend.account.service.VerificationEmailService;
 import com.teamfoundry.backend.security.dto.LoginRequest;
 import com.teamfoundry.backend.security.dto.LoginResponse;
 import com.teamfoundry.backend.security.dto.LoginResult;
@@ -22,11 +25,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,6 +51,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthTokenRepository authTokenRepository;
     private final JwtService jwtService;
+    private final VerificationEmailService verificationEmailService;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public LoginResult login(LoginRequest request) {
         String identifier = request.email().trim();
@@ -134,33 +141,42 @@ public class AuthService {
         }
     }
 
+    @Transactional
     public void requestPasswordReset(String email) {
-        accountRepository.findByEmail(email).ifPresent(acc -> {
-            // Clean previous tokens for this user (optional but tidy)
-            passwordResetTokenRepository.deleteByUser(acc);
+        String normalizedEmail = email.trim().toLowerCase();
+        Account account = accountRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conta não encontrada."));
+        ensureAccountEligibleForReset(account);
 
-            PasswordResetToken prt = new PasswordResetToken();
-            prt.setUser(acc);
-            prt.setToken(UUID.randomUUID().toString());
-            prt.setCreatedAt(Timestamp.from(Instant.now()));
-            prt.setExpireAt(Timestamp.from(Instant.now().plus(1, ChronoUnit.HOURS)));
-            passwordResetTokenRepository.save(prt);
+        passwordResetTokenRepository.deleteByUser(account);
 
-            // No email service configured; log token for integration/testing
-            LOGGER.info("Password reset token for {}: {} (expires in 1h)", acc.getEmail(), prt.getToken());
-        });
+        PasswordResetToken prt = new PasswordResetToken();
+        prt.setUser(account);
+        String code = generateResetCode();
+        prt.setToken(code);
+        prt.setCreatedAt(Timestamp.from(Instant.now()));
+        prt.setExpireAt(Timestamp.from(Instant.now().plus(1, ChronoUnit.HOURS)));
+        passwordResetTokenRepository.save(prt);
+
+        verificationEmailService.sendPasswordResetCode(account.getEmail(), code);
     }
 
+    @Transactional
     public void resetPassword(String email, String code, String newPassword) {
         String normalizedEmail = email.trim().toLowerCase();
         var user = accountRepository.findByEmail(normalizedEmail)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email não existe, crie uma conta"));
+        ensureAccountEligibleForReset(user);
 
         PasswordResetToken prt = passwordResetTokenRepository.findByUserAndToken(user, code)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset token"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código incorreto, reveja a sua caixa de correio"));
         if (prt.getExpireAt().before(Timestamp.from(Instant.now()))) {
             passwordResetTokenRepository.delete(prt);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token expired");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código expirado, recomeçe o processo");
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova password deve ser diferente da atual");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -168,6 +184,36 @@ public class AuthService {
 
         // Invalidate used token(s)
         passwordResetTokenRepository.deleteByUser(user);
+    }
+
+    @Transactional(readOnly = true)
+    public void validateResetCode(String email, String code) {
+        String normalizedEmail = email.trim().toLowerCase();
+        var user = accountRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not found"));
+        ensureAccountEligibleForReset(user);
+
+        PasswordResetToken prt = passwordResetTokenRepository.findByUserAndToken(user, code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset token"));
+        if (prt.getExpireAt().before(Timestamp.from(Instant.now()))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token expired");
+        }
+    }
+
+    private String generateResetCode() {
+        return String.format("%06d", secureRandom.nextInt(1_000_000));
+    }
+
+    private void ensureAccountEligibleForReset(Account account) {
+        if (account.getRegistrationStatus() != RegistrationStatus.COMPLETED) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Esta conta ainda não concluiu o registo.");
+        }
+        if (!account.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A conta ainda não foi verificada.");
+        }
+        if (account instanceof CompanyAccount companyAccount && !companyAccount.isStatus()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A conta da empresa aguarda aprovação do administrador.");
+        }
     }
 
     public LoginResponse refresh(String refreshToken) {

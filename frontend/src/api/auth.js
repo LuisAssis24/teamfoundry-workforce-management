@@ -71,3 +71,7 @@ export function forgotPassword(email) {
 export function resetPassword(email, code, newPassword) {
   return httpPost("/auth/reset-password", { email, code, newPassword });
 }
+
+export function verifyResetCode(email, code) {
+  return httpPost("/auth/reset-password/verify", { email, code });
+}
