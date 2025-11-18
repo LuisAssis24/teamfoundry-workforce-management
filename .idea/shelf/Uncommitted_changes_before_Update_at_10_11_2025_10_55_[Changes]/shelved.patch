@@ -1,0 +1,266 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"small changes\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JSX File\" />\r\n        <option value=\"JavaScript File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;LuisAssis24&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management&quot;,\r\n    &quot;accountId&quot;: &quot;744e2a3a-bde5-4768-bf04-afd756c9b8e6&quot;\r\n  }\r\n}</component>\r\n  <component name=\"KubernetesApiPersistence\">{}</component>\r\n  <component name=\"KubernetesApiProvider\">{\r\n  &quot;isMigrated&quot;: true\r\n}</component>\r\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"PHP\" />\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"34vCubPTpiW0fbRzlf0VXysOloh\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ReactDesignerToolWindowState\">\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.intellij.reactbuddy.reactComponents\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.reactInspector\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.storybook\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"findNameReturnsValueFromRepository\" type=\"JavaScriptTestRunnerJest\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <node-interpreter value=\"project\" />\r\n      <jest-package value=\"$PROJECT_DIR$/frontend/node_modules/jest\" />\r\n      <working-dir value=\"$PROJECT_DIR$/frontend\" />\r\n      <envs />\r\n      <scope-kind value=\"TEST\" />\r\n      <test-file value=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx\" />\r\n      <test-names>\r\n        <test-name value=\"findNameReturnsValueFromRepository\" />\r\n      </test-names>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"\" />\r\n      <created>1762084882236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762084882236</updated>\r\n      <workItem from=\"1762084883878\" duration=\"21000\" />\r\n      <workItem from=\"1762091469964\" duration=\"76000\" />\r\n      <workItem from=\"1762094001251\" duration=\"2765000\" />\r\n      <workItem from=\"1762246782593\" duration=\"518000\" />\r\n      <workItem from=\"1762251955265\" duration=\"1640000\" />\r\n      <workItem from=\"1762269561409\" duration=\"37000\" />\r\n      <workItem from=\"1762342213231\" duration=\"34000\" />\r\n      <workItem from=\"1762342346529\" duration=\"11000\" />\r\n      <workItem from=\"1762342365107\" duration=\"12000\" />\r\n      <workItem from=\"1762343724969\" duration=\"31000\" />\r\n      <workItem from=\"1762343772875\" duration=\"5000\" />\r\n      <workItem from=\"1762344150441\" duration=\"327000\" />\r\n      <workItem from=\"1762345186853\" duration=\"419000\" />\r\n      <workItem from=\"1762358190210\" duration=\"4167000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"paleta certa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762094139652</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762094139652</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762342221517</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762342221517</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762345285968</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762345285968</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"paleta certa\" />\r\n    <MESSAGE value=\"small changes\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"small changes\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 1c1a748c4ba96edd7cdf2f1dcdbc04b8066641c7)
++++ b/.idea/workspace.xml	(date 1762772134852)
+@@ -5,9 +5,11 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="small changes">
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25_[Changes]/shelved.patch" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25__Changes_.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/repository/AccountRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -65,15 +67,20 @@
+     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,
++    &quot;last_opened_file_path&quot;: &quot;D:/Projetos/TeamFoundry/teamfoundry-workforce-management&quot;,
+     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+     &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,
+     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+@@ -100,17 +107,12 @@
+       </test-names>
+       <method v="2" />
+     </configuration>
+-    <recent_temporary>
+-      <list>
+-        <item itemvalue="Jest.findNameReturnsValueFromRepository" />
+-      </list>
+-    </recent_temporary>
+   </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
++        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
++        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -136,6 +138,11 @@
+       <workItem from="1762344150441" duration="327000" />
+       <workItem from="1762345186853" duration="419000" />
+       <workItem from="1762358190210" duration="4167000" />
++      <workItem from="1762626353152" duration="160000" />
++      <workItem from="1762626562380" duration="438000" />
++      <workItem from="1762627024314" duration="2094000" />
++      <workItem from="1762699055010" duration="4344000" />
++      <workItem from="1762771725395" duration="403000" />
+     </task>
+     <task id="LOCAL-00001" summary="paleta certa">
+       <option name="closed" value="true" />
+Index: frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>export default function GestaoTrabalho() {\r\n  return (\r\n    <section className=\"space-y-6\">\r\n      <header>\r\n        <h1 className=\"text-3xl md:text-4xl font-extrabold text-primary\">\r\n          Gestao de trabalho\r\n        </h1>\r\n        <p className=\"text-base-content/70 mt-2\">\r\n          Configure fluxos de trabalho, cargos e equipes empresariais.\r\n        </p>\r\n      </header>\r\n\r\n      <div className=\"alert alert-info shadow-md\">\r\n        <span>Em breve: painel de gestao de trabalho.</span>\r\n      </div>\r\n    </section>\r\n  );\r\n}\r\n
+===================================================================
+diff --git a/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx b/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx
+--- a/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx	(revision 1c1a748c4ba96edd7cdf2f1dcdbc04b8066641c7)
++++ b/frontend/src/pages/SuperAdmin-pages/GestaoTrabalho.jsx	(date 1762714846249)
+@@ -1,18 +1,168 @@
++import { useState } from "react";
++import Button from "../../components/ui/Button/Button.jsx";
++import InputField from "../../components/ui/Input/InputField.jsx";
++import Modal from "../../components/ui/Modal/Modal.jsx";
++
+ export default function GestaoTrabalho() {
++  const [q, setQ] = useState("");
++  const [showModal, setShowModal] = useState(false);
++  const [selected, setSelected] = useState(null);
++
++  const filters = [
++    { id: "status", label: "Status: Por Fazer" },
++    { id: "date", label: "Data: Ascendente" },
++    { id: "mdo", label: "MdO: Ascendente" },
++  ];
++
++  const sample = new Array(6).fill(0).map((_, i) => ({
++    id: i,
++    company: "Clebin Ltda",
++    role: "Tubista",
++    workforce: 3,
++    admin: i === 3 ? "Admin Fulano" : null,
++    startDate: "dd/mm/aaaa",
++    endDate: "dd/mm/aaaa",
++    status: "Por fazer",
++  }));
++
++  function handleAssignClick(req) {
++    setSelected(req);
++    setShowModal(true);
++  }
++
++  function closeModal() {
++    setShowModal(false);
++    setSelected(null);
++  }
++
++  const filtered = sample.filter((r) =>
++    r.company.toLowerCase().includes(q.toLowerCase())
++  );
++
+   return (
+-    <section className="space-y-6">
+-      <header>
+-        <h1 className="text-3xl md:text-4xl font-extrabold text-primary">
+-          Gestao de trabalho
+-        </h1>
+-        <p className="text-base-content/70 mt-2">
+-          Configure fluxos de trabalho, cargos e equipes empresariais.
+-        </p>
++    <section className="space-y-6 px-6 py-4">
++      <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
++        <div>
++          <h1 className="text-3xl md:text-4xl font-extrabold text-primary">
++            Requisições
++          </h1>
++          <p className="text-base-content/70 mt-2">
++            Configure fluxos de trabalho, cargos e equipes empresariais.
++          </p>
++        </div>
++
++        <div className="flex items-center gap-4 w-full md:w-auto">
++          <InputField
++            value={q}
++            onChange={(e) => {
++              const v = typeof e === "string" ? e : e?.target?.value;
++              setQ(v ?? "");
++            }}
++            placeholder="Pesquisar..."
++            className="w-full md:w-80"
++          />
++        </div>
+       </header>
+ 
+-      <div className="alert alert-info shadow-md">
+-        <span>Em breve: painel de gestao de trabalho.</span>
+-      </div>
++      <div className="flex items-center justify-between">
++        <div className="flex gap-3 flex-wrap">
++          {filters.map((f) => (
++            <button
++              key={f.id}
++              type="button"
++              className="btn btn-ghost btn-sm rounded-full border"
++              onClick={() => console.log("filtro:", f)}
++            >
++              {f.label}
++            </button>
++          ))}
++        </div>
++      </div>
++
++      <div className="flex gap-4">
++        <div className="w-2 hidden lg:block">
++          <div className="h-full bg-primary rounded-l-lg" />
++        </div>
++
++        <div className="flex-1">
++          {filtered.length === 0 ? (
++            <div className="alert alert-info shadow-md">
++              Nenhuma requisição encontrada.
++            </div>
++          ) : (
++            <div className="space-y-4">
++              {filtered.map((r) => (
++                <div
++                  key={r.id}
++                  className="card bg-base-100 shadow-md border rounded-lg p-4 flex items-start justify-between"
++                >
++                  <div className="flex-1 text-sm text-slate-800">
++                    <div className="mb-3">
++                      <strong>Nome Empresa:</strong> {r.company} &nbsp;&nbsp;
++                      <strong>Função:</strong> {r.role} &nbsp;&nbsp;
++                      <strong>Mão de Obra:</strong> {r.workforce} &nbsp;&nbsp;
++                      <strong>Administrador:</strong> {r.admin ?? "N/A"}
++                    </div>
++
++                    <div className="text-sm text-slate-600">
++                      <span>
++                        <strong>Data de início:</strong> {r.startDate}
++                      </span>
++                      &nbsp;&nbsp;
++                      <span>
++                        <strong>Data de finalização:</strong> {r.endDate}
++                      </span>
++                      &nbsp;&nbsp;
++                      <span>
++                        <strong>Status:</strong> {r.status}
++                      </span>
++                    </div>
++                  </div>
++
++                  <div className="flex-shrink-0">
++                    <Button
++                      className={r.admin ? "btn-secondary" : "btn-success"}
++                      onClick={() => handleAssignClick(r)}
++                    >
++                      {r.admin ? "Mudar administrador" : "Atribuir Administrador"}
++                    </Button>
++                  </div>
++                </div>
++              ))}
++            </div>
++          )}
++        </div>
++      </div>
++
++      {showModal && (
++        <Modal title="Atribuir Administrador" onClose={closeModal}>
++          <div className="space-y-4">
++            <p>
++              Selecionado: <strong>{selected?.company}</strong> — {selected?.role}
++            </p>
++
++            <div className="flex gap-2 items-center">
++              <InputField placeholder="Pesquisar administrador..." />
++              <Button className="btn-primary">Pesquisar</Button>
++            </div>
++
++            <div className="flex justify-end gap-2">
++              <Button className="btn-ghost" onClick={closeModal}>
++                Cancelar
++              </Button>
++              <Button
++                className="btn-success"
++                onClick={() => {
++                  alert("Administrador atribuído.");
++                  closeModal();
++                }}
++              >
++                Confirmar
++              </Button>
++            </div>
++          </div>
++        </Modal>
++      )}
+     </section>
+   );
+ }

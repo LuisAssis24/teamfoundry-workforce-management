@@ -2,9 +2,8 @@ package com.teamfoundry.backend.admin.controller;
 
 import com.teamfoundry.backend.admin.model.TeamRequest;
 import com.teamfoundry.backend.admin.service.TeamRequestService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -21,6 +20,14 @@ class TeamRequestController {
     @GetMapping
     public List<TeamRequest> getAll() {
         return service.getAllRequests();
+    }
+
+    @PatchMapping("/{id}/responsible-admin")
+    public TeamRequest updateResponsibleAdmin(
+            @PathVariable Integer id,
+            @RequestParam Integer adminId) {
+
+        return service.updateResponsibleAdmin(id, adminId);
     }
 
 }
