@@ -323,7 +323,11 @@ export default function ForgotPassword({ open, onClose, initialEmail }) {
         <button
           type="button"
           className="btn btn-ghost btn-sm"
-          onClick={() => setStep(STEPS.EMAIL)}
+          onClick={() => {
+            setInfoMessage("");
+            setCodeError("");
+            setStep(STEPS.EMAIL);
+          }}
         >
           Alterar email
         </button>

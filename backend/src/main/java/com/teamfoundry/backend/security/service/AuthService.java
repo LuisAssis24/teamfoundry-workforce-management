@@ -190,13 +190,13 @@ public class AuthService {
     public void validateResetCode(String email, String code) {
         String normalizedEmail = email.trim().toLowerCase();
         var user = accountRepository.findByEmail(normalizedEmail)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email não encontrado"));
         ensureAccountEligibleForReset(user);
 
         PasswordResetToken prt = passwordResetTokenRepository.findByUserAndToken(user, code)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset token"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código incorreto, reveja a sua caixa de correio"));
         if (prt.getExpireAt().before(Timestamp.from(Instant.now()))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token expired");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código expirado, recomeçe o processo");
         }
     }
 

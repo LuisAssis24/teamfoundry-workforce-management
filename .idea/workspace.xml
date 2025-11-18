@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="correçao Navbar.jsx">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/common/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/common/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -194,7 +185,7 @@
       <workItem from="1762949627915" duration="1635000" />
       <workItem from="1762969694442" duration="2838000" />
       <workItem from="1762972598953" duration="721000" />
-      <workItem from="1763463924704" duration="4137000" />
+      <workItem from="1763463924704" duration="4709000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -244,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763467462690</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais">
+      <option name="closed" value="true" />
+      <created>1763471752630</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763471752630</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -256,7 +255,8 @@
     <MESSAGE value="Implement password reset functionality and update email service" />
     <MESSAGE value="Backend inicia, server email com problemas" />
     <MESSAGE value="correçao Navbar.jsx" />
-    <option name="LAST_COMMIT_MESSAGE" value="correçao Navbar.jsx" />
+    <MESSAGE value="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais" />
+    <option name="LAST_COMMIT_MESSAGE" value="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
