@@ -41,10 +41,19 @@ public class ProfileOptionsSeeder {
 
     private List<ActivitySectors> defaultActivitySectors() {
         return List.of(
-                activitySector("Fundição"),
-                activitySector("Manutenção Industrial")
+                activitySector("Fundicao"),
+                activitySector("Manutencao Industrial"),
+                activitySector("Metalomecanica"),
+                activitySector("Automacao"),
+                activitySector("Eletronica"),
+                activitySector("Energia"),
+                activitySector("Infraestruturas"),
+                activitySector("Logistica"),
+                activitySector("Fabricacao Pesada"),
+                activitySector("Robotica")
         );
     }
+
 
     private List<Function> defaultFunctions() {
         return List.of(
