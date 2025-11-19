@@ -30,12 +30,13 @@ import Staffing from "./pages/admin/SuperAdmin/Staffing/Staffing.jsx";
 import VariableManagement from "./pages/admin/SuperAdmin/VariableManagement/VariableManagement.jsx";
 import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
 import { HomeNoLogin } from "./pages/home/HomeNoLogin/HomeNoLogin.jsx";
+import HomeLogin from "./pages/home/HomeLogin/HomeLogin.jsx";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeNoLogin />} />
-
+      <Route path="/home-login" element={<HomeLogin />} />
       <Route path="/login" element={<CandidateLogin />} />
       <Route
         path="/forgot-password"
