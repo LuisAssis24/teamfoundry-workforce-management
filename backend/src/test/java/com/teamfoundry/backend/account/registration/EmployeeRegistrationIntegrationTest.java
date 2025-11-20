@@ -1,0 +1,322 @@
+package com.teamfoundry.backend.account.registration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamfoundry.backend.account.enums.RegistrationStatus;
+import com.teamfoundry.backend.account.enums.UserType;
+import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.account.repository.AccountRepository;
+import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
+import com.teamfoundry.backend.account_options.model.Competence;
+import com.teamfoundry.backend.account_options.model.Function;
+import com.teamfoundry.backend.account_options.model.GeoArea;
+import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
+import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.account_options.repository.FunctionRepository;
+import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.security.model.AuthToken;
+import com.teamfoundry.backend.security.repository.AuthTokenRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
+import com.teamfoundry.backend.account.service.VerificationEmailService;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@DisplayName("Employee registration flow")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+class EmployeeRegistrationIntegrationTest {
+
+    @Autowired MockMvc mockMvc;
+    @Autowired ObjectMapper objectMapper;
+
+    @Autowired EmployeeAccountRepository employeeAccountRepository;
+    @Autowired AccountRepository accountRepository;
+    @Autowired AuthTokenRepository authTokenRepository;
+    @Autowired PasswordEncoder passwordEncoder;
+
+    @Autowired FunctionRepository functionRepository;
+    @Autowired GeoAreaRepository geoAreaRepository;
+    @Autowired CompetenceRepository competenceRepository;
+    @Autowired EmployeeFunctionRepository employeeFunctionRepository;
+    @Autowired EmployeeGeoAreaRepository employeeGeoAreaRepository;
+    @Autowired EmployeeCompetenceRepository employeeCompetenceRepository;
+
+    @MockBean
+    VerificationEmailService verificationEmailService;
+
+
+    private final String email = "Candidate@Test.com";
+    private final String password = "StrongPass123";
+    private final LocalDate birthDate = LocalDate.of(2000, 1, 15);
+
+    @BeforeEach
+    void setup() {
+        authTokenRepository.deleteAll();
+        employeeFunctionRepository.deleteAll();
+        employeeGeoAreaRepository.deleteAll();
+        employeeCompetenceRepository.deleteAll();
+        competenceRepository.deleteAll();
+        geoAreaRepository.deleteAll();
+        functionRepository.deleteAll();
+        employeeAccountRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("Step1 creates pending employee account")
+    void step1_successful_registration() throws Exception {
+        performStep1(email, password);
+
+        EmployeeAccount created = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(created.getEmail()).isEqualTo(email.toLowerCase());
+        assertThat(created.getRole()).isEqualTo(UserType.EMPLOYEE);
+        assertThat(created.getRegistrationStatus()).isEqualTo(RegistrationStatus.PENDING);
+        assertThat(created.isActive()).isFalse();
+        assertThat(created.getPassword()).isNotEqualTo(password);
+        assertThat(passwordEncoder.matches(password, created.getPassword())).isTrue();
+    }
+
+    @Test
+    @DisplayName("Step1 allows restarting registration when account is still pending")
+    void step1_allows_restart_for_pending_account() throws Exception {
+        // primeiro registo
+        performStep1(email, password);
+        EmployeeAccount first = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        
+        // segundo step1 com mesmo email (recomeçar)
+        performStep1(email, password); // agora esperamos 201 outra vez, não 4xx
+
+        EmployeeAccount second = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+
+        // continua a haver só 1 conta para aquele email
+        assertThat(employeeAccountRepository.count()).isEqualTo(1);
+
+        // continua PENDING e inativa
+        assertThat(second.getRegistrationStatus()).isEqualTo(RegistrationStatus.PENDING);
+        assertThat(second.isActive()).isFalse();
+    }
+
+
+    @Test
+    @DisplayName("Step2 updates personal data")
+    void step2_updates_personal_data() throws Exception {
+        performStep1(email, password);
+        performStep2(email);
+
+        EmployeeAccount account = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(account.getName()).isEqualTo("Alice");
+        assertThat(account.getSurname()).isEqualTo("Doe");
+        assertThat(account.getNationality()).isEqualTo("Portugal");
+        assertThat(account.getBirthDate()).isEqualTo(birthDate);
+        assertThat(account.getPhone()).isEqualTo("+351987654321");
+        assertThat(account.getNif()).isEqualTo(123456789);
+    }
+
+    @Test
+    @DisplayName("Step3 stores preferences and generates token")
+    void step3_preferences_and_token() throws Exception {
+        performStep1(email, password);
+        performStep2(email);
+
+        String roleName = "Developer";
+        String areaName = "Lisbon";
+        String skillName = "Java";
+        seedOptionData(roleName, areaName, skillName);
+
+        performStep3(email, roleName, areaName, skillName, true, status().isOk(), true);
+
+        EmployeeAccount account = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(employeeFunctionRepository.findFirstByEmployee(account))
+                .isPresent()
+                .get()
+                .extracting(rel -> rel.getFunction().getName())
+                .isEqualTo(roleName);
+        assertThat(employeeGeoAreaRepository.findByEmployee(account))
+                .extracting(rel -> rel.getGeoArea().getName())
+                .containsExactly(areaName);
+        assertThat(employeeCompetenceRepository.findByEmployee(account))
+                .extracting(rel -> rel.getCompetence().getName())
+                .containsExactly(skillName);
+
+        long tokensForAccount = authTokenRepository.findAll().stream()
+                .filter(t -> t.getUser().getId().equals(account.getId()))
+                .count();
+        assertThat(tokensForAccount).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("Step3 fails when terms not accepted")
+    void step3_terms_not_accepted() throws Exception {
+        performStep1(email, password);
+        performStep2(email);
+
+        String roleName = "Analyst";
+        String areaName = "Porto";
+        String skillName = "SQL";
+        seedOptionData(roleName, areaName, skillName);
+
+        performStep3(email, roleName, areaName, skillName, false, status().isBadRequest(), false);
+
+        EmployeeAccount account = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(employeeFunctionRepository.findFirstByEmployee(account)).isEmpty();
+        assertThat(employeeGeoAreaRepository.findByEmployee(account)).isEmpty();
+        assertThat(employeeCompetenceRepository.findByEmployee(account)).isEmpty();
+        assertThat(authTokenRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Step4 activates account with correct verification code")
+    void step4_completes_verification() throws Exception {
+        performStep1(email, password);
+        performStep2(email);
+
+        String roleName = "Tester";
+        String areaName = "Braga";
+        String skillName = "Selenium";
+        seedOptionData(roleName, areaName, skillName);
+        performStep3(email, roleName, areaName, skillName, true, status().isOk(), true);
+
+        EmployeeAccount account = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        AuthToken token = authTokenRepository.findAll().stream()
+                .filter(t -> t.getUser().getId().equals(account.getId()))
+                .findFirst()
+                .orElseThrow();
+
+        performStep4(email, token.getToken(), status().isOk());
+
+        EmployeeAccount activated = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(activated.isActive()).isTrue();
+        assertThat(activated.getRegistrationStatus()).isEqualTo(RegistrationStatus.COMPLETED);
+        assertThat(authTokenRepository.findByAccountAndCode(activated, token.getToken())).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Step4 keeps account inactive when code is wrong")
+    void step4_wrong_code_keeps_account_inactive() throws Exception {
+        performStep1(email, password);
+        performStep2(email);
+
+        String roleName = "Architect";
+        String areaName = "Coimbra";
+        String skillName = "AWS";
+        seedOptionData(roleName, areaName, skillName);
+        performStep3(email, roleName, areaName, skillName, true, status().isOk(), true);
+
+        EmployeeAccount account = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        AuthToken token = authTokenRepository.findAll().stream()
+                .filter(t -> t.getUser().getId().equals(account.getId()))
+                .findFirst()
+                .orElseThrow();
+
+        performStep4(email, "000000", status().is4xxClientError());
+
+        EmployeeAccount unchanged = employeeAccountRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        assertThat(unchanged.isActive()).isFalse();
+        assertThat(unchanged.getRegistrationStatus()).isEqualTo(RegistrationStatus.PENDING);
+        assertThat(authTokenRepository.findByAccountAndCode(account, token.getToken())).isPresent();
+    }
+
+    private void performStep1(String email, String password) throws Exception {
+        var body = objectMapper.writeValueAsString(Map.of(
+                "email", email,
+                "password", password
+        ));
+
+        mockMvc.perform(post("/api/candidate/register/step1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Conta criada com sucesso. Continue para o passo 2."));
+    }
+
+    private void performStep2(String email) throws Exception {
+        var body = objectMapper.writeValueAsString(Map.of(
+                "email", email,
+                "firstName", "Alice",
+                "lastName", "Doe",
+                "nationality", "Portugal",
+                "birthDate", birthDate,
+                "phone", "+351987654321",
+                "nif", 123456789
+        ));
+
+        mockMvc.perform(post("/api/candidate/register/step2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Dados atualizados."));
+    }
+
+    private void performStep3(String email, String role, String area, String skill, boolean termsAccepted, ResultMatcher expectedStatus, boolean expectSuccessPayload) throws Exception {
+        var body = objectMapper.writeValueAsString(Map.of(
+                "email", email,
+                "role", role,
+                "areas", List.of(area),
+                "skills", List.of(skill),
+                "termsAccepted", termsAccepted
+        ));
+
+        ResultActions actions = mockMvc.perform(post("/api/candidate/register/step3")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(expectedStatus);
+
+        if (expectSuccessPayload) {
+            actions.andExpect(jsonPath("$.message").exists());
+        } else {
+            actions.andExpect(jsonPath("$.error").exists());
+        }
+    }
+
+    private void performStep4(String email, String verificationCode, ResultMatcher expectedStatus) throws Exception {
+        var body = objectMapper.writeValueAsString(Map.of(
+                "email", email,
+                "verificationCode", verificationCode
+        ));
+
+        mockMvc.perform(post("/api/candidate/register/step4")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(expectedStatus);
+    }
+
+    private void seedOptionData(String functionName, String areaName, String competenceName) {
+        Function function = new Function();
+        function.setName(functionName);
+        functionRepository.save(function);
+
+        GeoArea area = new GeoArea();
+        area.setName(areaName);
+        geoAreaRepository.save(area);
+
+        Competence competence = new Competence();
+        competence.setName(competenceName);
+        competenceRepository.save(competence);
+    }
+}
