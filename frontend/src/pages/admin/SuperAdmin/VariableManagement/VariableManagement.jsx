@@ -21,25 +21,25 @@ import AppHomeManager from "../AppHomeManager.jsx";
 
 const SECTION_LABELS = {
   HERO: "Hero (topo)",
-  INDUSTRIES: "IndÃºstrias",
+  INDUSTRIES: "Indústrias",
   PARTNERS: "Parceiros",
 };
 
 const VIEW_TABS = [
   {
     id: "publicHome",
-    label: "Home pÃºblica",
-    description: "Configura a landing page visÃ­vel antes do login.",
+    label: "Home pública",
+    description: "Configura a landing page visível antes do login.",
   },
   {
     id: "appHome",
     label: "Home autenticada",
-    description: "ConteÃºdo mostrado quando o utilizador jÃ¡ fez login.",
+    description: "Conteúdo mostrado quando o utilizador já fez login.",
   },
   {
     id: "otherPages",
-    label: "Outras pÃ¡ginas",
-    description: "Futuras secÃ§Ãµes do site que serÃ£o controladas aqui.",
+    label: "Outras páginas",
+    description: "Futuras secções do site que serão controladas aqui.",
   },
 ];
 
@@ -100,7 +100,7 @@ export default function VariableManagement() {
         handleUnauthorized();
         return;
       }
-      setLoadError(err.message || "NÃ£o foi possÃ­vel carregar as configuraÃ§Ãµes.");
+      setLoadError(err.message || "Não foi possível carregar as configurações.");
     } finally {
       if (mountedRef.current) setLoading(false);
     }
@@ -153,7 +153,7 @@ export default function VariableManagement() {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel guardar o hero.",
+        message: err.message || "Não foi possível guardar o hero.",
       });
     } finally {
       setSavingHero(false);
@@ -171,12 +171,12 @@ export default function VariableManagement() {
 
     try {
       await reorderSections(next.map((section) => section.id));
-      setBanner({ type: "success", message: "Ordem das secÃ§Ãµes atualizada." });
+      setBanner({ type: "success", message: "Ordem das secções atualizada." });
     } catch (err) {
       setConfig((prev) => ({ ...prev, sections: previous }));
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel reordenar as secÃ§Ãµes.",
+        message: err.message || "Não foi possível reordenar as secções.",
       });
     }
   };
@@ -204,7 +204,7 @@ export default function VariableManagement() {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel atualizar a secÃ§Ã£o.",
+        message: err.message || "Não foi possível atualizar a secção.",
       });
     }
   };
@@ -226,19 +226,19 @@ export default function VariableManagement() {
     setBanner(null);
     try {
       await apiFn(next.map((item) => item.id));
-      setBanner({ type: "success", message: "OrdenaÃ§Ã£o atualizada." });
+      setBanner({ type: "success", message: "Ordenação atualizada." });
     } catch (err) {
       setConfig((prev) => ({ ...prev, [key]: previous }));
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel reordenar a lista.",
+        message: err.message || "Não foi possível reordenar a lista.",
       });
     }
   };
 
   const handleDeleteIndustry = async (record, { confirmDeletion = true } = {}) => {
     if (!record) return false;
-    if (confirmDeletion && !window.confirm(`Eliminar a indÃºstria "${record.name}"?`)) {
+    if (confirmDeletion && !window.confirm(`Eliminar a indústria "${record.name}"?`)) {
       return false;
     }
     setBanner(null);
@@ -248,7 +248,7 @@ export default function VariableManagement() {
         ...prev,
         industries: prev.industries.filter((item) => item.id !== record.id),
       }));
-      setBanner({ type: "success", message: "IndÃºstria removida com sucesso." });
+      setBanner({ type: "success", message: "Indústria removida com sucesso." });
       return true;
     } catch (err) {
       if (err?.status === 401) {
@@ -257,7 +257,7 @@ export default function VariableManagement() {
       }
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel eliminar a indÃºstria.",
+        message: err.message || "Não foi possível eliminar a indústria.",
       });
       return false;
     }
@@ -284,7 +284,7 @@ export default function VariableManagement() {
       }
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel eliminar o parceiro.",
+        message: err.message || "Não foi possível eliminar o parceiro.",
       });
       return false;
     }
@@ -357,11 +357,11 @@ export default function VariableManagement() {
         }));
       }
       closeModal();
-      setBanner({ type: "success", message: "ConteÃºdo guardado com sucesso." });
+      setBanner({ type: "success", message: "Conteúdo guardado com sucesso." });
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NÃ£o foi possÃ­vel guardar os dados.",
+        message: err.message || "Não foi possível guardar os dados.",
       });
       setModalSaving(false);
     }

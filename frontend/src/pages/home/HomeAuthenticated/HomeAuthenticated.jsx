@@ -22,7 +22,7 @@ const FALLBACK_WEEKLY_TIP = {
   ],
 };
 
-export default function HomeLogin() {
+export default function HomeAuthenticated() {
   const { profile, loadingProfile, refreshProfile, logout } = useAuth();
   const [homeContent, setHomeContent] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
