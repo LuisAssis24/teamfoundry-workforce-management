@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.site.enums;
 
 /**
- * Sections rendered specifically in the authenticated home (HomeLogin).
+ * Types of configurable blocks shown on the authenticated HomeLogin dashboard.
  */
 public enum HomeLoginSectionType {
     HERO,

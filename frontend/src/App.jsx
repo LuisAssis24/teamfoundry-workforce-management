@@ -32,18 +32,19 @@ import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
 import TeamManagement from "./pages/admin/TeamManagement/TeamManagement.jsx";
 import BuildTeamSearch from "./pages/admin/TeamManagement/BuildTeamSearch.jsx";
 import { HomeNoLogin } from "./pages/home/HomeNoLogin/HomeNoLogin.jsx";
-import HomeLogin from "./pages/home/HomeLogin/HomeLogin.jsx";
+import HomeAuthenticated from "./pages/home/HomeAuthenticated/HomeAuthenticated.jsx";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeNoLogin />} />
-      <Route path="/home-login" element={<HomeLogin />} />
+      <Route path="/home-login" element={<HomeAuthenticated />} />
       <Route path="/login" element={<CandidateLogin />} />
       <Route
         path="/forgot-password"
         element={<Navigate to="/login" state={{ openForgotModal: true }} replace />}
       />
+      <Route path="/home-login" element={<HomeAuthenticated />} />
 
       <Route path="/employee-register" element={<EmployeeRegisterLayout />}>
         <Route index element={<Navigate to="step1" replace />} />

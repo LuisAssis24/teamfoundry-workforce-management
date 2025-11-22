@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Configurable building block for the authenticated landing page (HomeLogin).
- * Mirrors HomepageSection but includes API metadata so the News block can pull
- * articles from an external endpoint once integrated.
+ * Configurable blocks for the authenticated home. Mirrors HomepageSection
+ * but adds optional API metadata to power the news feed later on.
  */
 @Getter
 @Setter
@@ -48,9 +47,7 @@ public class HomeLoginSection {
     private String primaryCtaUrl;
 
     /**
-     * Metadata for future integration with the news API.
-     * When apiEnabled is true the backend can fetch items from apiUrl using the
-     * provided credentials/settings.
+     * Metadata for integrating with an external News API.
      */
     @Column(name = "api_enabled")
     private boolean apiEnabled = false;

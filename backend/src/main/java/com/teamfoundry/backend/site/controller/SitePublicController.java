@@ -1,5 +1,6 @@
 package com.teamfoundry.backend.site.controller;
 
+import com.teamfoundry.backend.site.dto.HomeLoginConfigResponse;
 import com.teamfoundry.backend.site.dto.HomepageConfigResponse;
 import com.teamfoundry.backend.site.service.SiteContentService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,10 @@ public class SitePublicController {
     @GetMapping("/homepage")
     public HomepageConfigResponse homepage() {
         return service.getPublicHomepage();
+    }
+
+    @GetMapping("/app-home")
+    public HomeLoginConfigResponse appHome() {
+        return service.getPublicHomeLogin();
     }
 }

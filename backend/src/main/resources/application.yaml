@@ -5,7 +5,7 @@ jwt:
 
 spring:
   config:
-    import: optional:file:../.env[.properties]
+    import: optional:file:.env[.properties],optional:file:../.env[.properties]
   application:
     name: teamfoundry
   profiles:
@@ -14,6 +14,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   main:
     allow-bean-definition-overriding: true
   mail:
@@ -38,6 +42,17 @@ app:
     media:
       storage-dir: ${APP_SITE_MEDIA_DIR:uploads/site}
       public-path: /media/site
+  news:
+    enabled: ${NEWSAPI_ENABLED:true}
+    api-key: ${NEWSAPI_KEY:56ac4b5c930f41979fdf586909a7a7b8}
+    base-url: ${NEWSAPI_BASE_URL:https://newsapi.org/v2}
+    top-headlines-path: ${NEWSAPI_TOP_HEADLINES_PATH:/top-headlines}
+    everything-path: ${NEWSAPI_EVERYTHING_PATH:/everything}
+    country: ${NEWSAPI_COUNTRY:pt}
+    category: ${NEWSAPI_CATEGORY:business}
+    portuguese-sources: ${NEWSAPI_PORTUGUESE_SOURCES:publico,observador,jn}
+    language: ${NEWSAPI_LANGUAGE:pt}
+    query: ${NEWSAPI_QUERY:Portugal}
   candidate:
     certificates-upload-dir: ${APP_CERTIFICATES_UPLOAD_DIR:uploads/certificates}
     payslips-upload-dir: ${APP_PAYSLIPS_UPLOAD_DIR:uploads/payslips}

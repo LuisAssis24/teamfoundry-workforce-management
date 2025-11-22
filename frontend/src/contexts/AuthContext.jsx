@@ -11,8 +11,8 @@ export function AuthProvider({ children }) {
   const [profileError, setProfileError] = useState(null);
 
   const refreshProfile = useCallback(async () => {
-    const hasToken = Boolean(getAccessToken());
-    if (!hasToken) {
+    const token = getAccessToken();
+    if (!token) {
       setProfile(null);
       return null;
     }
@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
       setProfileError(null);
       return data;
     } catch (error) {
-      setProfileError(error.message || "N\u00e3o foi poss\u00edvel carregar o perfil.");
+      setProfileError(error.message || "Não foi possível carregar o perfil.");
       return null;
     } finally {
       setLoadingProfile(false);
