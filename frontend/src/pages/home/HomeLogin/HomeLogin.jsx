@@ -90,7 +90,7 @@ export default function HomeLogin() {
 }
 
 function HeroPanel({ displayName, loading, section, loadingContent }) {
-  const title = section?.title ?? `Ola ${displayName}`;
+  const title = section?.title ?? "Perfil do candidato";
   const subtitle = section?.subtitle ?? "Perfil =%";
   const contentLines = section?.content
     ? section.content.split("\n").filter(Boolean)
@@ -106,7 +106,9 @@ function HeroPanel({ displayName, loading, section, loadingContent }) {
       <div className="max-w-6xl mx-auto px-6">
         <div className="rounded-3xl bg-base-100 shadow-xl border border-base-300 p-8 flex flex-col gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-primary/70">Bem-vindo</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-primary/70">
+              Ola {displayName}
+            </p>
             <h1 className="text-4xl font-bold text-base-content">{title}</h1>
             <p className="text-lg text-base-content/70">{subtitle}</p>
           </div>

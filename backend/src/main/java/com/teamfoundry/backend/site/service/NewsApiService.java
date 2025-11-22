@@ -81,33 +81,18 @@ public class NewsApiService {
     }
 
     public List<HomeNewsArticleResponse> getLatestPortugueseNews(int limit) {
-        List<HomeNewsArticleResponse> articles = performRequest(
+        // Overfetch to compensate for articles descartados sem URL/título, mas limitar no retorno ao "limit" solicitado.
+        int fetchSize = Math.min(Math.max(limit * 3, limit), 30);
+        return performRequest(
                 properties.getEverythingPath(),
                 limit,
-                builder -> {
-                    builder.queryParam("sortBy", "publishedAt");
-                    if (StringUtils.hasText(properties.getPortugueseSources())) {
-                        builder.queryParam("sources", properties.getPortugueseSources());
-                    } else {
-                        builder.queryParam("language", properties.getLanguage());
-                        builder.queryParam("q", sanitizeQuery(null));
-                    }
-                    return builder;
-                },
+                fetchSize,
+                builder -> builder
+                        .queryParam("sortBy", "publishedAt")
+                        .queryParam("language", properties.getLanguage())
+                        .queryParam("q", sanitizeQuery(null)),
                 "[NewsAPI] Latest Portuguese news"
         );
-        if (articles.isEmpty() && StringUtils.hasText(properties.getPortugueseSources())) {
-            log.info("[NewsAPI] Nenhum resultado usando sources='{}'. Voltando para filtro por idioma.", properties.getPortugueseSources());
-            return performRequest(
-                    properties.getEverythingPath(),
-                    limit,
-                    builder -> builder.queryParam("sortBy", "publishedAt")
-                            .queryParam("language", properties.getLanguage())
-                            .queryParam("q", sanitizeQuery(null)),
-                    "[NewsAPI] Latest Portuguese news (fallback language)"
-            );
-        }
-        return articles;
     }
 
     public List<HomeNewsArticleResponse> getNewsByQuery(String query) {
@@ -198,6 +183,16 @@ public class NewsApiService {
             Function<UriBuilder, UriBuilder> uriCustomizer,
             String contextLabel
     ) {
+        return performRequest(path, limit, limit, uriCustomizer, contextLabel);
+    }
+
+    private List<HomeNewsArticleResponse> performRequest(
+            String path,
+            int limit,
+            int fetchSize,
+            Function<UriBuilder, UriBuilder> uriCustomizer,
+            String contextLabel
+    ) {
         if (!properties.isEnabled()) {
             log.debug("{} ignorado porque app.news.enabled=false.", contextLabel);
             return Collections.emptyList();
@@ -208,7 +203,7 @@ public class NewsApiService {
             return Collections.emptyList();
         }
 
-        int pageSize = normalizeLimit(limit);
+        int pageSize = clampPageSize(fetchSize);
 
         try {
             log.info("{} iniciando requisicao (limit={}).", contextLabel, pageSize);
@@ -224,7 +219,7 @@ public class NewsApiService {
                     .header("X-Api-Key", properties.getApiKey())
                     .retrieve()
                     .body(NewsApiResponse.class);
-            return handleResponse(response, pageSize, contextLabel);
+            return handleResponse(response, limit, contextLabel);
         } catch (Exception ex) {
             log.warn("{} falhou: {}", contextLabel, ex.getMessage());
             log.debug("Detalhes completos do erro", ex);
@@ -234,7 +229,7 @@ public class NewsApiService {
 
     private List<HomeNewsArticleResponse> handleResponse(
             NewsApiResponse response,
-            int pageSize,
+            int limit,
             String contextLabel
     ) {
         if (response == null) {
@@ -252,9 +247,9 @@ public class NewsApiService {
         }
 
         List<HomeNewsArticleResponse> mapped = response.articles().stream()
-                .filter(article -> StringUtils.hasText(article.title()) && StringUtils.hasText(article.url()))
+                .filter(article -> StringUtils.hasText(article.url()))
                 .map(this::mapArticle)
-                .limit(pageSize)
+                .limit(limit)
                 .toList();
         log.info("{} devolveu {} artigos apos filtragem.", contextLabel, mapped.size());
         return mapped;
@@ -262,7 +257,7 @@ public class NewsApiService {
 
     private HomeNewsArticleResponse mapArticle(NewsApiArticle article) {
         return new HomeNewsArticleResponse(
-                article.title(),
+                StringUtils.hasText(article.title()) ? article.title() : Optional.ofNullable(article.description()).orElse(""),
                 article.description(),
                 article.url(),
                 article.urlToImage(),
@@ -288,6 +283,11 @@ public class NewsApiService {
             return MIN_ITEMS;
         }
         return Math.min(desired, MAX_ITEMS);
+    }
+
+    private int clampPageSize(int desired) {
+        int minimum = Math.max(desired, MIN_ITEMS);
+        return Math.min(minimum, 100);
     }
 
     private String sanitizeQuery(String query) {

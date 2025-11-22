@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
@@ -18,6 +18,7 @@ export default function LoginCandidate() {
     const [success, setSuccess] = useState(false);
     const [showForgotModal, setShowForgotModal] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Sempre que alguém navega para /login com state { openForgotModal: true } abrimos o modal automaticamente.
     useEffect(() => {
@@ -38,7 +39,7 @@ export default function LoginCandidate() {
             const data = await login(email, password, rememberMe);
             console.log("Login OK:", data);
             setSuccess(true);
-            // redirecionar aqui se houver roteamento (ex.: react-router)
+            navigate("/home-login");
         } catch (e) {
             setError(e.message || "Falha no login");
         } finally {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createIndustry,
@@ -17,28 +17,29 @@ import {
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
 import DropZone from "../../../../components/ui/Upload/DropZone.jsx";
 import { clearTokens } from "../../../../auth/tokenStorage.js";
+import AppHomeManager from "../AppHomeManager.jsx";
 
 const SECTION_LABELS = {
   HERO: "Hero (topo)",
-  INDUSTRIES: "Indústrias",
+  INDUSTRIES: "IndÃºstrias",
   PARTNERS: "Parceiros",
 };
 
 const VIEW_TABS = [
   {
     id: "publicHome",
-    label: "Home pública",
-    description: "Configura a landing page visível antes do login.",
+    label: "Home pÃºblica",
+    description: "Configura a landing page visÃ­vel antes do login.",
   },
   {
     id: "appHome",
     label: "Home autenticada",
-    description: "Conteúdo mostrado quando o utilizador já fez login.",
+    description: "ConteÃºdo mostrado quando o utilizador jÃ¡ fez login.",
   },
   {
     id: "otherPages",
-    label: "Outras páginas",
-    description: "Futuras secções do site que serão controladas aqui.",
+    label: "Outras pÃ¡ginas",
+    description: "Futuras secÃ§Ãµes do site que serÃ£o controladas aqui.",
   },
 ];
 
@@ -99,7 +100,7 @@ export default function VariableManagement() {
         handleUnauthorized();
         return;
       }
-      setLoadError(err.message || "Não foi possível carregar as configurações.");
+      setLoadError(err.message || "NÃ£o foi possÃ­vel carregar as configuraÃ§Ãµes.");
     } finally {
       if (mountedRef.current) setLoading(false);
     }
@@ -152,7 +153,7 @@ export default function VariableManagement() {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível guardar o hero.",
+        message: err.message || "NÃ£o foi possÃ­vel guardar o hero.",
       });
     } finally {
       setSavingHero(false);
@@ -170,12 +171,12 @@ export default function VariableManagement() {
 
     try {
       await reorderSections(next.map((section) => section.id));
-      setBanner({ type: "success", message: "Ordem das secções atualizada." });
+      setBanner({ type: "success", message: "Ordem das secÃ§Ãµes atualizada." });
     } catch (err) {
       setConfig((prev) => ({ ...prev, sections: previous }));
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível reordenar as secções.",
+        message: err.message || "NÃ£o foi possÃ­vel reordenar as secÃ§Ãµes.",
       });
     }
   };
@@ -198,12 +199,12 @@ export default function VariableManagement() {
       }));
       setBanner({
         type: "success",
-        message: `Secção ${updated.active ? "ativada" : "ocultada"} com sucesso.`,
+        message: `SecÃ§Ã£o ${updated.active ? "ativada" : "ocultada"} com sucesso.`,
       });
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível atualizar a secção.",
+        message: err.message || "NÃ£o foi possÃ­vel atualizar a secÃ§Ã£o.",
       });
     }
   };
@@ -225,19 +226,19 @@ export default function VariableManagement() {
     setBanner(null);
     try {
       await apiFn(next.map((item) => item.id));
-      setBanner({ type: "success", message: "Ordenação atualizada." });
+      setBanner({ type: "success", message: "OrdenaÃ§Ã£o atualizada." });
     } catch (err) {
       setConfig((prev) => ({ ...prev, [key]: previous }));
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível reordenar a lista.",
+        message: err.message || "NÃ£o foi possÃ­vel reordenar a lista.",
       });
     }
   };
 
   const handleDeleteIndustry = async (record, { confirmDeletion = true } = {}) => {
     if (!record) return false;
-    if (confirmDeletion && !window.confirm(`Eliminar a indústria "${record.name}"?`)) {
+    if (confirmDeletion && !window.confirm(`Eliminar a indÃºstria "${record.name}"?`)) {
       return false;
     }
     setBanner(null);
@@ -247,7 +248,7 @@ export default function VariableManagement() {
         ...prev,
         industries: prev.industries.filter((item) => item.id !== record.id),
       }));
-      setBanner({ type: "success", message: "Indústria removida com sucesso." });
+      setBanner({ type: "success", message: "IndÃºstria removida com sucesso." });
       return true;
     } catch (err) {
       if (err?.status === 401) {
@@ -256,7 +257,7 @@ export default function VariableManagement() {
       }
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível eliminar a indústria.",
+        message: err.message || "NÃ£o foi possÃ­vel eliminar a indÃºstria.",
       });
       return false;
     }
@@ -283,7 +284,7 @@ export default function VariableManagement() {
       }
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível eliminar o parceiro.",
+        message: err.message || "NÃ£o foi possÃ­vel eliminar o parceiro.",
       });
       return false;
     }
@@ -356,11 +357,11 @@ export default function VariableManagement() {
         }));
       }
       closeModal();
-      setBanner({ type: "success", message: "Conteúdo guardado com sucesso." });
+      setBanner({ type: "success", message: "ConteÃºdo guardado com sucesso." });
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "Não foi possível guardar os dados.",
+        message: err.message || "NÃ£o foi possÃ­vel guardar os dados.",
       });
       setModalSaving(false);
     }
@@ -395,25 +396,13 @@ export default function VariableManagement() {
       );
     }
 
-    if (!config) return null;
+        if (!config) return null;
 
-    if (activeView !== "publicHome") {
-      const activeTab = VIEW_TABS.find((tab) => tab.id === activeView);
-      return (
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body space-y-4">
-            <h2 className="card-title text-2xl">{activeTab?.label}</h2>
-            <p className="text-base-content/70">
-              {activeTab?.description ??
-                "Esta secção estará disponível em breve para configuração."}
-            </p>
-            <div className="rounded-2xl border border-dashed border-base-300 p-6 text-center text-base-content/60">
-              Planeamos trazer opções detalhadas para estas páginas numa próxima atualização.
-            </div>
-          </div>
-        </div>
-      );
+    if (activeView === "appHome") {
+      return <AppHomeManager onUnauthorized={handleUnauthorized} />;
     }
+
+
 
     return (
       <div className="space-y-10">
@@ -438,18 +427,18 @@ export default function VariableManagement() {
           <div className="card-body space-y-6">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-primary/70">
-                Conteúdo
+                ConteÃºdo
               </p>
               <h2 className="card-title text-3xl">Hero e chamadas</h2>
               <p className="text-base-content/70">
-                Atualize o texto principal, subtítulo e CTAs apresentados no topo do
-                site público.
+                Atualize o texto principal, subtÃ­tulo e CTAs apresentados no topo do
+                site pÃºblico.
               </p>
             </div>
             {heroForm && (
               <form className="grid gap-4 md:grid-cols-2" onSubmit={handleHeroSubmit}>
                 <label className="form-control md:col-span-2">
-                  <span className="label-text font-semibold">Título</span>
+                  <span className="label-text font-semibold">TÃ­tulo</span>
                   <input
                     type="text"
                     className="input input-bordered"
@@ -460,7 +449,7 @@ export default function VariableManagement() {
                 </label>
 
                 <label className="form-control md:col-span-2">
-                  <span className="label-text font-semibold">Subtítulo</span>
+                  <span className="label-text font-semibold">SubtÃ­tulo</span>
                   <textarea
                     className="textarea textarea-bordered min-h-[120px]"
                     value={heroForm.subtitle}
@@ -481,7 +470,7 @@ export default function VariableManagement() {
                   placeholder="/login"
                 />
                 <FieldGroup
-                  label="Texto do CTA secundário"
+                  label="Texto do CTA secundÃ¡rio"
                   value={heroForm.secondaryCtaLabel}
                   onChange={(value) =>
                     handleHeroFieldChange("secondaryCtaLabel", value)
@@ -489,7 +478,7 @@ export default function VariableManagement() {
                   placeholder="Sou empresa"
                 />
                 <FieldGroup
-                  label="URL do CTA secundário"
+                  label="URL do CTA secundÃ¡rio"
                   value={heroForm.secondaryCtaUrl}
                   onChange={(value) => handleHeroFieldChange("secondaryCtaUrl", value)}
                   placeholder="/company-register"
@@ -502,7 +491,7 @@ export default function VariableManagement() {
                     checked={heroForm.active}
                     onChange={(e) => handleHeroFieldChange("active", e.target.checked)}
                   />
-                  <span className="label-text">Mostrar esta secção no site público</span>
+                  <span className="label-text">Mostrar esta secÃ§Ã£o no site pÃºblico</span>
                 </label>
 
                 <div className="md:col-span-2 flex gap-3 justify-end">
@@ -514,10 +503,10 @@ export default function VariableManagement() {
                     {savingHero ? (
                       <>
                         <span className="loading loading-spinner loading-sm" />
-                        A guardar…
+                        A guardarâ€¦
                       </>
                     ) : (
-                      "Guardar alterações"
+                      "Guardar alteraÃ§Ãµes"
                     )}
                   </button>
                 </div>
@@ -533,7 +522,7 @@ export default function VariableManagement() {
         />
 
         <ShowcaseList
-          title="Indústrias em destaque"
+          title="IndÃºstrias em destaque"
           description="Controle quais setores aparecem e a ordem apresentada na home page."
           type="industry"
           items={config.industries}
@@ -559,12 +548,12 @@ export default function VariableManagement() {
     <section className="space-y-8">
       <header>
         <p className="text-sm uppercase tracking-[0.35em] text-primary/80">
-          Gestão do site
+          GestÃ£o do site
         </p>
-        <h1 className="text-4xl font-extrabold text-primary">Configurações do site</h1>
+        <h1 className="text-4xl font-extrabold text-primary">ConfiguraÃ§Ãµes do site</h1>
         <p className="text-base-content/70 mt-2">
-          Gerencie o conteúdo dinâmico da home page e mantenha o site sempre
-          alinhado com a estratégia da TeamFoundry.
+          Gerencie o conteÃºdo dinÃ¢mico da home page e mantenha o site sempre
+          alinhado com a estratÃ©gia da TeamFoundry.
         </p>
       </header>
 
@@ -616,9 +605,9 @@ function SectionOrderCard({ sections = [], onMove, onToggle }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-4">
         <div className="flex flex-col gap-1">
-          <h2 className="card-title text-2xl">Ordem das secções</h2>
+          <h2 className="card-title text-2xl">Ordem das secÃ§Ãµes</h2>
           <p className="text-base-content/70">
-            Defina a sequência com que cada bloco aparece para os visitantes.
+            Defina a sequÃªncia com que cada bloco aparece para os visitantes.
           </p>
         </div>
         <ol className="space-y-3">
@@ -638,7 +627,7 @@ function SectionOrderCard({ sections = [], onMove, onToggle }) {
                 {typeof onToggle === "function" && (
                   <label className="label cursor-pointer gap-3">
                     <span className="text-sm text-base-content/70">
-                      {section.active ? "Visível" : "Oculta"}
+                      {section.active ? "VisÃ­vel" : "Oculta"}
                     </span>
                     <input
                       type="checkbox"
@@ -693,7 +682,7 @@ function ShowcaseList({
             <p className="text-base-content/70">{description}</p>
           </div>
           <button type="button" className="btn btn-primary" onClick={onCreate}>
-            Adicionar {isIndustry ? "indústria" : "parceiro"}
+            Adicionar {isIndustry ? "indÃºstria" : "parceiro"}
           </button>
         </div>
         {safeItems.length ? (
@@ -715,7 +704,7 @@ function ShowcaseList({
                           item.active ? "badge-success" : "badge-ghost"
                         } uppercase`}
                       >
-                        {item.active ? "Visível" : "Oculto"}
+                        {item.active ? "VisÃ­vel" : "Oculto"}
                       </span>
                       <div className="flex items-center gap-2 text-xs text-base-content/60">
                         <button
@@ -762,7 +751,7 @@ function ShowcaseList({
         ) : (
           <div className="rounded-2xl border border-dashed border-base-300 p-10 text-center">
             <p className="text-base-content/60">
-              Ainda não existem {isIndustry ? "indústrias" : "parceiros"} configurados.
+              Ainda nÃ£o existem {isIndustry ? "indÃºstrias" : "parceiros"} configurados.
             </p>
           </div>
         )}
@@ -785,7 +774,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
       const result = await uploadSiteImage(file);
       onChange("imageUrl", result.url);
     } catch (err) {
-      setUploadError(err.message || "Não foi possível carregar a imagem.");
+      setUploadError(err.message || "NÃ£o foi possÃ­vel carregar a imagem.");
     } finally {
       setUploadingImage(false);
     }
@@ -796,8 +785,8 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
       open
       title={
         state.mode === "create"
-          ? `Adicionar ${isIndustry ? "indústria" : "parceiro"}`
-          : `Editar ${isIndustry ? "indústria" : "parceiro"}`
+          ? `Adicionar ${isIndustry ? "indÃºstria" : "parceiro"}`
+          : `Editar ${isIndustry ? "indÃºstria" : "parceiro"}`
       }
       onClose={onClose}
       actions={
@@ -824,7 +813,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
             {saving ? (
               <>
                 <span className="loading loading-spinner loading-sm" />
-                A guardar…
+                A guardarâ€¦
               </>
             ) : (
               "Guardar"
@@ -849,7 +838,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
             <div>
               <p className="text-sm font-semibold text-base-content/80">Visibilidade</p>
               <p className="text-xs text-base-content/60">
-                Controle se aparece na página inicial
+                Controle se aparece na pÃ¡gina inicial
               </p>
             </div>
             <label className="label cursor-pointer gap-3">
@@ -866,7 +855,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
 
         {!isIndustry && (
           <label className="form-control">
-            <span className="label-text font-semibold">Descrição</span>
+            <span className="label-text font-semibold">DescriÃ§Ã£o</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               required
@@ -886,7 +875,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
               {uploadingImage && (
                 <div className="text-sm text-primary flex items-center gap-2">
                   <span className="loading loading-spinner loading-xs" />
-                  A enviar imagem…
+                  A enviar imagemâ€¦
                 </div>
               )}
               {uploadError && <p className="text-sm text-error">{uploadError}</p>}
@@ -978,3 +967,4 @@ function ShowcasePreview({ src, alt }) {
   }
   return <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />;
 }
+
