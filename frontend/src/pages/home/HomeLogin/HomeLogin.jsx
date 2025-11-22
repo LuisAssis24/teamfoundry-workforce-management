@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/sections/Navbar.jsx";
 import Footer from "../../../components/sections/Footer.jsx";

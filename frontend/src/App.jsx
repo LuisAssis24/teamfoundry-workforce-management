@@ -29,6 +29,8 @@ import Credentials from "./pages/admin/SuperAdmin/Credentials/Credentials.jsx";
 import Staffing from "./pages/admin/SuperAdmin/Staffing/Staffing.jsx";
 import VariableManagement from "./pages/admin/SuperAdmin/VariableManagement/VariableManagement.jsx";
 import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
+import TeamManagement from "./pages/admin/TeamManagement/TeamManagement.jsx";
+import BuildTeamSearch from "./pages/admin/TeamManagement/BuildTeamSearch.jsx";
 import { HomeNoLogin } from "./pages/home/HomeNoLogin/HomeNoLogin.jsx";
 import HomeLogin from "./pages/home/HomeLogin/HomeLogin.jsx";
 
@@ -36,7 +38,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeNoLogin />} />
-
+      <Route path="/home-login" element={<HomeLogin />} />
       <Route path="/login" element={<CandidateLogin />} />
       <Route
         path="/forgot-password"
@@ -60,6 +62,8 @@ function App() {
       </Route>
 
       <Route path="/admin" element={<AdminLogin />} />
+      <Route path="/admin/team-management" element={<TeamManagement />} />
+      <Route path="/admin/team-management/build" element={<BuildTeamSearch />} />
 
       <Route path="/admin/super" element={<SuperAdminLayout />}>
         <Route index element={<Navigate to="credenciais" replace />} />
