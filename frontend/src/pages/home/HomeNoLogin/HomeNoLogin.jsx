@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchPublicHomepage } from "../../../api/siteManagement.js";
 import Navbar from "../../../components/sections/Navbar.jsx";
 import Footer from "../../../components/sections/Footer.jsx";
-import logoPrimary from "../../../assets/images/logo/teamFoundry_LogoPrimary.png";
 
 const SECTION_COMPONENTS = {
   HERO: HeroSection,
@@ -105,12 +104,15 @@ function HeroSection({ section }) {
     "A forma mais fácil de conectar profissionais a projetos industriais e criar equipas de alto desempenho.";
 
   return (
-    <section id="hero" className="bg-base-100 text-base-content border-b border-base-200">
+    <section id="hero" className="bg-base-100 text-base-content">
       <div className="max-w-6xl mx-auto px-6 py-20 text-center space-y-5">
-        <div className="flex items-center justify-center gap-3">
-        </div>
-        <h1 className="text-4xl font-extrabold text-base-content">Team Foundry</h1>
-        <p className="text-lg text-base-content/70 leading-relaxed -mt-2">{subtitle}</p>
+        <div className="flex items-center justify-center gap-3" />
+        <h1 className="text-4xl md:text-5xl font-extrabold text-base-content">
+          Team Foundry
+        </h1>
+        <p className="text-lg text-base-content/70 leading-relaxed -mt-2">
+          {subtitle}
+        </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           {section?.primaryCtaLabel && section?.primaryCtaUrl && (
             <a href={section.primaryCtaUrl} className="btn btn-primary btn-wide shadow">
@@ -130,53 +132,42 @@ function HeroSection({ section }) {
 
 function IndustriesSection({ section, industries }) {
   return (
-    <section id="industrias" className="max-w-6xl mx-auto px-6 py-16 space-y-10">
-      <SectionHeader
-        section={section}
-        fallbackTitle="Indústrias em que atuamos"
-        fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
-      />
-      {industries?.length ? (
-        <div className="grid gap-8 md:grid-cols-3">
-          {industries.map((industry) => (
-            <article
-              key={industry.id}
-              className="card bg-base-100 shadow-xl overflow-hidden border border-base-200"
-            >
-              <figure className="h-56 bg-base-200">
-                <ShowcaseImage src={industry.imageUrl} alt={industry.name} />
-              </figure>
-              <div className="card-body space-y-3">
-                <h3 className="card-title text-2xl">{industry.name}</h3>
-                {industry.description && (
-                  <p className="text-sm text-base-content/70 leading-relaxed">
-                    {industry.description}
-                  </p>
-                )}
-                {industry.linkUrl && (
-                  <a
-                    href={industry.linkUrl}
-                    className="link link-primary text-sm"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Saber mais
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <EmptyState message="Ainda não há indústrias destacadas." />
-      )}
+    <section id="industrias" className="bg-base-100 py-16">
+      <div className="max-w-6xl mx-auto px-6 space-y-10">
+        <SectionHeader
+          section={section}
+          fallbackTitle="Indústrias em que atuamos"
+          fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
+        />
+        {industries?.length ? (
+          <div className="grid gap-8 md:grid-cols-3">
+            {industries.map((industry) => (
+              <article
+                key={industry.id}
+                className="bg-base-100 rounded-3xl shadow-lg overflow-hidden"
+              >
+                <div className="h-56 bg-base-200">
+                  <ShowcaseImage src={industry.imageUrl} alt={industry.name} />
+                </div>
+                <div className="px-5 py-4 text-center">
+                  <h3 className="text-base font-semibold text-base-content">
+                    {industry.name}
+                  </h3>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <EmptyState message="Ainda não há indústrias destacadas." />
+        )}
+      </div>
     </section>
   );
 }
 
 function PartnersSection({ section, partners }) {
   return (
-    <section id="parceiros" className="bg-base-200 py-16">
+    <section id="parceiros" className="bg-base-100 py-16">
       <div className="max-w-6xl mx-auto px-6 space-y-10">
         <SectionHeader
           section={section}
@@ -184,31 +175,33 @@ function PartnersSection({ section, partners }) {
           fallbackSubtitle="Empresas que confiam na TeamFoundry para acelerar os seus projetos."
         />
         {partners?.length ? (
-          <div className="grid gap-8 md:grid-cols-2">
+          <div className="grid gap-10 md:grid-cols-2">
             {partners.map((partner) => (
               <article
                 key={partner.id}
-                className="bg-base-100 rounded-2xl shadow-lg p-6 space-y-4 border border-base-300"
+                className="bg-base-100 rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row"
               >
-                <div className="h-64 rounded-xl overflow-hidden bg-base-200">
+                <div className="w-full md:w-[45%] h-56 md:h-auto bg-base-200 flex-shrink-0">
                   <ShowcaseImage src={partner.imageUrl} alt={partner.name} />
                 </div>
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-semibold text-primary">{partner.name}</h3>
+                <div className="w-full md:w-[55%] p-6 space-y-3 flex flex-col justify-center">
+                  <h3 className="text-xl font-semibold text-base-content">
+                    {partner.name}
+                  </h3>
                   <p className="text-sm text-base-content/80 leading-relaxed">
                     {partner.description}
                   </p>
+                  {partner.websiteUrl && (
+                    <a
+                      href={partner.websiteUrl}
+                      className="link link-primary text-sm"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Visitar website
+                    </a>
+                  )}
                 </div>
-                {partner.websiteUrl && (
-                  <a
-                    href={partner.websiteUrl}
-                    className="btn btn-link px-0 text-primary"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Visitar website
-                  </a>
-                )}
               </article>
             ))}
           </div>
@@ -223,17 +216,16 @@ function PartnersSection({ section, partners }) {
 function SectionHeader({ section, fallbackTitle, fallbackSubtitle }) {
   const hasSubtitle = (section?.subtitle ?? fallbackSubtitle)?.length;
   return (
-    <div className="text-center space-y-3">
-      <p className="text-xs uppercase tracking-[0.5em] text-primary/70">
-        TeamFoundry
-      </p>
-      <h2 className="text-3xl font-bold">{section?.title ?? fallbackTitle}</h2>
+    <header className="text-center space-y-3">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-base-content">
+        {section?.title ?? fallbackTitle}
+      </h2>
       {hasSubtitle && (
         <p className="text-base-content/70 max-w-3xl mx-auto">
           {section?.subtitle ?? fallbackSubtitle}
         </p>
       )}
-    </div>
+    </header>
   );
 }
 
