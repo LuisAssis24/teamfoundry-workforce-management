@@ -665,7 +665,7 @@ function SectionOrderCard({ sections = [], onMove, onToggle }) {
                 {typeof onToggle === "function" && (
                   <label className="label cursor-pointer gap-3">
                     <span className="text-sm text-base-content/70">
-                      {section.active ? "VisÃ­vel" : "Oculta"}
+                      {section.active ? "Visível" : "Oculta"}
                     </span>
                     <input
                       type="checkbox"
