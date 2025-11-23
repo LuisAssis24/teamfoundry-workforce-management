@@ -50,14 +50,14 @@ export default function Navbar({
 
   return (
     <header className={wrapperClasses}>
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-3 flex items-center justify-between gap-6">
+      <div className="max-w-6xl mx-auto px-4 lg:px-6 py-3 flex items-center justify-between gap-6">
         <Link to={homePath} className="flex items-center gap-3 shrink-0 group">
           <img
             src={logo}
             alt="TeamFoundry"
             className={`object-contain ${isPublic ? "h-12 w-12" : "h-10 w-10"}`}
           />
-          <span className={`font-semibold tracking-wide ${isPublic ? "text-primary" : "text-primary-content"}`}>
+          <span className="font-semibold font-semibold tracking-[0.2em] uppercase text-primary-content">
             TeamFoundry
           </span>
         </Link>
@@ -95,11 +95,7 @@ export default function Navbar({
                 to={to}
                 label={label}
                 variant={variant}
-                className={`w-auto btn-sm ${
-                  variant === "primary"
-                    ? "btn-outline border-white/80 text-white hover:bg-white/10"
-                    : ""
-                }`}
+                className="w-auto btn-md px-6 text-white min-w-[10rem]"
               />
             ))}
           </div>

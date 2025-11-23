@@ -24,7 +24,7 @@ export default function EmployeeSidebar() {
 
   return (
     <aside className="hidden md:block w-64 px-4">
-      <div className="bg-primary text-primary-content rounded-xl shadow-lg sticky top-6 px-0 py-6 min-h-[calc(90vh-6rem)]">
+      <div className="bg-accent text-primary-content rounded-lg shadow-lg sticky top-6 px-0 py-6 h-full">
         <ul className="flex flex-col gap-2">
           {SIDEBAR_LINKS.map(({ to, label, icon, matches }) => (
             <li key={to}>

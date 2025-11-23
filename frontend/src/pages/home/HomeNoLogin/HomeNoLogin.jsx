@@ -100,22 +100,17 @@ export function HomeNoLogin() {
 }
 
 function HeroSection({ section }) {
-  const title = section?.title ?? "TeamFoundry";
   const subtitle =
     section?.subtitle ??
     "A forma mais fácil de conectar profissionais a projetos industriais e criar equipas de alto desempenho.";
 
   return (
     <section id="hero" className="bg-base-100 text-base-content border-b border-base-200">
-      <div className="max-w-4xl mx-auto px-6 py-20 text-center space-y-5">
+      <div className="max-w-6xl mx-auto px-6 py-20 text-center space-y-5">
         <div className="flex items-center justify-center gap-3">
-          <img src={logoPrimary} alt="TeamFoundry" className="h-12 w-12 object-contain" />
-          <span className="text-xl font-semibold tracking-[0.2em] uppercase text-primary">
-            TeamFoundry
-          </span>
         </div>
-        <h1 className="text-4xl font-extrabold text-base-content">{title}</h1>
-        <p className="text-lg text-base-content/70 leading-relaxed">{subtitle}</p>
+        <h1 className="text-4xl font-extrabold text-base-content">Team Foundry</h1>
+        <p className="text-lg text-base-content/70 leading-relaxed -mt-2">{subtitle}</p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           {section?.primaryCtaLabel && section?.primaryCtaUrl && (
             <a href={section.primaryCtaUrl} className="btn btn-primary btn-wide shadow">

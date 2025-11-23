@@ -7,7 +7,7 @@ export default function EmployeeLayout() {
     <div className="min-h-screen bg-base-100 text-base-content">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 flex gap-6">
+      <div className="max-w-6xl mx-auto px-1 md:px-2 py-6 flex gap-6">
         <EmployeeSidebar />
         <main className="flex-1">
           <Outlet />
