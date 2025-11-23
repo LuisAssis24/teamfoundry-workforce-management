@@ -29,18 +29,23 @@ const VIEW_TABS = [
   {
     id: "publicHome",
     label: "Home pública",
-    description: "Configura a landing page visível antes do login.",
+    description: "Configura a landing page visivel antes do login.",
   },
   {
     id: "appHome",
     label: "Home autenticada",
-    description: "Conteúdo mostrado quando o utilizador já fez login.",
+    description: "Conteudo mostrado quando o utilizador ja fez login.",
   },
   {
-    id: "otherPages",
-    label: "Outras páginas",
-    description: "Futuras secções do site que serão controladas aqui.",
+    id: "weeklyTips",
+    label: "Dicas da semana",
+    description: "Sugestoes rapidas para destacar na plataforma.",
   },
+  {
+    id: "globalVars",
+    label: "Variáveis globais",
+    description: "Texto e links reutilizados em varias paginas.",
+  }
 ];
 
 const EMPTY_FORMS = {
@@ -396,14 +401,43 @@ export default function VariableManagement() {
       );
     }
 
-        if (!config) return null;
+    if (!config) return null;
 
     if (activeView === "appHome") {
       return <AppHomeManager onUnauthorized={handleUnauthorized} />;
     }
 
+    if (activeView === "weeklyTips") {
+      return (
+        <TabPlaceholder
+          title="Dicas da semana"
+          description="Espaco reservado para destacar conteudos semanais em breve."
+        />
+      );
+    }
 
+    if (activeView === "globalVars") {
+      return (
+        <TabPlaceholder
+          title="Variaveis globais"
+          description="Texto, links e dados partilhados entre paginas. Em breve."
+        />
+      );
+    }
 
+    if (activeView === "otherPages") {
+      return (
+        <TabPlaceholder
+          title="Outras paginas"
+          description="Gestao futura de paginas adicionais. Em breve."
+        />
+      );
+    }
+
+    return renderPublicHome();
+  };
+
+  function renderPublicHome() {
     return (
       <div className="space-y-10">
         {banner && (
@@ -455,19 +489,19 @@ export default function VariableManagement() {
                 </label>
 
                 <FieldGroup
-                  label="Texto do do botão"
+                  label="Texto do botao"
                   value={heroForm.primaryCtaLabel}
                   onChange={(value) => handleHeroFieldChange("primaryCtaLabel", value)}
                   placeholder="Ex.: Quero trabalhar"
                 />
                 <FieldGroup
-                  label="URL do botão principal"
+                  label="URL do botao principal"
                   value={heroForm.primaryCtaUrl}
                   onChange={(value) => handleHeroFieldChange("primaryCtaUrl", value)}
                   placeholder="/login"
                 />
                 <FieldGroup
-                  label="Texto do botão"
+                  label="Texto do botao"
                   value={heroForm.secondaryCtaLabel}
                   onChange={(value) =>
                     handleHeroFieldChange("secondaryCtaLabel", value)
@@ -475,7 +509,7 @@ export default function VariableManagement() {
                   placeholder="Sou empresa"
                 />
                 <FieldGroup
-                  label="URL do botão secundário"
+                  label="URL do botao secundario"
                   value={heroForm.secondaryCtaUrl}
                   onChange={(value) => handleHeroFieldChange("secondaryCtaUrl", value)}
                   placeholder="/company-register"
@@ -488,7 +522,7 @@ export default function VariableManagement() {
                     checked={heroForm.active}
                     onChange={(e) => handleHeroFieldChange("active", e.target.checked)}
                   />
-                  <span className="label-text">Mostrar esta secção no site público </span>
+                  <span className="label-text">Mostrar esta secao no site publico </span>
                 </label>
 
                 <div className="md:col-span-2 flex gap-3 justify-end">
@@ -503,7 +537,7 @@ export default function VariableManagement() {
                         A guardar!
                       </>
                     ) : (
-                      "Guardar alterações"
+                      "Guardar alteracoes"
                     )}
                   </button>
                 </div>
@@ -539,7 +573,7 @@ export default function VariableManagement() {
         />
       </div>
     );
-  };
+  }
 
   return (
     <section className="space-y-8">
@@ -575,6 +609,17 @@ export default function VariableManagement() {
         onDelete={handleModalDelete}
       />
     </section>
+  );
+}
+
+function TabPlaceholder({ title, description }) {
+  return (
+    <div className="card bg-base-100 shadow-xl">
+      <div className="card-body space-y-2">
+        <h2 className="card-title text-2xl">{title}</h2>
+        <p className="text-base-content/70">{description}</p>
+      </div>
+    </div>
   );
 }
 
