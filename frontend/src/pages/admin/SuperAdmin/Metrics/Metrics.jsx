@@ -6,7 +6,7 @@ export default function Metrics() {
           Metricas
         </h1>
         <p className="text-base-content/70 mt-2">
-          Acompanhe metricas de contratacao, retencao e desempenho em tempo real.
+          Acompanhe metricas de contratação, retenção e desempenho em tempo real.
         </p>
       </header>
 

@@ -19,9 +19,9 @@ const APP_SECTION_TYPES = {
 
 const SECTION_LABELS = {
   HERO: "Hero autenticado",
-  METRICS: "MA©tricas",
+  METRICS: "Métricas",
   WEEKLY_TIP: "Dica da semana",
-  NEWS: "NotA­cias recentes",
+  NEWS: "Noticias recentes",
 };
 
 export default function AppHomeManager({ onUnauthorized }) {
@@ -57,7 +57,7 @@ export default function AppHomeManager({ onUnauthorized }) {
         onUnauthorized?.();
         return;
       }
-      setLoadError(err.message || "NA£o foi possA­vel carregar a home autenticada.");
+      setLoadError(err.message || "Não foi possível carregar a página.");
     } finally {
       if (mountedRef.current) setLoading(false);
     }
@@ -107,11 +107,11 @@ export default function AppHomeManager({ onUnauthorized }) {
         sections: prev.sections.map((item) => (item.id === updated.id ? updated : item)),
       }));
       setForms((prev) => ({ ...prev, [key]: mapAppSectionForm(updated) }));
-      setBanner({ type: "success", message: "SecA§A£o guardada com sucesso." });
+      setBanner({ type: "success", message: "Secção guardada com sucesso." });
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel guardar a secA§A£o.",
+        message: err.message || "Não foi possível guardar a secção.",
       });
     } finally {
       setSavingSections((prev) => ({ ...prev, [key]: false }));
@@ -131,7 +131,7 @@ export default function AppHomeManager({ onUnauthorized }) {
       setConfig((prev) => ({ ...prev, sections: previous }));
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel reordenar as secA§Aµes.",
+        message: err.message || "Não foi possível reordenar as secções.",
       });
     }
   };
@@ -161,7 +161,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel atualizar a secA§A£o.",
+        message: err.message || "Não foi possível atualizar a secção.",
       });
     }
   };
@@ -206,12 +206,12 @@ export default function AppHomeManager({ onUnauthorized }) {
           metrics: sortByOrder([...(prev.metrics ?? []), result]),
         }));
       }
-      setBanner({ type: "success", message: "MA©trica guardada com sucesso." });
+      setBanner({ type: "success", message: "Métrica guardada com sucesso." });
       closeMetricModal();
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel guardar a mA©trica.",
+        message: err.message || "Não foi possível guardar a métrica.",
       });
     } finally {
       setMetricSaving(false);
@@ -233,7 +233,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel remover a mA©trica.",
+        message: err.message || "Não foi possível remover a métrica.",
       });
     } finally {
       setMetricSaving(false);
@@ -248,12 +248,12 @@ export default function AppHomeManager({ onUnauthorized }) {
     setBanner(null);
     try {
       await reorderAppMetrics(next.map((metric) => metric.id));
-      setBanner({ type: "success", message: "MA©tricas reordenadas." });
+      setBanner({ type: "success", message: "Métricas reordenadas." });
     } catch (err) {
       setConfig((prev) => ({ ...prev, metrics: previous }));
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel reordenar as mA©tricas.",
+        message: err.message || "Não foi possível reordenar as métricas.",
       });
     }
   };
@@ -270,7 +270,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err.message || "NA£o foi possA­vel alterar a mA©trica.",
+        message: err.message || "Não foi possí­vel alterar a métrica.",
       });
     }
   };
@@ -364,21 +364,17 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-6">
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-primary/70">ConteAºdo</p>
-          <h2 className="card-title text-3xl">Hero autenticado</h2>
-          <p className="text-base-content/70">
-            Personalize a mensagem apresentada quando o utilizador faz login.
-          </p>
+          <h2 className="card-title text-3xl">Hero</h2>
         </div>
         <form className="space-y-4" onSubmit={onSubmit}>
           <FieldGroup
-            label="TA­tulo"
+            label="Titulo"
             value={form.title}
             onChange={(value) => onFieldChange("title", value)}
-            placeholder="OlA¡ JoA£o"
+            placeholder="Olá João!"
           />
           <label className="form-control">
-            <span className="label-text font-semibold">SubtA­tulo</span>
+            <span className="label-text font-semibold">Subtitulo</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               value={form.subtitle}
@@ -386,7 +382,7 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
             />
           </label>
           <label className="form-control">
-            <span className="label-text font-semibold">ConteAºdo complementar</span>
+            <span className="label-text font-semibold">Conteudo complementar</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               value={form.content}
@@ -412,7 +408,7 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
               checked={form.active}
               onChange={(e) => onFieldChange("active", e.target.checked)}
             />
-            <span className="label-text">Mostrar secA§A£o</span>
+            <span className="label-text">Mostrar secção</span>
           </label>
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={saving}>
@@ -422,7 +418,7 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
                   A guardar...
                 </>
               ) : (
-                "Guardar alteraA§Aµes"
+                "Guardar alterações"
               )}
             </button>
           </div>
@@ -438,27 +434,23 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-6">
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-primary/70">ConteAºdo</p>
           <h2 className="card-title text-3xl">Dica da semana</h2>
-          <p className="text-base-content/70">
-            Destaque boas prA¡ticas internas ou mensagens de seguranA§a.
-          </p>
         </div>
         <form className="space-y-4" onSubmit={onSubmit}>
           <FieldGroup
-            label="TA­tulo"
+            label="Tí­tulo"
             value={form.title}
             onChange={(value) => onFieldChange("title", value)}
-            placeholder="SeguranA§a em primeiro lugar"
+            placeholder="Segurança em primeiro lugar"
           />
           <FieldGroup
-            label="SubtA­tulo"
+            label="Subtí­tulo"
             value={form.subtitle}
             onChange={(value) => onFieldChange("subtitle", value)}
             placeholder="Resumo curto"
           />
           <label className="form-control">
-            <span className="label-text font-semibold">ConteAºdo</span>
+            <span className="label-text font-semibold">Conteúdo</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               value={form.content}
@@ -484,7 +476,7 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
               checked={form.active}
               onChange={(e) => onFieldChange("active", e.target.checked)}
             />
-            <span className="label-text">Mostrar secA§A£o</span>
+            <span className="label-text">Mostrar secção</span>
           </label>
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={saving}>
@@ -494,7 +486,7 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
                   A guardar...
                 </>
               ) : (
-                "Guardar alteraA§Aµes"
+                "Guardar alterações"
               )}
             </button>
           </div>
@@ -529,17 +521,16 @@ function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-6">
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-primary/70">Integracao</p>
           <h2 className="card-title text-3xl">Noticias da NewsAPI</h2>
           <p className="text-base-content/70">
             As manchetes sao sincronizadas automaticamente. Ajuste apenas quantos cards deseja
-            mostrar (maximo de 6) e deixe o backend fazer o resto.
+            mostrar (maximo de 6)
           </p>
         </div>
         <form className="space-y-6" onSubmit={onSubmit}>
           <div className="rounded-2xl border border-base-200 bg-base-100 p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-base-content">Quantidade de noticias</span>
+              <span className="font-semibold text-base-content">Quantidade de notícias</span>
               <span className="text-sm text-base-content/70">
                 {selectedItems} {selectedItems === 1 ? "noticia" : "noticias"}
               </span>
@@ -559,7 +550,7 @@ function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-base-content">Pre-visualizacao</span>
+              <span className="font-semibold text-base-content">Pre-visualização</span>
               <span className="badge badge-ghost">
                 {previewArticles.length ? `${previewArticles.length} artigos` : "Sem dados"}
               </span>
@@ -593,7 +584,7 @@ function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
                   A guardar...
                 </>
               ) : (
-                "Guardar alteracoes"
+                "Guardar alterações"
               )}
             </button>
           </div>
@@ -609,9 +600,9 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-4">
         <div className="flex flex-col gap-1">
-          <h2 className="card-title text-2xl">Ordem das secA§Aµes</h2>
+          <h2 className="card-title text-2xl">Ordem das secções</h2>
           <p className="text-base-content/70">
-            Defina a sequAªncia como cada bloco aparece para os utilizadores autenticados.
+            Defina a sequência como cada bloco aparece para os utilizadores autenticados.
           </p>
         </div>
         <ol className="space-y-3">
@@ -631,7 +622,7 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
                 {typeof onToggle === "function" && (
                   <label className="label cursor-pointer gap-3">
                     <span className="text-sm text-base-content/70">
-                      {section.active ? "VisA­vel" : "Oculta"}
+                      {section.active ? "Visí­vel" : "Oculta"}
                     </span>
                     <input
                       type="checkbox"
@@ -672,11 +663,11 @@ function AppMetricsList({ metrics, onCreate, onEdit, onMove, onToggle }) {
       <div className="card-body space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="card-title text-2xl">MA©tricas destacadas</h2>
-            <p className="text-base-content/70">Registe manualmente os nAºmeros mostrados na Home.</p>
+            <h2 className="card-title text-2xl">Métrcias destacadas</h2>
+            <p className="text-base-content/70">Registe manualmente os números mostrados na Home.</p>
           </div>
           <button type="button" className="btn btn-primary" onClick={onCreate}>
-            Adicionar mA©trica
+            Adicionar métrica
           </button>
         </div>
         {metrics.length ? (
@@ -695,7 +686,7 @@ function AppMetricsList({ metrics, onCreate, onEdit, onMove, onToggle }) {
                     )}
                   </div>
                   <span className={`badge ${metric.active ? "badge-success" : "badge-ghost"}`}>
-                    {metric.active ? "VisA­vel" : "Oculta"}
+                    {metric.active ? "Visí­vel" : "Oculta"}
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -739,7 +730,7 @@ function AppMetricsList({ metrics, onCreate, onEdit, onMove, onToggle }) {
           </div>
         ) : (
           <div className="rounded-2xl border border-dashed border-base-300 p-10 text-center">
-            <p className="text-base-content/60">Ainda nA£o existem mA©tricas configuradas.</p>
+            <p className="text-base-content/60">Ainda não existem métricas configuradas.</p>
           </div>
         )}
       </div>
@@ -753,7 +744,7 @@ function MetricModal({ state, form, saving, onClose, onChange, onSubmit, onDelet
   return (
     <Modal
       open
-      title={isEdit ? "Editar mA©trica" : "Adicionar mA©trica"}
+      title={isEdit ? "Editar métrica" : "Adicionar métrica"}
       onClose={onClose}
       actions={
         <>
@@ -797,7 +788,7 @@ function MetricModal({ state, form, saving, onClose, onChange, onSubmit, onDelet
           placeholder="8"
         />
         <label className="form-control">
-          <span className="label-text font-semibold">DescriA§A£o</span>
+          <span className="label-text font-semibold">Descrição</span>
           <textarea
             className="textarea textarea-bordered min-h-[100px]"
             value={form.description}

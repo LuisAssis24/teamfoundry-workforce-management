@@ -427,18 +427,15 @@ export default function VariableManagement() {
           <div className="card-body space-y-6">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-primary/70">
-                ConteÃºdo
               </p>
-              <h2 className="card-title text-3xl">Hero e chamadas</h2>
+              <h2 className="card-title text-3xl">Hero e Redirecionamento</h2>
               <p className="text-base-content/70">
-                Atualize o texto principal, subtÃ­tulo e CTAs apresentados no topo do
-                site pÃºblico.
               </p>
             </div>
             {heroForm && (
               <form className="grid gap-4 md:grid-cols-2" onSubmit={handleHeroSubmit}>
                 <label className="form-control md:col-span-2">
-                  <span className="label-text font-semibold">TÃ­tulo</span>
+                  <span className="label-text font-semibold">Titulo</span>
                   <input
                     type="text"
                     className="input input-bordered"
@@ -449,7 +446,7 @@ export default function VariableManagement() {
                 </label>
 
                 <label className="form-control md:col-span-2">
-                  <span className="label-text font-semibold">SubtÃ­tulo</span>
+                  <span className="label-text font-semibold">Subtitulo</span>
                   <textarea
                     className="textarea textarea-bordered min-h-[120px]"
                     value={heroForm.subtitle}
@@ -458,19 +455,19 @@ export default function VariableManagement() {
                 </label>
 
                 <FieldGroup
-                  label="Texto do CTA principal"
+                  label="Texto do do botão"
                   value={heroForm.primaryCtaLabel}
                   onChange={(value) => handleHeroFieldChange("primaryCtaLabel", value)}
                   placeholder="Ex.: Quero trabalhar"
                 />
                 <FieldGroup
-                  label="URL do CTA principal"
+                  label="URL do botão principal"
                   value={heroForm.primaryCtaUrl}
                   onChange={(value) => handleHeroFieldChange("primaryCtaUrl", value)}
                   placeholder="/login"
                 />
                 <FieldGroup
-                  label="Texto do CTA secundÃ¡rio"
+                  label="Texto do botão"
                   value={heroForm.secondaryCtaLabel}
                   onChange={(value) =>
                     handleHeroFieldChange("secondaryCtaLabel", value)
@@ -478,7 +475,7 @@ export default function VariableManagement() {
                   placeholder="Sou empresa"
                 />
                 <FieldGroup
-                  label="URL do CTA secundÃ¡rio"
+                  label="URL do botão secundário"
                   value={heroForm.secondaryCtaUrl}
                   onChange={(value) => handleHeroFieldChange("secondaryCtaUrl", value)}
                   placeholder="/company-register"
@@ -491,7 +488,7 @@ export default function VariableManagement() {
                     checked={heroForm.active}
                     onChange={(e) => handleHeroFieldChange("active", e.target.checked)}
                   />
-                  <span className="label-text">Mostrar esta secÃ§Ã£o no site pÃºblico</span>
+                  <span className="label-text">Mostrar esta secção no site público </span>
                 </label>
 
                 <div className="md:col-span-2 flex gap-3 justify-end">
@@ -503,10 +500,10 @@ export default function VariableManagement() {
                     {savingHero ? (
                       <>
                         <span className="loading loading-spinner loading-sm" />
-                        A guardarâ€¦
+                        A guardar!
                       </>
                     ) : (
-                      "Guardar alteraÃ§Ãµes"
+                      "Guardar alterações"
                     )}
                   </button>
                 </div>
@@ -522,7 +519,7 @@ export default function VariableManagement() {
         />
 
         <ShowcaseList
-          title="IndÃºstrias em destaque"
+          title="Industrias em destaque"
           description="Controle quais setores aparecem e a ordem apresentada na home page."
           type="industry"
           items={config.industries}
@@ -548,13 +545,9 @@ export default function VariableManagement() {
     <section className="space-y-8">
       <header>
         <p className="text-sm uppercase tracking-[0.35em] text-primary/80">
-          GestÃ£o do site
+          Gestão do site
         </p>
-        <h1 className="text-4xl font-extrabold text-primary">ConfiguraÃ§Ãµes do site</h1>
-        <p className="text-base-content/70 mt-2">
-          Gerencie o conteÃºdo dinÃ¢mico da home page e mantenha o site sempre
-          alinhado com a estratÃ©gia da TeamFoundry.
-        </p>
+        <h1 className="text-4xl font-extrabold text-primary">Configurações do site</h1>
       </header>
 
       <nav className="tabs tabs-boxed bg-base-100 shadow-sm w-fit">
@@ -605,9 +598,9 @@ function SectionOrderCard({ sections = [], onMove, onToggle }) {
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-4">
         <div className="flex flex-col gap-1">
-          <h2 className="card-title text-2xl">Ordem das secÃ§Ãµes</h2>
+          <h2 className="card-title text-2xl">Ordem das secções</h2>
           <p className="text-base-content/70">
-            Defina a sequÃªncia com que cada bloco aparece para os visitantes.
+            Defina a sequencia com que cada bloco aparece para os visitantes.
           </p>
         </div>
         <ol className="space-y-3">
@@ -682,7 +675,7 @@ function ShowcaseList({
             <p className="text-base-content/70">{description}</p>
           </div>
           <button type="button" className="btn btn-primary" onClick={onCreate}>
-            Adicionar {isIndustry ? "indÃºstria" : "parceiro"}
+            Adicionar {isIndustry ? "industria" : "parceiro"}
           </button>
         </div>
         {safeItems.length ? (
@@ -704,7 +697,7 @@ function ShowcaseList({
                           item.active ? "badge-success" : "badge-ghost"
                         } uppercase`}
                       >
-                        {item.active ? "VisÃ­vel" : "Oculto"}
+                        {item.active ? "Visi­vel" : "Oculto"}
                       </span>
                       <div className="flex items-center gap-2 text-xs text-base-content/60">
                         <button
@@ -751,7 +744,7 @@ function ShowcaseList({
         ) : (
           <div className="rounded-2xl border border-dashed border-base-300 p-10 text-center">
             <p className="text-base-content/60">
-              Ainda nÃ£o existem {isIndustry ? "indÃºstrias" : "parceiros"} configurados.
+              Ainda não existem {isIndustry ? "indÃºstrias" : "parceiros"} configurados.
             </p>
           </div>
         )}
@@ -774,7 +767,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
       const result = await uploadSiteImage(file);
       onChange("imageUrl", result.url);
     } catch (err) {
-      setUploadError(err.message || "NÃ£o foi possÃ­vel carregar a imagem.");
+      setUploadError(err.message || "Não foi possivel carregar a imagem.");
     } finally {
       setUploadingImage(false);
     }
@@ -785,8 +778,8 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
       open
       title={
         state.mode === "create"
-          ? `Adicionar ${isIndustry ? "indÃºstria" : "parceiro"}`
-          : `Editar ${isIndustry ? "indÃºstria" : "parceiro"}`
+          ? `Adicionar ${isIndustry ? "industria" : "parceiro"}`
+          : `Editar ${isIndustry ? "industria" : "parceiro"}`
       }
       onClose={onClose}
       actions={
@@ -813,7 +806,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
             {saving ? (
               <>
                 <span className="loading loading-spinner loading-sm" />
-                A guardarâ€¦
+                A guardar!
               </>
             ) : (
               "Guardar"
@@ -838,7 +831,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
             <div>
               <p className="text-sm font-semibold text-base-content/80">Visibilidade</p>
               <p className="text-xs text-base-content/60">
-                Controle se aparece na pÃ¡gina inicial
+                Controle se aparece na paigina inicial
               </p>
             </div>
             <label className="label cursor-pointer gap-3">
@@ -855,7 +848,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
 
         {!isIndustry && (
           <label className="form-control">
-            <span className="label-text font-semibold">DescriÃ§Ã£o</span>
+            <span className="label-text font-semibold">Descrição</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               required
@@ -875,7 +868,7 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
               {uploadingImage && (
                 <div className="text-sm text-primary flex items-center gap-2">
                   <span className="loading loading-spinner loading-xs" />
-                  A enviar imagemâ€¦
+                  A enviar imagem!
                 </div>
               )}
               {uploadError && <p className="text-sm text-error">{uploadError}</p>}
