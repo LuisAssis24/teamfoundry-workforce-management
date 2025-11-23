@@ -50,7 +50,13 @@ export function HomeNoLogin() {
       .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   }, [data]);
 
-  const navLinks = [];
+  const navLinks = useMemo(
+    () =>
+      orderedSections
+        .map((section) => SECTION_NAV_LINKS[section.type])
+        .filter(Boolean),
+    [orderedSections]
+  );
 
   const renderSection = (section) => {
     const Component = SECTION_COMPONENTS[section.type];
@@ -135,54 +141,56 @@ function HeroSection({ section }) {
 
 function IndustriesSection({ section, industries }) {
   return (
-    <section id="industrias" className="max-w-6xl mx-auto px-6 py-16 space-y-10">
-      <SectionHeader
-        section={section}
-        fallbackTitle="Indústrias em que atuamos"
-        fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
-      />
-      {industries?.length ? (
-        <div className="grid gap-8 md:grid-cols-3">
-          {industries.map((industry) => (
-            <article
-              key={industry.id}
-              className="card bg-base-100 shadow-xl overflow-hidden border border-base-200"
-            >
-              <figure className="h-56 bg-base-200">
-                <ShowcaseImage src={industry.imageUrl} alt={industry.name} />
-              </figure>
-              <div className="card-body space-y-3">
-                <h3 className="card-title text-2xl">{industry.name}</h3>
-                {industry.description && (
-                  <p className="text-sm text-base-content/70 leading-relaxed">
-                    {industry.description}
-                  </p>
-                )}
-                {industry.linkUrl && (
-                  <a
-                    href={industry.linkUrl}
-                    className="link link-primary text-sm"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Saber mais
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <EmptyState message="Ainda não há indústrias destacadas." />
-      )}
+    <section id="industrias" className="border-t border-base-200 bg-base-100">
+      <div className="max-w-6xl mx-auto px-6 py-16 space-y-10">
+        <SectionHeader
+          section={section}
+          fallbackTitle="Indústrias em que atuamos"
+          fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
+        />
+        {industries?.length ? (
+          <div className="grid gap-8 md:grid-cols-3">
+            {industries.map((industry) => (
+              <article
+                key={industry.id}
+                className="card bg-base-100 shadow-xl overflow-hidden border border-base-200"
+              >
+                <figure className="h-56 bg-base-200">
+                  <ShowcaseImage src={industry.imageUrl} alt={industry.name} />
+                </figure>
+                <div className="card-body items-center text-center space-y-3">
+                  <h3 className="card-title text-2xl">{industry.name}</h3>
+                  {industry.description && (
+                    <p className="text-sm text-base-content/70 leading-relaxed">
+                      {industry.description}
+                    </p>
+                  )}
+                  {industry.linkUrl && (
+                    <a
+                      href={industry.linkUrl}
+                      className="link link-primary text-sm"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Saber mais
+                    </a>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <EmptyState message="Ainda não há indústrias destacadas." />
+        )}
+      </div>
     </section>
   );
 }
 
 function PartnersSection({ section, partners }) {
   return (
-    <section id="parceiros" className="bg-base-200 py-16">
-      <div className="max-w-6xl mx-auto px-6 space-y-10">
+    <section id="parceiros" className="border-t border-base-200 bg-base-100">
+      <div className="max-w-6xl mx-auto px-6 py-16 space-y-10">
         <SectionHeader
           section={section}
           fallbackTitle="Parceiros principais"
@@ -193,27 +201,29 @@ function PartnersSection({ section, partners }) {
             {partners.map((partner) => (
               <article
                 key={partner.id}
-                className="bg-base-100 rounded-2xl shadow-lg p-6 space-y-4 border border-base-300"
+                className="bg-base-100 rounded-2xl shadow-lg border border-base-300 overflow-hidden flex flex-col md:flex-row"
               >
-                <div className="h-64 rounded-xl overflow-hidden bg-base-200">
+                <div className="md:w-1/2 h-64 md:h-auto bg-base-200">
                   <ShowcaseImage src={partner.imageUrl} alt={partner.name} />
                 </div>
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-semibold text-primary">{partner.name}</h3>
-                  <p className="text-sm text-base-content/80 leading-relaxed">
-                    {partner.description}
-                  </p>
+                <div className="flex-1 p-6 space-y-4 flex flex-col justify-center">
+                  <div className="space-y-3">
+                    <h3 className="text-2xl font-semibold text-primary">{partner.name}</h3>
+                    <p className="text-sm text-base-content/80 leading-relaxed">
+                      {partner.description}
+                    </p>
+                  </div>
+                  {partner.websiteUrl && (
+                    <a
+                      href={partner.websiteUrl}
+                      className="btn btn-link px-0 text-primary self-start"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Visitar website
+                    </a>
+                  )}
                 </div>
-                {partner.websiteUrl && (
-                  <a
-                    href={partner.websiteUrl}
-                    className="btn btn-link px-0 text-primary"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Visitar website
-                  </a>
-                )}
               </article>
             ))}
           </div>
