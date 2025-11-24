@@ -5,10 +5,9 @@ import Button from "../../../../components/ui/Button/Button.jsx";
 import MultiSelectDropdown from "../../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
 import { fetchProfileOptions } from "../../../../api/profileOptions.js";
 import {
-  fetchCandidatePreferences,
-  updateCandidatePreferences,
-  setCandidatePreferencesEmail,
-} from "../../../../api/candidatePreferences.js";
+  fetchEmployeePreferences,
+  updateEmployeePreferences,
+} from "../../../../api/profile/employeePreferences.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const initialForm = {
@@ -39,11 +38,10 @@ export default function Preferences() {
         const profileSource = profile || (await refreshProfile());
         if (isMounted) {
           setDisplayName(formatName(profileSource?.firstName, profileSource?.lastName));
-          setCandidatePreferencesEmail(profileSource?.email ?? null);
         }
 
         const optionsData = await fetchProfileOptions();
-        const preferencesPayload = preferencesData || (await fetchCandidatePreferences());
+        const preferencesPayload = preferencesData || (await fetchEmployeePreferences());
 
         if (!isMounted) return;
 
@@ -98,7 +96,7 @@ export default function Preferences() {
 
     setSaving(true);
     try {
-      await updateCandidatePreferences({
+      await updateEmployeePreferences({
         role: form.roles?.[0] || "",
         roles: form.roles,
         areas: form.areas,

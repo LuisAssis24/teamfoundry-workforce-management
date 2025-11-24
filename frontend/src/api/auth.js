@@ -21,12 +21,12 @@ export async function login(email, password, rememberMe = false) {
 }
 
 /**
- * Passo 1 do registo de candidato: cria a conta pendente.
+ * Passo 1 do registo de funcionário: cria a conta pendente.
  * @param {{email:string,password:string}} payload
  * @returns {Promise<{message:string}>}
  */
 export function registerStep1(payload) {
-  return httpPost("/api/candidate/register/step1", payload);
+  return httpPost("/api/employee/register/step1", payload);
 }
 
 /**
@@ -35,7 +35,7 @@ export function registerStep1(payload) {
  * @returns {Promise<{message:string}>}
  */
 export function registerStep2(payload) {
-  return httpPost("/api/candidate/register/step2", payload);
+  return httpPost("/api/employee/register/step2", payload);
 }
 
 /**
@@ -44,7 +44,7 @@ export function registerStep2(payload) {
  * @returns {Promise<{message:string}>}
  */
 export function registerStep3(payload) {
-  return httpPost("/api/candidate/register/step3", payload);
+  return httpPost("/api/employee/register/step3", payload);
 }
 
 /**
@@ -53,7 +53,7 @@ export function registerStep3(payload) {
  * @returns {Promise<{message:string}>}
  */
 export function registerStep4(payload) {
-  return httpPost("/api/candidate/register/step4", payload);
+  return httpPost("/api/employee/register/step4", payload);
 }
 
 /**
@@ -61,7 +61,7 @@ export function registerStep4(payload) {
  * @param {string} email
  */
 export function resendVerificationCode(email) {
-  return httpPost("/api/candidate/verification/send", { email });
+  return httpPost("/api/employee/verification/send", { email });
 }
 
 export function forgotPassword(email) {

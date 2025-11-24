@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { fetchCandidateProfile } from "../../../api/candidateProfile.js";
+import { fetchEmployeeProfile } from "../../../api/profile/employeeProfile.js";
 import { useAuthContext } from "../../../auth/AuthContext.jsx";
 
 const EmployeeProfileContext = createContext(null);
@@ -24,7 +24,7 @@ export function EmployeeProfileProvider({ children }) {
     }
     setLoadingProfile(true);
     try {
-      const data = await fetchCandidateProfile();
+      const data = await fetchEmployeeProfile();
       setProfile(data);
       setProfileError(null);
       return data;

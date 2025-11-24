@@ -64,9 +64,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/auth/**",
-                                "/api/candidate/register/**",
-                                "/api/candidate/verification/**",
-                                "/api/candidate/preferences/**",
+                                "/api/employee/register/**",
+                                "/api/employee/verification/**",
+                                "/api/employee/preferences/**",
                                 "/api/company/register/**",
                                 "/api/company/options/**",
                                 "/api/profile-options",

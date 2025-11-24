@@ -5,9 +5,9 @@ import Button from "../../../../components/ui/Button/Button.jsx";
 import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
 import {
-  createCandidateEducation,
-  listCandidateEducation,
-} from "../../../../api/candidateEducation.js";
+  createEmployeeEducation,
+  listEmployeeEducation,
+} from "../../../../api/profile/employeeEducation.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const initialForm = {
@@ -36,7 +36,7 @@ export default function Education() {
     let isMounted = true;
     async function loadEducation() {
       try {
-        const data = educationData || (await listCandidateEducation());
+        const data = educationData || (await listEmployeeEducation());
         if (!isMounted) return;
         setEducations(Array.isArray(data) ? data : []);
         if (!educationData) setEducationData(data);
@@ -64,7 +64,9 @@ export default function Education() {
     return () => {
       isMounted = false;
     };
-  }, []);  const handleChange = (event) => {
+  }, []);
+
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -107,7 +109,7 @@ export default function Education() {
 
     try {
       const payload = await buildPayload(form);
-      const created = await createCandidateEducation(payload);
+      const created = await createEmployeeEducation(payload);
       setEducations((prev) => [created, ...prev]);
       setSuccessMessage("Formação adicionada com sucesso.");
       closeModal();

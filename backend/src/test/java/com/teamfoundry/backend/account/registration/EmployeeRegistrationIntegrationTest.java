@@ -248,7 +248,7 @@ class EmployeeRegistrationIntegrationTest {
                 "password", password
         ));
 
-        mockMvc.perform(post("/api/candidate/register/step1")
+        mockMvc.perform(post("/api/employee/register/step1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isCreated())
@@ -266,7 +266,7 @@ class EmployeeRegistrationIntegrationTest {
                 "nif", 123456789
         ));
 
-        mockMvc.perform(post("/api/candidate/register/step2")
+        mockMvc.perform(post("/api/employee/register/step2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())
@@ -282,7 +282,7 @@ class EmployeeRegistrationIntegrationTest {
                 "termsAccepted", termsAccepted
         ));
 
-        ResultActions actions = mockMvc.perform(post("/api/candidate/register/step3")
+        ResultActions actions = mockMvc.perform(post("/api/employee/register/step3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(expectedStatus);
@@ -300,7 +300,7 @@ class EmployeeRegistrationIntegrationTest {
                 "verificationCode", verificationCode
         ));
 
-        mockMvc.perform(post("/api/candidate/register/step4")
+        mockMvc.perform(post("/api/employee/register/step4")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(expectedStatus);
