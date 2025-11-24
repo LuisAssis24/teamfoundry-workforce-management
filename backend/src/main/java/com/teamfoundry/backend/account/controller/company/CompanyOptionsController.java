@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.account.controller.company;
 
-import com.teamfoundry.backend.account.dto.company.CompanyOptionsResponse;
-import com.teamfoundry.backend.account.service.CompanyOptionsService;
+import com.teamfoundry.backend.account_options.dto.company.CompanyOptionsResponse;
+import com.teamfoundry.backend.account_options.service.CompanyOptionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

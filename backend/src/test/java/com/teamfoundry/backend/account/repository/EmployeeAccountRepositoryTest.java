@@ -23,12 +23,12 @@ class EmployeeAccountRepositoryTest {
     @DisplayName("findByEmail devolve a conta guardada")
     void findByEmail() {
         EmployeeAccount account = new EmployeeAccount();
-        account.setEmail("candidate@example.com");
+        account.setEmail("employee@example.com");
         account.setPassword("hash");
         account.setRole(UserType.EMPLOYEE);
         account.setRegistrationStatus(RegistrationStatus.PENDING);
         employeeAccountRepository.save(account);
 
-        assertThat(employeeAccountRepository.findByEmail("candidate@example.com")).isPresent();
+        assertThat(employeeAccountRepository.findByEmail("employee@example.com")).isPresent();
     }
 }
