@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/team-requests")
+@RequestMapping("/api/super-admin/team-requests")
 class TeamRequestController {
 
     private final TeamRequestService service;

@@ -1,22 +1,20 @@
 import { API_URL } from './config';
+import { getAccessToken } from '../auth/tokenStorage';
 
-const BASE_URL = `${API_URL}/admin/team-requests`;
+const BASE_URL = `${API_URL}/api/super-admin/team-requests`;
 
 export const teamRequestsAPI = {
   getAll: async () => {
-    try {
-      const response = await fetch(`${BASE_URL}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-      if (!response.ok) throw new Error('Erro ao buscar requisicoes de equipa');
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao buscar requisicoes de equipa:', error);
-      throw error;
-    }
+    const token = getAccessToken();
+    const response = await fetch(BASE_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      credentials: "include",
+    });
+    if (!response.ok) throw new Error("Erro ao buscar requisicoes de equipa");
+    return response.json();
   },
 };
