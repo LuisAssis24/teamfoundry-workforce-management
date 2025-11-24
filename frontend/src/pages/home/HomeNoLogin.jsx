@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchPublicHomepage } from "../../../api/siteManagement.js";
-import Navbar from "../../../components/sections/Navbar.jsx";
-import Footer from "../../../components/sections/Footer.jsx";
+import { fetchPublicHomepage } from "../../api/siteManagement.js";
+import Navbar from "../../components/sections/Navbar.jsx";
+import Footer from "../../components/sections/Footer.jsx";
 
 const SECTION_COMPONENTS = {
   HERO: HeroSection,

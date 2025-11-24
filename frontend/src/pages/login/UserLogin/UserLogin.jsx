@@ -4,6 +4,7 @@ import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import { login } from "../../../api/auth.js";
 import ForgotPassword from "./ForgotPassword.jsx";
+import { useAuthContext } from "../../../auth/AuthContext.jsx";
 
 /**
  * Ecrã de login dos utilizadores (colaboradores e empresas).
@@ -19,6 +20,7 @@ export default function LoginCandidate() {
     const [showForgotModal, setShowForgotModal] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const { refreshAuth } = useAuthContext();
 
     // Sempre que alguém navega para /login com state { openForgotModal: true } abrimos o modal automaticamente.
     useEffect(() => {
@@ -39,7 +41,8 @@ export default function LoginCandidate() {
             const data = await login(email, password, rememberMe);
             console.log("Login OK:", data);
             setSuccess(true);
-            navigate("/home-login");
+            refreshAuth();
+            navigate("/", { replace: true });
         } catch (e) {
             setError(e.message || "Falha no login");
         } finally {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../../../components/sections/Navbar.jsx";
-import Footer from "../../../components/sections/Footer.jsx";
-import { useAuthContext } from "../../../auth/AuthContext.jsx";
-import { useEmployeeProfile } from "../../profile/Employee/EmployeeProfileContext.jsx";
-import { fetchAppHomePublic } from "../../../api/siteManagement.js";
+import Navbar from "../../components/sections/Navbar.jsx";
+import Footer from "../../components/sections/Footer.jsx";
+import { useAuthContext } from "../../auth/AuthContext.jsx";
+import { useEmployeeProfile } from "../profile/Employee/EmployeeProfileContext.jsx";
+import { fetchAppHomePublic } from "../../api/siteManagement.js";
 
 const FALLBACK_METRICS = [
   { label: "Equipas concluidas", value: "8" },
