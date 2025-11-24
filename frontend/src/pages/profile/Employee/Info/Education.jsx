@@ -8,7 +8,7 @@ import {
   createCandidateEducation,
   listCandidateEducation,
 } from "../../../../api/candidateEducation.js";
-import { fetchCandidateProfile } from "../../../../api/candidateProfile.js";
+import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const initialForm = {
   name: "",
@@ -28,16 +28,18 @@ export default function Education() {
   const [saving, setSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [displayName, setDisplayName] = useState("Nome Sobrenome");
+  const { profile, refreshProfile, educationData, setEducationData } = useEmployeeProfile();
+  const [displayName, setDisplayName] = useState("");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
     async function loadEducation() {
       try {
-        const data = await listCandidateEducation();
+        const data = educationData || (await listCandidateEducation());
         if (!isMounted) return;
         setEducations(Array.isArray(data) ? data : []);
+        if (!educationData) setEducationData(data);
       } catch (error) {
         if (isMounted) {
           setErrorMessage(error.message || "Nuo foi poss??vel carregar as forma????es.");
@@ -47,11 +49,12 @@ export default function Education() {
       }
     }
 
+    // Usa o nome vindo do contexto ou, se não existir, faz refresh.
     async function loadProfileName() {
       try {
-        const profile = await fetchCandidateProfile();
+        const profileSource = profile || (await refreshProfile());
         if (!isMounted) return;
-        setDisplayName(formatName(profile?.firstName, profile?.lastName));
+        setDisplayName(formatName(profileSource?.firstName, profileSource?.lastName));
       } catch {
       }
     }

@@ -9,10 +9,10 @@ import {
   updateCandidatePreferences,
   setCandidatePreferencesEmail,
 } from "../../../../api/candidatePreferences.js";
-import { fetchCandidateProfile } from "../../../../api/candidateProfile.js";
+import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const initialForm = {
-  role: "",
+  roles: [],
   areas: [],
   skills: [],
 };
@@ -20,7 +20,8 @@ const initialForm = {
 export default function Preferences() {
   const [form, setForm] = useState(initialForm);
   const [options, setOptions] = useState({ functions: [], geoAreas: [], competences: [] });
-  const [displayName, setDisplayName] = useState("Nome Sobrenome");
+  const { profile, refreshProfile, preferencesData, setPreferencesData } = useEmployeeProfile();
+  const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -30,26 +31,19 @@ export default function Preferences() {
   useEffect(() => {
     let isMounted = true;
 
+    // Carrega opções (sempre) e preferências (cache do contexto se existir).
     async function loadData() {
       setLoading(true);
       setError("");
       try {
-        try {
-          const profile = await fetchCandidateProfile();
-          if (isMounted) {
-            setDisplayName(formatName(profile?.firstName, profile?.lastName));
-            setCandidatePreferencesEmail(profile?.email ?? null);
-          }
-        } catch {
-          if (isMounted) {
-            setCandidatePreferencesEmail(null);
-          }
+        const profileSource = profile || (await refreshProfile());
+        if (isMounted) {
+          setDisplayName(formatName(profileSource?.firstName, profileSource?.lastName));
+          setCandidatePreferencesEmail(profileSource?.email ?? null);
         }
 
-        const [optionsData, preferencesData] = await Promise.all([
-          fetchProfileOptions(),
-          fetchCandidatePreferences(),
-        ]);
+        const optionsData = await fetchProfileOptions();
+        const preferencesPayload = preferencesData || (await fetchCandidatePreferences());
 
         if (!isMounted) return;
 
@@ -60,10 +54,16 @@ export default function Preferences() {
         });
 
         setForm({
-          role: preferencesData?.role ?? "",
-          areas: Array.isArray(preferencesData?.areas) ? preferencesData.areas : [],
-          skills: Array.isArray(preferencesData?.skills) ? preferencesData.skills : [],
+          roles: Array.isArray(preferencesPayload?.roles)
+            ? preferencesPayload.roles
+            : preferencesPayload?.role
+              ? [preferencesPayload.role]
+              : [],
+          areas: Array.isArray(preferencesPayload?.areas) ? preferencesPayload.areas : [],
+          skills: Array.isArray(preferencesPayload?.skills) ? preferencesPayload.skills : [],
         });
+
+        if (!preferencesData) setPreferencesData(preferencesPayload);
       } catch (err) {
         if (isMounted) {
           setError(err.message || "Nao foi possivel carregar as preferencias.");
@@ -77,15 +77,13 @@ export default function Preferences() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [profile, refreshProfile, preferencesData, setPreferencesData]);
 
   const functionOptions = useMemo(() => {
     const list = Array.isArray(options.functions) ? [...options.functions] : [];
-    if (form.role && !list.includes(form.role)) {
-      return [form.role, ...list];
-    }
-    return list;
-  }, [options.functions, form.role]);
+    const extras = (form.roles || []).filter((r) => r && !list.includes(r));
+    return [...extras, ...list];
+  }, [options.functions, form.roles]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -101,11 +99,16 @@ export default function Preferences() {
     setSaving(true);
     try {
       await updateCandidatePreferences({
-        role: form.role,
+        role: form.roles?.[0] || "",
+        roles: form.roles,
         areas: form.areas,
         skills: form.skills,
       });
       setFeedback("Preferencias atualizadas com sucesso.");
+      setPreferencesData({
+        ...form,
+        role: form.roles?.[0] || "",
+      });
     } catch (err) {
       setError(err.message || "Nao foi possivel guardar as preferencias.");
     } finally {
@@ -120,9 +123,8 @@ export default function Preferences() {
   };
 
   const handleRoleDropdownChange = (values) => {
-    const normalized = Array.isArray(values) ? values.filter(Boolean) : [];
-    const lastSelected = normalized[normalized.length - 1] || "";
-    setForm((prev) => ({ ...prev, role: lastSelected }));
+    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
+    setForm((prev) => ({ ...prev, roles: normalized }));
     clearFieldError("role");
   };
 
@@ -149,25 +151,25 @@ export default function Preferences() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <MultiSelectDropdown
-                  label="Funcao preferencial"
+                  label="Função preferencial"
                   options={functionOptions}
-                  selectedOptions={form.role ? [form.role] : []}
+                  selectedOptions={form.roles}
                   onChange={handleRoleDropdownChange}
-                  placeholder="Selecione a funcao"
+                  placeholder="Selecione a função"
                   disabled={loading || saving || functionOptions.length === 0}
                 />
-                {fieldErrors.role && (
-                  <p className="mt-2 text-sm text-error">{fieldErrors.role}</p>
+                {fieldErrors.roles && (
+                  <p className="mt-2 text-sm text-error">{fieldErrors.roles}</p>
                 )}
               </div>
 
               <div>
                 <MultiSelectDropdown
-                  label="Area(s) Geograficas"
+                  label="Área(s) Geográfica(s)"
                   options={options.geoAreas}
                   selectedOptions={form.areas}
                   onChange={handleAreasChange}
-                  placeholder="Adicionar area geografica"
+                  placeholder="Adicionar área geográfica"
                   disabled={loading || saving}
                 />
                 {fieldErrors.areas && (
@@ -177,12 +179,13 @@ export default function Preferences() {
 
               <div className="md:col-span-2">
                 <MultiSelectDropdown
-                  label="Competencias"
+                  label="Competência(s)"
                   options={options.competences}
                   selectedOptions={form.skills}
                   onChange={handleSkillsChange}
-                  placeholder="Adicionar competencia"
+                  placeholder="Adicionar competência"
                   disabled={loading || saving}
+                  maxVisibleChips={3}
                 />
                 {fieldErrors.skills && (
                   <p className="mt-2 text-sm text-error">{fieldErrors.skills}</p>
@@ -218,8 +221,8 @@ export default function Preferences() {
 
 function validateForm(form) {
   const errors = {};
-  if (!form.role) {
-    errors.role = "Selecione uma funcao.";
+  if (!Array.isArray(form.roles) || form.roles.length === 0) {
+    errors.role = "Selecione pelo menos uma funcao.";
   }
   if (!Array.isArray(form.areas) || form.areas.length === 0) {
     errors.areas = "Selecione pelo menos uma area geografica.";

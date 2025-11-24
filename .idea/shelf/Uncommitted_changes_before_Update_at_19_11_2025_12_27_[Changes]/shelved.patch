@@ -1,0 +1,1905 @@
+Index: backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.teamfoundry.backend.admin.model;\r\n\r\nimport com.teamfoundry.backend.admin.enums.State;\r\nimport com.teamfoundry.backend.account.model.CompanyAccount;\r\nimport jakarta.persistence.*;\r\nimport lombok.*;\r\nimport java.time.LocalDateTime;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Entity\r\n@Table(name = \"request_equipa\")\r\npublic class TeamRequest {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private int id;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name = \"id_empresa\", nullable = false)\r\n    private CompanyAccount company;\r\n\r\n    @Column(name = \"team_name\", nullable = false)\r\n    private String teamName;\r\n\r\n    @Column(name = \"description\")\r\n    private String description;\r\n\r\n    @Enumerated(EnumType.STRING)\r\n    @Column(nullable = false)\r\n    private State state;\r\n\r\n    @Column(name = \"created_at\", nullable = false)\r\n    private LocalDateTime createdAt = LocalDateTime.now();\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java b/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java
+--- a/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
++++ b/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java	(date 1763481184324)
+@@ -33,4 +33,5 @@
+ 
+     @Column(name = "created_at", nullable = false)
+     private LocalDateTime createdAt = LocalDateTime.now();
++
+ }
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
++++ /dev/null	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
+@@ -1,1616 +0,0 @@
+-Index: frontend/src/App.jsx
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>import { Navigate, Route, Routes } from \"react-router-dom\";\r\n\r\nimport CandidateLogin from \"./pages/login/CandidateLogin/Login.jsx\";\r\nimport AdminLogin from \"./pages/login/AdminLogin/AdminLogin.jsx\";\r\nimport ForgotPassword from \"./pages/login/CandidateLogin/ForgotPassword.jsx\";\r\nimport ResetPassword from \"./pages/login/CandidateLogin/ResetPassword.jsx\";\r\n\r\nimport RegisterLayout from \"./layout/RegisterLayout.jsx\";\r\nimport RegisterStep1 from \"./pages/register/RegisterStep1.jsx\";\r\nimport RegisterStep2 from \"./pages/register/RegisterStep2.jsx\";\r\nimport RegisterStep3 from \"./pages/register/RegisterStep3.jsx\";\r\nimport RegisterStep4 from \"./pages/register/RegisterStep4.jsx\";\r\n\r\nimport CandidateLayout, {\r\n  CandidateIndexRedirect,\r\n} from \"./layout/CandidateLayout.jsx\";\r\nimport DadosPessoais from \"./pages/candidate/DadosPessoais.jsx\";\r\nimport Formacao from \"./pages/candidate/Formacao.jsx\";\r\nimport UltimosTrabalhos from \"./pages/candidate/UltimosTrabalhos.jsx\";\r\nimport Preferencias from \"./pages/candidate/Preferencias.jsx\";\r\nimport AlertasEmprego from \"./pages/candidate/alertas/AlertasEmprego.jsx\";\r\nimport Documentos from \"./pages/candidate/documentos/Documentos.jsx\";\r\nimport ProximosPassos from \"./pages/candidate/proximos/ProximosPassos.jsx\";\r\n\r\nimport SuperAdminLayout from \"./layout/SuperAdminLayout.jsx\";\r\nimport Credenciais from \"./pages/admin/SuperAdmin/Credenciais.jsx\";\r\nimport GestaoTrabalho from \"./pages/admin/SuperAdmin/GestaoTrabalho.jsx\";\r\nimport GestaoSite from \"./pages/admin/SuperAdmin/GestaoSite.jsx\";\r\nimport Metricas from \"./pages/admin/SuperAdmin/Metricas.jsx\";\r\n\r\nfunction App() {\r\n  return (\r\n    <Routes>\r\n      <Route path=\"/\" element={<CandidateLogin />} />\r\n      <Route path=\"/admin\" element={<AdminLogin />} />\r\n      <Route path=\"/register\" element={<RegisterLayout />}>\r\n        <Route index element={<Navigate to=\"step1\" replace />} />\r\n        <Route path=\"step1\" element={<RegisterStep1 />} />\r\n        <Route path=\"step2\" element={<RegisterStep2 />} />\r\n        <Route path=\"step3\" element={<RegisterStep3 />} />\r\n        <Route path=\"step4\" element={<RegisterStep4 />} />\r\n      </Route>\r\n      \r\n      <Route path=\"/forgot-password\" element={<ForgotPassword />} />\r\n      <Route path=\"/reset-password\" element={<ResetPassword />} />\r\n\r\n      {/* Candidato */}\r\n      <Route path=\"/candidato\" element={<CandidateLayout />}>\r\n        <Route index element={<CandidateIndexRedirect />} />\r\n        <Route path=\"dados-pessoais\" element={<DadosPessoais />} />\r\n        <Route path=\"formacao\" element={<Formacao />} />\r\n        <Route path=\"ultimos-trabalhos\" element={<UltimosTrabalhos />} />\r\n        <Route path=\"preferencias\" element={<Preferencias />} />\r\n        {/* Secções fora do Perfil */}\r\n        <Route path=\"alertas\" element={<AlertasEmprego />} />\r\n        <Route path=\"documentos\" element={<Documentos />} />\r\n        <Route path=\"proximos-passos\" element={<ProximosPassos />} />\r\n      </Route>\r\n\r\n    \r\n      <Route path=\"/credenciais\" element={<Navigate to=\"/super-admin/credenciais\" replace />} />\r\n\r\n      <Route path=\"/super-admin\" element={<SuperAdminLayout />}>\r\n        <Route index element={<Navigate to=\"credenciais\" replace />} />\r\n        <Route path=\"credenciais\" element={<Credenciais />} />\r\n        <Route path=\"gestao-trabalho\" element={<GestaoTrabalho />} />\r\n        <Route path=\"gestao-site\" element={<GestaoSite />} />\r\n        <Route path=\"metricas\" element={<Metricas />} />\r\n      </Route>\r\n    </Routes>\r\n  );\r\n}\r\n\r\nexport default App;\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/frontend/src/App.jsx b/frontend/src/App.jsx
+---- a/frontend/src/App.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/frontend/src/App.jsx	(date 1762879003354)
+-@@ -6,10 +6,14 @@
+- import ResetPassword from "./pages/login/CandidateLogin/ResetPassword.jsx";
+- 
+- import RegisterLayout from "./layout/RegisterLayout.jsx";
+--import RegisterStep1 from "./pages/register/RegisterStep1.jsx";
+--import RegisterStep2 from "./pages/register/RegisterStep2.jsx";
+--import RegisterStep3 from "./pages/register/RegisterStep3.jsx";
+--import RegisterStep4 from "./pages/register/RegisterStep4.jsx";
+-+import CandidateRegisterStep1 from "./pages/register/CandidateRegisterStep1.jsx";
+-+import CandidateRegisterStep2 from "./pages/register/CandidateRegisterStep2.jsx";
+-+import CandidateRegisterStep3 from "./pages/register/CandidateRegisterStep3.jsx";
+-+import CandidateRegisterStep4 from "./pages/register/CandidateRegisterStep4.jsx";
+-+import CompanyRegisterLayout from "./layout/CompanyRegisterLayout.jsx";
+-+import CompanyRegisterStep1 from "./pages/register/company/CompanyRegisterStep1.jsx";
+-+import CompanyRegisterStep2 from "./pages/register/company/CompanyRegisterStep2.jsx";
+-+import CompanyRegisterStep3 from "./pages/register/company/CompanyRegisterStep3.jsx";
+- 
+- import CandidateLayout, {
+-   CandidateIndexRedirect,
+-@@ -35,10 +39,16 @@
+-       <Route path="/admin" element={<AdminLogin />} />
+-       <Route path="/register" element={<RegisterLayout />}>
+-         <Route index element={<Navigate to="step1" replace />} />
+--        <Route path="step1" element={<RegisterStep1 />} />
+--        <Route path="step2" element={<RegisterStep2 />} />
+--        <Route path="step3" element={<RegisterStep3 />} />
+--        <Route path="step4" element={<RegisterStep4 />} />
+-+        <Route path="step1" element={<CandidateRegisterStep1 />} />
+-+        <Route path="step2" element={<CandidateRegisterStep2 />} />
+-+        <Route path="step3" element={<CandidateRegisterStep3 />} />
+-+        <Route path="step4" element={<CandidateRegisterStep4 />} />
+-+      </Route>
+-+      <Route path="/register/company" element={<CompanyRegisterLayout />}>
+-+        <Route index element={<Navigate to="step1" replace />} />
+-+        <Route path="step1" element={<CompanyRegisterStep1 />} />
+-+        <Route path="step2" element={<CompanyRegisterStep2 />} />
+-+        <Route path="step3" element={<CompanyRegisterStep3 />} />
+-       </Route>
+-       
+-       <Route path="/forgot-password" element={<ForgotPassword />} />
+-Index: frontend/src/pages/register/RegisterStep4.jsx
+-===================================================================
+-diff --git a/frontend/src/pages/register/RegisterStep4.jsx b/frontend/src/pages/register/RegisterStep4.jsx
+-deleted file mode 100644
+---- a/frontend/src/pages/register/RegisterStep4.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,247 +0,0 @@
+--import React, { useEffect, useMemo, useRef, useState } from "react";
+--import { useOutletContext } from "react-router-dom";
+--import InputField from "../../components/ui/Input/InputField.jsx";
+--import Button from "../../components/ui/Button/Button.jsx";
+--import { registerStep4, resendVerificationCode } from "../../api/auth.js";
+--
+--const CODE_LENGTH = 6;
+--const RESEND_COOLDOWN_SECONDS = 30;
+--
+--const maskEmail = (email = "") => {
+--    if (!email.includes("@")) {
+--        return email;
+--    }
+--    const [localPart, domain] = email.split("@");
+--    if (localPart.length <= 2) {
+--        return `${localPart[0] || ""}***@${domain}`;
+--    }
+--    return `${localPart.slice(0, 2)}***@${domain}`;
+--};
+--
+--/**
+-- * Passo 4: recebe os 5 dígitos do código enviado ao email e confirma a conta.
+-- * Também permite reenviar o código reaproveitando as credenciais inseridas no passo 1.
+-- */
+--export default function RegisterStep4() {
+--    const { registerData, updateStepData, completeStep, goToStep } = useOutletContext();
+--    const emailFromState = registerData.credentials?.email || "";
+--
+--    const [code, setCode] = useState(Array(CODE_LENGTH).fill(""));
+--    const [resent, setResent] = useState(false);
+--    const [success, setSuccess] = useState(false);
+--    const [serverError, setServerError] = useState("");
+--    const [resendCooldown, setResendCooldown] = useState(0);
+--    const [isResending, setIsResending] = useState(false);
+--    const inputRefs = useRef([]);
+--
+--    useEffect(() => {
+--        const storedCode = registerData.verification?.code || "";
+--        if (storedCode) {
+--            const padded = storedCode.padEnd(CODE_LENGTH, "");
+--            setCode(padded.slice(0, CODE_LENGTH).split(""));
+--        }
+--    }, [registerData.verification?.code]);
+--
+--    const isComplete = useMemo(() => code.every((digit) => digit !== ""), [code]);
+--
+--    const focusInput = (index) => {
+--        const input = inputRefs.current[index];
+--        if (input) {
+--            input.focus();
+--            input.select();
+--        }
+--    };
+--
+--    useEffect(() => {
+--        if (resendCooldown <= 0) {
+--            return;
+--        }
+--        const timer = setInterval(() => {
+--            setResendCooldown((prev) => Math.max(prev - 1, 0));
+--        }, 1000);
+--        return () => clearInterval(timer);
+--    }, [resendCooldown]);
+--
+--    const handleChange = (index, value) => {
+--        const sanitized = value.replace(/\D/g, "");
+--        if (!sanitized) {
+--            setCode((prev) => {
+--                const next = [...prev];
+--                next[index] = "";
+--                return next;
+--            });
+--            return;
+--        }
+--
+--        const digit = sanitized.slice(-1);
+--        setCode((prev) => {
+--            const next = [...prev];
+--            next[index] = digit;
+--            return next;
+--        });
+--
+--        if (index < CODE_LENGTH - 1) {
+--            focusInput(index + 1);
+--        }
+--    };
+--
+--    const handleKeyDown = (event, index) => {
+--        if (event.key === "Backspace" && !code[index] && index > 0) {
+--            focusInput(index - 1);
+--        }
+--
+--        if (event.key === "ArrowLeft" && index > 0) {
+--            event.preventDefault();
+--            focusInput(index - 1);
+--        }
+--
+--        if (event.key === "ArrowRight" && index < CODE_LENGTH - 1) {
+--            event.preventDefault();
+--            focusInput(index + 1);
+--        }
+--    };
+--
+--    const handlePaste = (event) => {
+--        event.preventDefault();
+--        const pasted = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, CODE_LENGTH);
+--        if (!pasted) {
+--            return;
+--        }
+--
+--        setCode((prev) => {
+--            const next = [...prev];
+--            pasted.split("").forEach((digit, index) => {
+--                next[index] = digit;
+--            });
+--            return next;
+--        });
+--
+--        if (pasted.length < CODE_LENGTH) {
+--            focusInput(pasted.length);
+--        }
+--    };
+--
+--    const handleSubmit = async (event) => {
+--        event.preventDefault();
+--        if (!isComplete) {
+--            return;
+--        }
+--
+--        try {
+--            await registerStep4({ email: emailFromState, verificationCode: code.join("") });
+--            setSuccess(true);
+--            setServerError("");
+--            updateStepData("verification", { code: code.join("") });
+--            completeStep(4);
+--        } catch (error) {
+--            setServerError(error.message || "Não foi possível validar o código.");
+--        }
+--    };
+--
+--    const handleResend = async () => {
+--        if (resendCooldown > 0 || isResending) {
+--            return;
+--        }
+--        setIsResending(true);
+--        try {
+--            await resendVerificationCode(emailFromState);
+--            setResent(true);
+--            setServerError("");
+--            setResendCooldown(RESEND_COOLDOWN_SECONDS);
+--        } catch (error) {
+--            setServerError(error.message || "Não foi possível reenviar o código.");
+--        } finally {
+--            setIsResending(false);
+--        }
+--    };
+--
+--    return (
+--        <section className="flex h-full flex-col">
+--            <div>
+--                <p className="text-sm font-semibold text-primary uppercase tracking-wide">
+--                    Passo 4 de 4
+--                </p>
+--                <h1 className="mt-2 text-3xl font-bold text-accent">
+--                    Confirmar identidade
+--                </h1>
+--                <p className="mt-4 text-base text-base-content/70">
+--                    Foi enviado um código de verificação para{" "}
+--                    <span className="font-semibold">{maskEmail(emailFromState)}</span>. Insira o código abaixo para
+--                    concluir o registo.
+--                </p>
+--            </div>
+--
+--            <form className="mt-8 flex-1 space-y-6" onSubmit={handleSubmit}>
+--                <div className="flex items-center justify-between gap-3">
+--                    {code.map((digit, index) => (
+--                        <InputField
+--                            key={index}
+--                            label=""
+--                            type="text"
+--                            inputMode="numeric"
+--                            pattern="[0-9]*"
+--                            maxLength={1}
+--                            value={digit}
+--                            onChange={(event) => handleChange(index, event.target.value)}
+--                            onKeyDown={(event) => handleKeyDown(event, index)}
+--                            onPaste={handlePaste}
+--                            aria-label={`Dígito ${index + 1} do código`}
+--                            className="w-16"
+--                            fullWidth={false}
+--                            inputClassName="input-lg h-16 text-center text-2xl font-semibold"
+--                            inputRef={(element) => {
+--                                inputRefs.current[index] = element;
+--                            }}
+--                        />
+--                    ))}
+--                </div>
+--
+--                <div className="flex items-center justify-between">
+--                    <div className="flex flex-col gap-1">
+--                        <button
+--                            type="button"
+--                            className="btn btn-ghost btn-sm px-0 text-primary"
+--                            onClick={handleResend}
+--                            disabled={resendCooldown > 0 || isResending}
+--                        >
+--                            {resendCooldown > 0
+--                                ? `Aguarde ${resendCooldown}s`
+--                                : "Reenviar código de confirmação"}
+--                        </button>
+--
+--                    </div>
+--                    {resent && resendCooldown > 0 && (
+--                        <span className="text-sm text-success">Novo código enviado!</span>
+--                    )}
+--                </div>
+--
+--                {serverError && (
+--                    <div className="alert alert-error">
+--                        <span>{serverError}</span>
+--                    </div>
+--                )}
+--
+--                {success && (
+--                    <div className="alert alert-success">
+--                        <span>Identidade confirmada com sucesso!</span>
+--                    </div>
+--                )}
+--
+--                <div className="mt-10 grid grid-cols-2 gap-4">
+--                    <Button
+--                        label="← Voltar"
+--                        variant="outline"
+--                        className="btn-outline border-base-300"
+--                        onClick={() => goToStep(3)}
+--                    />
+--                    <Button
+--                        label="Concluir"
+--                        type="submit"
+--                        variant="primary"
+--                        disabled={!isComplete}
+--                    />
+--                </div>
+--            </form>
+--        </section>
+--    );
+--}
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch
+-===================================================================
+-diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch
+-deleted file mode 100644
+---- a/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,117 +0,0 @@
+--Index: .idea/workspace.xml
+--IDEA additional info:
+--Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+--<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"paleta certa\">\r\n      <change afterPath=\"$PROJECT_DIR$/frontend/babel.config.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/frontend/jest.config.js\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.jsx\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package-lock.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/package-lock.json\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/package.json\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JSX File\" />\r\n        <option value=\"JavaScript File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;LuisAssis24&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management.git&quot;,\r\n    &quot;accountId&quot;: &quot;eb883989-17ec-43e6-aea6-922f48415ba1&quot;\r\n  }\r\n}</component>\r\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"PHP\" />\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"34vCubPTpiW0fbRzlf0VXysOloh\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Jest.findNameReturnsValueFromRepository.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs.jest.jest_package\": \"C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"ReactDesignerToolWindowState\">\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.intellij.reactbuddy.reactComponents\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.reactInspector\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.storybook\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"findNameReturnsValueFromRepository\" type=\"JavaScriptTestRunnerJest\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <node-interpreter value=\"project\" />\r\n      <jest-package value=\"$PROJECT_DIR$/frontend/node_modules/jest\" />\r\n      <working-dir value=\"$PROJECT_DIR$/frontend\" />\r\n      <envs />\r\n      <scope-kind value=\"TEST\" />\r\n      <test-file value=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx\" />\r\n      <test-names>\r\n        <test-name value=\"findNameReturnsValueFromRepository\" />\r\n      </test-names>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128\" />\r\n        <option value=\"bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"\" />\r\n      <created>1762084882236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762084882236</updated>\r\n      <workItem from=\"1762084883878\" duration=\"21000\" />\r\n      <workItem from=\"1762091469964\" duration=\"76000\" />\r\n      <workItem from=\"1762094001251\" duration=\"2765000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"paleta certa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762094139652</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762094139652</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"paleta certa\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"paleta certa\" />\r\n  </component>\r\n</project>
+--Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+--<+>UTF-8
+--===================================================================
+--diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+----- a/.idea/workspace.xml	(revision e8b952c89f1c97b0f3ecb6e302586846575a987e)
+--+++ b/.idea/workspace.xml	(date 1762246639672)
+--@@ -4,14 +4,8 @@
+--     <option name="autoReloadType" value="SELECTIVE" />
+--   </component>
+--   <component name="ChangeListManager">
+---    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="paleta certa">
+---      <change afterPath="$PROJECT_DIR$/frontend/babel.config.js" afterDir="false" />
+---      <change afterPath="$PROJECT_DIR$/frontend/jest.config.js" afterDir="false" />
+---      <change afterPath="$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.jsx" afterDir="false" />
+---      <change afterPath="$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx" afterDir="false" />
+--+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Jest test frontend">
+--       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+---      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+---      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+--     </list>
+--     <option name="SHOW_DIALOG" value="false" />
+--     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+--@@ -53,24 +47,25 @@
+--     <option name="hideEmptyMiddlePackages" value="true" />
+--     <option name="showLibraryContents" value="true" />
+--   </component>
+---  <component name="PropertiesComponent"><![CDATA[{
+---  "keyToString": {
+---    "Jest.findNameReturnsValueFromRepository.executor": "Run",
+---    "RunOnceActivity.ShowReadmeOnStart": "true",
+---    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+---    "RunOnceActivity.git.unshallow": "true",
+---    "git-widget-placeholder": "main",
+---    "junie.onboarding.icon.badge.shown": "true",
+---    "node.js.detected.package.eslint": "true",
+---    "node.js.detected.package.tslint": "true",
+---    "node.js.selected.package.eslint": "(autodetect)",
+---    "node.js.selected.package.tslint": "(autodetect)",
+---    "nodejs.jest.jest_package": "C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest",
+---    "nodejs_package_manager_path": "npm",
+---    "to.speed.mode.migration.done": "true",
+---    "vue.rearranger.settings.migration": "true"
+--+  <component name="PropertiesComponent">{
+--+  &quot;keyToString&quot;: {
+--+    &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,
+--+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+--+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+--+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+--+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+--+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+--+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+--+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+--+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+--+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+--+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+--+    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,
+--+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+--+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+--+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+--   }
+---}]]></component>
+--+}</component>
+--   <component name="ReactDesignerToolWindowState">
+--     <option name="myId2Visible">
+--       <map>
+--@@ -102,8 +97,8 @@
+--   <component name="SharedIndexes">
+--     <attachedChunks>
+--       <set>
+---        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PS-252.25557.128" />
+---        <option value="bundled-php-predefined-a98d8de5180a-ce40d0652d34-com.jetbrains.php.sharedIndexes-PS-252.25557.128" />
+--+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+--+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+--       </set>
+--     </attachedChunks>
+--   </component>
+--@@ -117,7 +112,8 @@
+--       <updated>1762084882236</updated>
+--       <workItem from="1762084883878" duration="21000" />
+--       <workItem from="1762091469964" duration="76000" />
+---      <workItem from="1762094001251" duration="2765000" />
+--+      <workItem from="1762094001251" duration="3007000" />
+--+      <workItem from="1762246523218" duration="82000" />
+--     </task>
+--     <task id="LOCAL-00001" summary="paleta certa">
+--       <option name="closed" value="true" />
+--@@ -127,7 +123,15 @@
+--       <option name="project" value="LOCAL" />
+--       <updated>1762094139652</updated>
+--     </task>
+---    <option name="localTasksCounter" value="2" />
+--+    <task id="LOCAL-00002" summary="Jest test frontend">
+--+      <option name="closed" value="true" />
+--+      <created>1762096999489</created>
+--+      <option name="number" value="00002" />
+--+      <option name="presentableId" value="LOCAL-00002" />
+--+      <option name="project" value="LOCAL" />
+--+      <updated>1762096999489</updated>
+--+    </task>
+--+    <option name="localTasksCounter" value="3" />
+--     <servers />
+--   </component>
+--   <component name="TypeScriptGeneratedFilesManager">
+--@@ -135,6 +139,7 @@
+--   </component>
+--   <component name="VcsManagerConfiguration">
+--     <MESSAGE value="paleta certa" />
+---    <option name="LAST_COMMIT_MESSAGE" value="paleta certa" />
+--+    <MESSAGE value="Jest test frontend" />
+--+    <option name="LAST_COMMIT_MESSAGE" value="Jest test frontend" />
+--   </component>
+-- </project>
+--\ No newline at end of file
+-Index: frontend/src/pages/register/RegisterStep2.jsx
+-===================================================================
+-diff --git a/frontend/src/pages/register/RegisterStep2.jsx b/frontend/src/pages/register/RegisterStep2.jsx
+-deleted file mode 100644
+---- a/frontend/src/pages/register/RegisterStep2.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,248 +0,0 @@
+--import React, { useEffect, useState } from "react";
+--import { useOutletContext } from "react-router-dom";
+--import InputField from "../../components/ui/Input/InputField.jsx";
+--import Button from "../../components/ui/Button/Button.jsx";
+--import { registerStep2 } from "../../api/auth.js";
+--
+--const phoneRegex = /^\+?[0-9\s\-().]{9,15}$/;
+--const nifRegex = /^\d{9}$/;
+--
+--/**
+-- * Passo 2: coleta dados pessoais e envia para o backend.
+-- * Inclui upload opcional de CV (convertido em base64 antes do envio).
+-- */
+--export default function RegisterStep2() {
+--    const { registerData, updateStepData, completeStep, goToStep } = useOutletContext();
+--    const emailFromStep1 = registerData.credentials?.email || "";
+--
+--    const [formData, setFormData] = useState({
+--        firstName: registerData.personal?.firstName || "",
+--        lastName: registerData.personal?.lastName || "",
+--        birthDate: registerData.personal?.birthDate || "",
+--        phone: registerData.personal?.phone || "",
+--        nationality: registerData.personal?.nationality || "",
+--        nif: registerData.personal?.nif || "",
+--    });
+--    const [cvFile, setCvFile] = useState(registerData.personal?.cvFile || "");
+--    const [cvFileName, setCvFileName] = useState(registerData.personal?.cvFileName || "");
+--
+--    const [errors, setErrors] = useState({});
+--    const [loading, setLoading] = useState(false);
+--    const [serverError, setServerError] = useState("");
+--
+--    useEffect(() => {
+--        setFormData({
+--            firstName: registerData.personal?.firstName || "",
+--            lastName: registerData.personal?.lastName || "",
+--            birthDate: registerData.personal?.birthDate || "",
+--            phone: registerData.personal?.phone || "",
+--            nationality: registerData.personal?.nationality || "",
+--            nif: registerData.personal?.nif || "",
+--        });
+--        setCvFile(registerData.personal?.cvFile || "");
+--        setCvFileName(registerData.personal?.cvFileName || "");
+--    }, [
+--        registerData.personal?.birthDate,
+--        registerData.personal?.firstName,
+--        registerData.personal?.lastName,
+--        registerData.personal?.nationality,
+--        registerData.personal?.phone,
+--        registerData.personal?.nif,
+--        registerData.personal?.cvFile,
+--        registerData.personal?.cvFileName,
+--    ]);
+--
+--    const updateField = (field) => (event) => {
+--        setFormData((prev) => ({ ...prev, [field]: event.target.value }));
+--    };
+--
+--    const handleCvChange = async (event) => {
+--        const file = event.target.files?.[0];
+--        if (!file) {
+--            setCvFile("");
+--            setCvFileName("");
+--            return;
+--        }
+--        const base64 = await fileToBase64(file);
+--        setCvFile(base64);
+--        setCvFileName(file.name);
+--    };
+--
+--    const fileToBase64 = (file) =>
+--        new Promise((resolve, reject) => {
+--            const reader = new FileReader();
+--            reader.onload = () => resolve(reader.result);
+--            reader.onerror = reject;
+--            reader.readAsDataURL(file);
+--        });
+--
+--    const validateFields = () => {
+--        const newErrors = {};
+--
+--        if (!formData.firstName.trim()) {
+--            newErrors.firstName = "O primeiro nome é obrigatório.";
+--        }
+--
+--        if (!formData.lastName.trim()) {
+--            newErrors.lastName = "O apelido é obrigatório.";
+--        }
+--
+--        if (!formData.birthDate) {
+--            newErrors.birthDate = "A data de nascimento é obrigatória.";
+--        }
+--
+--        if (!formData.phone.trim()) {
+--            newErrors.phone = "O número de telemóvel é obrigatório.";
+--        } else if (!phoneRegex.test(formData.phone.trim())) {
+--            newErrors.phone = "Insira um número de telemóvel válido.";
+--        }
+--
+--        if (!formData.nationality.trim()) {
+--            newErrors.nationality = "A nacionalidade é obrigatória.";
+--        }
+--
+--        if (!formData.nif.trim()) {
+--            newErrors.nif = "O NIF é obrigatório.";
+--        } else if (!nifRegex.test(formData.nif.trim())) {
+--            newErrors.nif = "NIF deve ter 9 dígitos.";
+--        }
+--
+--        return newErrors;
+--    };
+--
+--    const handleSubmit = async (event) => {
+--        event.preventDefault();
+--        setServerError("");
+--
+--        const validationErrors = validateFields();
+--        if (Object.keys(validationErrors).length > 0) {
+--            setErrors(validationErrors);
+--            return;
+--        }
+--
+--        setErrors({});
+--        setLoading(true);
+--
+--        try {
+--            await registerStep2({
+--                ...formData,
+--                email: emailFromStep1,
+--                nif: Number(formData.nif),
+--                cvFile,
+--                cvFileName,
+--            });
+--
+--            updateStepData("personal", { ...formData, cvFile, cvFileName });
+--            completeStep(2, 3);
+--        } catch (error) {
+--            console.error("Erro ao guardar informações pessoais:", error);
+--            setServerError(error.message || "Ocorreu um erro inesperado.");
+--        } finally {
+--            setLoading(false);
+--        }
+--    };
+--
+--    return (
+--        <section className="flex h-full flex-col">
+--            <div>
+--                <p className="text-sm font-semibold text-primary uppercase tracking-wide">
+--                    Passo 2 de 4
+--                </p>
+--                <h1 className="mt-2 text-3xl font-bold text-accent">
+--                    Informações pessoais
+--                </h1>
+--                <p className="mt-4 text-base text-base-content/70">
+--                    Complete os seus dados pessoais para personalizar a sua experiência na plataforma.
+--                </p>
+--            </div>
+--
+--            <form className="mt-8 flex-1 space-y-6" onSubmit={handleSubmit} noValidate>
+--                {serverError && (
+--                    <div className="alert alert-error">
+--                        <span>{serverError}</span>
+--                    </div>
+--                )}
+--
+--                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+--                    <InputField
+--                        label="Primeiro nome"
+--                        placeholder="Insira o seu primeiro nome"
+--                        value={formData.firstName}
+--                        onChange={updateField("firstName")}
+--                        error={errors.firstName}
+--                    />
+--                    <InputField
+--                        label="Apelido"
+--                        placeholder="Insira o seu apelido"
+--                        value={formData.lastName}
+--                        onChange={updateField("lastName")}
+--                        error={errors.lastName}
+--                    />
+--                </div>
+--
+--                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+--                    <InputField
+--                        label="Data de nascimento"
+--                        type="date"
+--                        value={formData.birthDate}
+--                        onChange={updateField("birthDate")}
+--                        error={errors.birthDate}
+--                    />
+--                    <InputField
+--                        label="Telemóvel"
+--                        placeholder="Ex.: +351 910 000 000"
+--                        value={formData.phone}
+--                        onChange={updateField("phone")}
+--                        error={errors.phone}
+--                    />
+--                </div>
+--
+--                <InputField
+--                    label="Nacionalidade"
+--                    placeholder="Ex.: Portuguesa"
+--                    value={formData.nationality}
+--                    onChange={updateField("nationality")}
+--                    error={errors.nationality}
+--                />
+--
+--                <InputField
+--                    label="NIF"
+--                    placeholder="Ex.: 123456789"
+--                    value={formData.nif}
+--                    onChange={updateField("nif")}
+--                    error={errors.nif}
+--                />
+--
+--                <div>
+--                    <label className="label">
+--                        <span className="label-text font-medium">Curriculum (opcional)</span>
+--                    </label>
+--                    <input
+--                        type="file"
+--                        accept=".pdf,.doc,.docx"
+--                        className="file-input file-input-bordered w-full"
+--                        onChange={handleCvChange}
+--                    />
+--                    {cvFileName && (
+--                        <p className="mt-2 text-sm text-base-content/70">Ficheiro selecionado: {cvFileName}</p>
+--                    )}
+--                </div>
+--
+--                <div className="mt-10 grid grid-cols-2 gap-4">
+--                    <Button
+--                        label="← Voltar"
+--                        variant="outline"
+--                        className="btn-outline border-base-300"
+--                        onClick={() => goToStep(1)}
+--                    />
+--                    <Button
+--                        label={loading ? "A guardar..." : "Avançar"}
+--                        type="submit"
+--                        variant="primary"
+--                        disabled={loading}
+--                    />
+--                </div>
+--            </form>
+--        </section>
+--    );
+--}
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml
+-===================================================================
+-diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml
+-deleted file mode 100644
+---- a/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,4 +0,0 @@
+--<changelist name="Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]" date="1762246651438" recycled="true" deleted="true">
+--  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch" />
+--  <option name="DESCRIPTION" value="Uncommitted changes before Update at 04/11/2025 08:57 [Changes]" />
+--</changelist>
+-\ No newline at end of file
+-Index: frontend/src/pages/register/RegisterStep1.jsx
+-===================================================================
+-diff --git a/frontend/src/pages/register/RegisterStep1.jsx b/frontend/src/pages/register/RegisterStep1.jsx
+-deleted file mode 100644
+---- a/frontend/src/pages/register/RegisterStep1.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,217 +0,0 @@
+--import React, { useEffect, useMemo, useState } from "react";
+--import { useOutletContext } from "react-router-dom";
+--import InputField from "../../components/ui/Input/InputField.jsx";
+--import Button from "../../components/ui/Button/Button.jsx";
+--import { registerStep1 } from "../../api/auth.js";
+--
+--const passwordRequirements = [
+--    {
+--        id: "length",
+--        label: "Pelo menos 8 caracteres",
+--        test: (value) => value.length >= 8,
+--    },
+--    {
+--        id: "uppercase",
+--        label: "Uma letra maiúscula",
+--        test: (value) => /[A-Z]/.test(value),
+--    },
+--    {
+--        id: "lowercase",
+--        label: "Uma letra minúscula",
+--        test: (value) => /[a-z]/.test(value),
+--    },
+--    {
+--        id: "number",
+--        label: "Um número",
+--        test: (value) => /[0-9]/.test(value),
+--    },
+--    {
+--        id: "symbol",
+--        label: "Um símbolo",
+--        test: (value) => /[^A-Za-z0-9]/.test(value),
+--    },
+--];
+--
+--const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+--
+--/**
+-- * Primeiro passo do registo de candidato: recolhe email + password com validação visual.
+-- * As credenciais são enviadas ao backend e, em caso de sucesso, os dados ficam no contexto para os passos seguintes.
+-- */
+--export default function RegisterStep1() {
+--    const { registerData, updateStepData, completeStep, goToStep } = useOutletContext();
+--
+--    const [email, setEmail] = useState(registerData.credentials?.email || "");
+--    const [password, setPassword] = useState(registerData.credentials?.password || "");
+--    const [confirmPassword, setConfirmPassword] = useState(registerData.credentials?.password || "");
+--    const [passwordFocused, setPasswordFocused] = useState(false);
+--    const [errors, setErrors] = useState({});
+--    const [loading, setLoading] = useState(false);
+--    const [serverError, setServerError] = useState("");
+--
+--    useEffect(() => {
+--        setEmail(registerData.credentials?.email || "");
+--        setPassword(registerData.credentials?.password || "");
+--        setConfirmPassword(registerData.credentials?.password || "");
+--    }, [registerData.credentials?.email, registerData.credentials?.password]);
+--
+--    const passwordChecks = useMemo(() => {
+--        return passwordRequirements.map((requirement) => ({
+--            ...requirement,
+--            valid: requirement.test(password),
+--        }));
+--    }, [password]);
+--
+--    const isPasswordValid = useMemo(() => passwordChecks.every((item) => item.valid), [passwordChecks]);
+--
+--    const validateFields = () => {
+--        const newErrors = {};
+--
+--        if (!email.trim()) {
+--            newErrors.email = "O email é obrigatório.";
+--        } else if (!emailRegex.test(email.trim())) {
+--            newErrors.email = "Insira um email válido.";
+--        }
+--
+--        if (!password) {
+--            newErrors.password = "A password é obrigatória.";
+--        } else if (!isPasswordValid) {
+--            newErrors.password = "A password não cumpre os requisitos mínimos.";
+--        }
+--
+--        if (!confirmPassword) {
+--            newErrors.confirmPassword = "Confirme a password.";
+--        } else if (password !== confirmPassword) {
+--            newErrors.confirmPassword = "As passwords não coincidem.";
+--        }
+--
+--        return newErrors;
+--    };
+--
+--    const handleSubmit = async (event) => {
+--        event.preventDefault();
+--        setServerError("");
+--
+--        const validationErrors = validateFields();
+--
+--        if (Object.keys(validationErrors).length > 0) {
+--            setErrors(validationErrors);
+--            return;
+--        }
+--
+--        setErrors({});
+--        setLoading(true);
+--
+--        try {
+--            await registerStep1({ email, password });
+--
+--            updateStepData("credentials", { email, password });
+--            completeStep(1, 2);
+--        } catch (error) {
+--            console.error("Erro no registo de credenciais:", error);
+--            setServerError(error.message || "Ocorreu um erro inesperado.");
+--        } finally {
+--            setLoading(false);
+--        }
+--    };
+--
+--    const showPasswordTooltip = passwordFocused && password.length > 0 && !isPasswordValid;
+--
+--    return (
+--        <section className="flex h-full flex-col">
+--            <div>
+--                <p className="text-sm font-semibold text-primary uppercase tracking-wide">
+--                    Passo 1 de 4
+--                </p>
+--                <h1 className="mt-2 text-3xl font-bold text-accent">
+--                    Crie as suas credenciais
+--                </h1>
+--                <p className="mt-4 text-base text-base-content/70">
+--                    Defina o email e password que irá utilizar para aceder à plataforma.
+--                </p>
+--            </div>
+--
+--            {serverError && (
+--                <div className="alert alert-error mt-6">
+--                    <span>{serverError}</span>
+--                </div>
+--            )}
+--
+--            <form className="mt-8 flex-1 space-y-6" onSubmit={handleSubmit} noValidate>
+--                <InputField
+--                    label="Email"
+--                    placeholder="exemplo@dominio.com"
+--                    type="email"
+--                    icon={<i className="bi bi-envelope"></i>}
+--                    value={email}
+--                    onChange={(event) => setEmail(event.target.value)}
+--                    error={errors.email}
+--                />
+--
+--                <div className="relative">
+--                    <InputField
+--                        label="Password"
+--                        placeholder="Crie uma password"
+--                        type="password"
+--                        icon={<i className="bi bi-lock"></i>}
+--                        value={password}
+--                        onChange={(event) => setPassword(event.target.value)}
+--                        onFocus={() => setPasswordFocused(true)}
+--                        onBlur={() => setPasswordFocused(false)}
+--                        error={errors.password}
+--                    />
+--
+--                    {showPasswordTooltip && (
+--                        <div className="absolute left-0 right-0 mt-2 rounded-2xl border border-base-200 bg-base-100 p-4 shadow-lg z-20">
+--                            <p className="text-sm font-medium text-base-content">
+--                                A password deve incluir:
+--                            </p>
+--                            <ul className="mt-2 space-y-1">
+--                                {passwordChecks.map((item) => (
+--                                    <li
+--                                        key={item.id}
+--                                        className={`flex items-center gap-2 text-sm ${
+--                                            item.valid ? "text-success" : "text-error"
+--                                        }`}
+--                                    >
+--                                        <i
+--                                            className={`bi ${
+--                                                item.valid ? "bi-check-circle-fill" : "bi-x-circle-fill"
+--                                            }`}
+--                                        ></i>
+--                                        <span>{item.label}</span>
+--                                    </li>
+--                                ))}
+--                            </ul>
+--                        </div>
+--                    )}
+--                </div>
+--
+--                <InputField
+--                    label="Confirmar password"
+--                    placeholder="Repita a password"
+--                    type="password"
+--                    icon={<i className="bi bi-shield-check"></i>}
+--                    value={confirmPassword}
+--                    onChange={(event) => setConfirmPassword(event.target.value)}
+--                    error={errors.confirmPassword}
+--                />
+--
+--                <div className="mt-10 grid grid-cols-2 gap-4">
+--                    <Button
+--                        label="Anterior"
+--                        variant="outline"
+--                        disabled
+--                        className="btn-outline border-base-300 text-base-content/60"
+--                    />
+--                    <Button
+--                        label={loading ? "A guardar..." : "Avançar"}
+--                        type="submit"
+--                        variant="primary"
+--                        disabled={loading}
+--                    />
+--                </div>
+--            </form>
+--        </section>
+--    );
+--}
+-Index: frontend/src/pages/register/RegisterStep3.jsx
+-===================================================================
+-diff --git a/frontend/src/pages/register/RegisterStep3.jsx b/frontend/src/pages/register/RegisterStep3.jsx
+-deleted file mode 100644
+---- a/frontend/src/pages/register/RegisterStep3.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ /dev/null	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-@@ -1,236 +0,0 @@
+--import React, { useEffect, useMemo, useState } from "react";
+--import { useOutletContext } from "react-router-dom";
+--import Button from "../../components/ui/Button/Button.jsx";
+--import MultiSelectDropdown from "../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
+--import { registerStep3 } from "../../api/auth.js";
+--import { fetchProfileOptions } from "../../api/profileOptions.js";
+--
+--const FALLBACK_FUNCTIONS = ["Eletricista", "Canalizador", "Soldador", "Carpinteiro", "Pedreiro"];
+--const FALLBACK_COMPETENCES = ["Eletricista", "Canalizador", "Soldador", "Técnico de AVAC", "Pintor"];
+--const FALLBACK_AREAS = ["Lisboa", "Porto", "Braga", "Faro", "Madeira", "Açores"];
+--
+--/**
+-- * Passo 3: guarda preferências (função, áreas e competências) e termos.
+-- * Depois de validado, envia para o backend que sincroniza as tabelas associativas.
+-- */
+--export default function RegisterStep3() {
+--    const { registerData, updateStepData, completeStep, goToStep } = useOutletContext();
+--    const emailFromState = registerData.credentials?.email || "";
+--
+--    const initialRoles = registerData.preferences?.roles ||
+--        (registerData.preferences?.role ? [registerData.preferences.role] : []);
+--    const initialCompetences = registerData.preferences?.competences ||
+--        (registerData.preferences?.competence ? [registerData.preferences.competence] : []);
+--
+--    const [selectedRoles, setSelectedRoles] = useState(initialRoles);
+--    const [selectedAreas, setSelectedAreas] = useState(registerData.preferences?.areas || []);
+--    const [selectedCompetences, setSelectedCompetences] = useState(initialCompetences);
+--    const [termsAccepted, setTermsAccepted] = useState(registerData.preferences?.termsAccepted || false);
+--
+--    const [functionOptions, setFunctionOptions] = useState(FALLBACK_FUNCTIONS);
+--    const [competenceOptions, setCompetenceOptions] = useState(FALLBACK_COMPETENCES);
+--    const [geoAreas, setGeoAreas] = useState(FALLBACK_AREAS);
+--    const [optionsError, setOptionsError] = useState("");
+--
+--    const [errors, setErrors] = useState({});
+--    const [loading, setLoading] = useState(false);
+--    const [serverError, setServerError] = useState("");
+--
+--    useEffect(() => {
+--        setSelectedRoles(registerData.preferences?.roles ||
+--            (registerData.preferences?.role ? [registerData.preferences.role] : []));
+--        setSelectedAreas(registerData.preferences?.areas || []);
+--        setSelectedCompetences(registerData.preferences?.competences ||
+--            (registerData.preferences?.competence ? [registerData.preferences.competence] : []));
+--        setTermsAccepted(registerData.preferences?.termsAccepted || false);
+--    }, [registerData.preferences]);
+--
+--    useEffect(() => {
+--        let isMounted = true;
+--
+--        const loadOptions = async () => {
+--            try {
+--                const data = await fetchProfileOptions();
+--                if (!isMounted) return;
+--
+--                const safeFunctions = (data?.functions?.length ? data.functions : FALLBACK_FUNCTIONS).sort();
+--                const safeCompetences = (data?.competences?.length ? data.competences : FALLBACK_COMPETENCES).sort();
+--                const safeAreas = (data?.geoAreas?.length ? data.geoAreas : FALLBACK_AREAS).sort();
+--
+--                setFunctionOptions(safeFunctions);
+--                setCompetenceOptions(safeCompetences);
+--                setGeoAreas(safeAreas);
+--
+--                setSelectedRoles((prev) => prev.filter((value) => safeFunctions.includes(value)));
+--                setSelectedCompetences((prev) => prev.filter((value) => safeCompetences.includes(value)));
+--                setSelectedAreas((prev) => prev.filter((value) => safeAreas.includes(value)));
+--                setOptionsError("");
+--            } catch (error) {
+--                if (!isMounted) return;
+--                setOptionsError("Falha ao carregar opções. A usar valores padrão.");
+--                setFunctionOptions(FALLBACK_FUNCTIONS);
+--                setCompetenceOptions(FALLBACK_COMPETENCES);
+--                setGeoAreas(FALLBACK_AREAS);
+--            }
+--        };
+--
+--        loadOptions();
+--        return () => {
+--            isMounted = false;
+--        };
+--    }, []);
+--
+--    const isFormValid = useMemo(() => {
+--        return selectedRoles.length > 0 && selectedAreas.length > 0 && selectedCompetences.length > 0 && termsAccepted;
+--    }, [selectedRoles, selectedAreas, selectedCompetences, termsAccepted]);
+--
+--    const validateFields = () => {
+--        const newErrors = {};
+--
+--        if (selectedRoles.length === 0) {
+--            newErrors.role = "Selecione pelo menos uma função.";
+--        }
+--
+--        if (selectedCompetences.length === 0) {
+--            newErrors.competence = "Selecione pelo menos uma competência.";
+--        }
+--
+--        if (selectedAreas.length === 0) {
+--            newErrors.areas = "Selecione pelo menos uma área geográfica.";
+--        }
+--
+--        if (!termsAccepted) {
+--            newErrors.termsAccepted = "É necessário aceitar os termos e condições.";
+--        }
+--
+--        return newErrors;
+--    };
+--
+--    const handleSubmit = async (event) => {
+--        event.preventDefault();
+--        setServerError("");
+--
+--        const validationErrors = validateFields();
+--        if (Object.keys(validationErrors).length > 0) {
+--            setErrors(validationErrors);
+--            return;
+--        }
+--
+--        setErrors({});
+--        setLoading(true);
+--
+--        try {
+--            // O backend atualmente aceita apenas uma função principal, por isso enviamos o primeiro item selecionado.
+--            await registerStep3({
+--                email: emailFromState,
+--                role: selectedRoles[0] || "",
+--                areas: selectedAreas,
+--                skills: selectedCompetences,
+--                termsAccepted,
+--            });
+--
+--            updateStepData("preferences", {
+--                roles: selectedRoles,
+--                areas: selectedAreas,
+--                competences: selectedCompetences,
+--                termsAccepted,
+--            });
+--            completeStep(3, 4);
+--        } catch (error) {
+--            console.error("Erro ao guardar preferências:", error);
+--            setServerError(error.message || "Ocorreu um erro inesperado.");
+--        } finally {
+--            setLoading(false);
+--        }
+--    };
+--
+--    return (
+--        <section className="flex h-full flex-col">
+--            <div>
+--                <p className="text-sm font-semibold text-primary uppercase tracking-wide">
+--                    Passo 3 de 4
+--                </p>
+--                <h1 className="mt-2 text-3xl font-bold text-accent">
+--                    Preferências de trabalho
+--                </h1>
+--                <p className="mt-4 text-base text-base-content/70">
+--                    Ajude-nos a encontrar oportunidades alinhadas com o seu perfil.
+--                </p>
+--            </div>
+--
+--            {serverError && (
+--                <div className="alert alert-error mt-6">
+--                    <span>{serverError}</span>
+--                </div>
+--            )}
+--
+--            {optionsError && (
+--                <div className="alert alert-warning">
+--                    <span>{optionsError}</span>
+--                </div>
+--            )}
+--
+--            <form className="mt-8 flex-1 space-y-6" onSubmit={handleSubmit} noValidate>
+--                <MultiSelectDropdown
+--                    label="Funções"
+--                    options={functionOptions}
+--                    selectedOptions={selectedRoles}
+--                    onChange={setSelectedRoles}
+--                    placeholder="Selecione as funções que pretende exercer"
+--                />
+--                {errors.role && <p className="text-sm text-error">{errors.role}</p>}
+--
+--                <MultiSelectDropdown
+--                    label="Área geográfica"
+--                    options={geoAreas}
+--                    selectedOptions={selectedAreas}
+--                    onChange={setSelectedAreas}
+--                    placeholder="Selecione as áreas em que pretende trabalhar"
+--                />
+--                {errors.areas && <p className="text-sm text-error">{errors.areas}</p>}
+--
+--                <MultiSelectDropdown
+--                    label="Competências"
+--                    options={competenceOptions}
+--                    selectedOptions={selectedCompetences}
+--                    onChange={setSelectedCompetences}
+--                    placeholder="Selecione as suas competências principais"
+--                />
+--                {errors.competence && <p className="text-sm text-error">{errors.competence}</p>}
+--
+--                <div className="space-y-2">
+--                    <label className="label cursor-pointer justify-start gap-3 items-start whitespace-normal">
+--                        <input
+--                            type="checkbox"
+--                            className={`checkbox ${errors.termsAccepted ? "checkbox-error" : "checkbox-primary"}`}
+--                            checked={termsAccepted}
+--                            onChange={(event) => setTermsAccepted(event.target.checked)}
+--                        />
+--                        <span className="label-text text-sm text-base-content/80 leading-relaxed flex-1">
+--                            Ao registar-se, o utilizador concorda em fornecer informações verdadeiras e autoriza a
+--                            TeamFoundry a utilizar os dados apenas para fins de recrutamento e gestão de carreira.
+--                        </span>
+--                    </label>
+--                    {errors.termsAccepted && (
+--                        <p className="text-sm text-error">{errors.termsAccepted}</p>
+--                    )}
+--                </div>
+--
+--                <div className="mt-10 grid grid-cols-2 gap-4">
+--                    <Button
+--                        label="← Voltar"
+--                        variant="outline"
+--                        className="btn-outline border-base-300"
+--                        onClick={() => goToStep(2)}
+--                    />
+--                    <Button
+--                        label={loading ? "A guardar..." : "Estou quase →"}
+--                        type="submit"
+--                        variant="primary"
+--                        disabled={!isFormValid || loading}
+--                    />
+--                </div>
+--            </form>
+--        </section>
+--    );
+--}
+-Index: backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account_options.repository;\r\n\r\nimport com.teamfoundry.backend.account_options.model.ActivitySectors;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\n\r\npublic interface ActivitySectorsRepository extends JpaRepository<ActivitySectors, Integer> {\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java b/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java	(date 1762878755454)
+-@@ -3,5 +3,8 @@
+- import com.teamfoundry.backend.account_options.model.ActivitySectors;
+- import org.springframework.data.jpa.repository.JpaRepository;
+- 
+-+import java.util.List;
+-+
+- public interface ActivitySectorsRepository extends JpaRepository<ActivitySectors, Integer> {
+-+    List<ActivitySectors> findByNameIn(List<String> names);
+- }
+-Index: frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>import React, { useEffect, useMemo, useRef, useState } from \"react\";\r\nimport PropTypes from \"prop-types\";\r\n\r\nconst MAX_VISIBLE_CHIPS = 2;\r\n\r\n/**\r\n * Dropdown reutilizável com multi seleção e visual de tags/chips.\r\n * Mantém o estado aberto/fechado localmente e expõe o array completo para o componente pai.\r\n */\r\nexport default function MultiSelectDropdown({\r\n  label,\r\n  options,\r\n  selectedOptions,\r\n  onChange,\r\n  placeholder = \"Selecione uma ou mais opções\",\r\n}) {\r\n  const [isOpen, setIsOpen] = useState(false);\r\n  const containerRef = useRef(null);\r\n  const chipsRef = useRef(null);\r\n  const [hasOverflowed, setHasOverflowed] = useState(false);\r\n\r\n  const normalizedOptions = options.map((option) =>\r\n    typeof option === \"string\" ? { label: option, value: option } : option,\r\n  );\r\n\r\n  const shouldCollapse = hasOverflowed || selectedOptions.length > MAX_VISIBLE_CHIPS;\r\n\r\n  const { visibleChips, hiddenChips } = useMemo(() => {\r\n    if (!shouldCollapse) {\r\n      return { visibleChips: selectedOptions, hiddenChips: [] };\r\n    }\r\n    const visible = selectedOptions.slice(0, MAX_VISIBLE_CHIPS);\r\n    const hidden = selectedOptions.slice(MAX_VISIBLE_CHIPS);\r\n    return { visibleChips: visible, hiddenChips: hidden };\r\n  }, [selectedOptions, shouldCollapse]);\r\n\r\n  useEffect(() => {\r\n    const handleClickOutside = (event) => {\r\n      if (!containerRef.current?.contains(event.target)) {\r\n        setIsOpen(false);\r\n      }\r\n    };\r\n\r\n    document.addEventListener(\"mousedown\", handleClickOutside);\r\n    return () => document.removeEventListener(\"mousedown\", handleClickOutside);\r\n  }, []);\r\n\r\n  useEffect(() => {\r\n    setHasOverflowed(false);\r\n  }, [selectedOptions.length]);\r\n\r\n  useEffect(() => {\r\n    if (!chipsRef.current) {\r\n      return;\r\n    }\r\n\r\n    const observer = new ResizeObserver(() => {\r\n      if (!chipsRef.current || hasOverflowed) {\r\n        return;\r\n      }\r\n      const { scrollWidth, clientWidth } = chipsRef.current;\r\n      if (scrollWidth > clientWidth) {\r\n        setHasOverflowed(true);\r\n      }\r\n    });\r\n\r\n    observer.observe(chipsRef.current);\r\n    return () => observer.disconnect();\r\n  }, [hasOverflowed]);\r\n\r\n  /**\r\n   * Adiciona ou remove uma opção mantendo o array controlado pelo pai.\r\n   */\r\n  const toggleOption = (value) => {\r\n    if (selectedOptions.includes(value)) {\r\n      onChange(selectedOptions.filter((item) => item !== value));\r\n    } else {\r\n      onChange([...selectedOptions, value]);\r\n    }\r\n    setIsOpen(false);\r\n  };\r\n\r\n  /**\r\n   * Remove explicitamente uma opção ao clicar no botão \"X\" do chip.\r\n   */\r\n  const removeOption = (value) => {\r\n    onChange(selectedOptions.filter((item) => item !== value));\r\n  };\r\n\r\n  const handleTriggerKeyDown = (event) => {\r\n    if (event.key === \"Enter\" || event.key === \" \") {\r\n      event.preventDefault();\r\n      setIsOpen((prev) => !prev);\r\n    }\r\n  };\r\n\r\n  return (\r\n    <div className=\"form-control w-full\" ref={containerRef}>\r\n      {label && (\r\n        <label className=\"label\">\r\n          <span className=\"label-text font-medium\">{label}</span>\r\n        </label>\r\n      )}\r\n\r\n      <div className=\"relative\">\r\n        <div\r\n          role=\"button\"\r\n          tabIndex={0}\r\n          className={`input input-bordered w-full flex items-center justify-between gap-2 ${\r\n            selectedOptions.length === 0 ? \"text-base-content/70\" : \"\"\r\n          }`}\r\n          onClick={() => setIsOpen((prev) => !prev)}\r\n          onKeyDown={handleTriggerKeyDown}\r\n        >\r\n          <div\r\n            ref={chipsRef}\r\n            className=\"flex-1 flex items-center gap-2 overflow-hidden whitespace-nowrap\"\r\n          >\r\n            {selectedOptions.length === 0 && <span>{placeholder}</span>}\r\n            {visibleChips.map((value) => (\r\n              <span key={value} className=\"badge badge-primary gap-1\" title={value}>\r\n                {value}\r\n                <button\r\n                  type=\"button\"\r\n                  aria-label={`Remover ${value}`}\r\n                  className=\"btn btn-ghost btn-xs\"\r\n                  onClick={(event) => {\r\n                    event.stopPropagation();\r\n                    removeOption(value);\r\n                  }}\r\n                >\r\n                  ✕\r\n                </button>\r\n              </span>\r\n            ))}\r\n            {hiddenChips.length > 0 && (\r\n              <span\r\n                className=\"badge badge-outline\"\r\n                title={`Também: ${hiddenChips.join(\", \")}`}\r\n              >\r\n                +{hiddenChips.length}\r\n              </span>\r\n            )}\r\n          </div>\r\n          <i\r\n            className={`bi bi-chevron-${isOpen ? \"up\" : \"down\"} text-base-content/60`}\r\n            aria-hidden\r\n          ></i>\r\n        </div>\r\n        {isOpen && (\r\n          <ul className=\"absolute left-0 right-0 z-20 mt-2 menu menu-sm p-2 shadow bg-base-100 rounded-box border border-base-200\">\r\n            {normalizedOptions.map(({ value, label: optionLabel }) => (\r\n              <li key={value}>\r\n                <button\r\n                  type=\"button\"\r\n                  className=\"btn btn-ghost justify-start\"\r\n                  onClick={() => toggleOption(value)}\r\n                >\r\n                  <i\r\n                    className={`bi mr-2 ${\r\n                      selectedOptions.includes(value)\r\n                        ? \"bi-check-circle-fill text-success\"\r\n                        : \"bi-plus-circle text-base-content/60\"\r\n                    }`}\r\n                  ></i>\r\n                  {optionLabel}\r\n                </button>\r\n              </li>\r\n            ))}\r\n          </ul>\r\n        )}\r\n      </div>\r\n    </div>\r\n  );\r\n}\r\n\r\nMultiSelectDropdown.propTypes = {\r\n  label: PropTypes.string,\r\n  options: PropTypes.arrayOf(\r\n    PropTypes.oneOfType([\r\n      PropTypes.string,\r\n      PropTypes.shape({\r\n        label: PropTypes.string.isRequired,\r\n        value: PropTypes.string.isRequired,\r\n      }),\r\n    ]),\r\n  ).isRequired,\r\n  selectedOptions: PropTypes.arrayOf(PropTypes.string).isRequired,\r\n  onChange: PropTypes.func.isRequired,\r\n  placeholder: PropTypes.string,\r\n};\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx b/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx
+---- a/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx	(date 1762879636623)
+-@@ -13,6 +13,7 @@
+-   selectedOptions,
+-   onChange,
+-   placeholder = "Selecione uma ou mais opções",
+-+  disabled = false,
+- }) {
+-   const [isOpen, setIsOpen] = useState(false);
+-   const containerRef = useRef(null);
+-@@ -45,6 +46,12 @@
+-     return () => document.removeEventListener("mousedown", handleClickOutside);
+-   }, []);
+- 
+-+  useEffect(() => {
+-+    if (disabled && isOpen) {
+-+      setIsOpen(false);
+-+    }
+-+  }, [disabled, isOpen]);
+-+
+-   useEffect(() => {
+-     setHasOverflowed(false);
+-   }, [selectedOptions.length]);
+-@@ -72,6 +79,7 @@
+-    * Adiciona ou remove uma opção mantendo o array controlado pelo pai.
+-    */
+-   const toggleOption = (value) => {
+-+    if (disabled) return;
+-     if (selectedOptions.includes(value)) {
+-       onChange(selectedOptions.filter((item) => item !== value));
+-     } else {
+-@@ -88,6 +96,7 @@
+-   };
+- 
+-   const handleTriggerKeyDown = (event) => {
+-+    if (disabled) return;
+-     if (event.key === "Enter" || event.key === " ") {
+-       event.preventDefault();
+-       setIsOpen((prev) => !prev);
+-@@ -106,11 +115,12 @@
+-         <div
+-           role="button"
+-           tabIndex={0}
+--          className={`input input-bordered w-full flex items-center justify-between gap-2 ${
+-+          className={`input input-bordered w-full flex items-center justify-between gap-2 ${disabled ? "opacity-60 cursor-not-allowed" : ""} ${
+-             selectedOptions.length === 0 ? "text-base-content/70" : ""
+-           }`}
+--          onClick={() => setIsOpen((prev) => !prev)}
+-+          onClick={() => !disabled && setIsOpen((prev) => !prev)}
+-           onKeyDown={handleTriggerKeyDown}
+-+          aria-disabled={disabled}
+-         >
+-           <div
+-             ref={chipsRef}
+-@@ -147,7 +157,7 @@
+-             aria-hidden
+-           ></i>
+-         </div>
+--        {isOpen && (
+-+        {isOpen && !disabled && (
+-           <ul className="absolute left-0 right-0 z-20 mt-2 menu menu-sm p-2 shadow bg-base-100 rounded-box border border-base-200">
+-             {normalizedOptions.map(({ value, label: optionLabel }) => (
+-               <li key={value}>
+-@@ -188,4 +198,5 @@
+-   selectedOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+-   onChange: PropTypes.func.isRequired,
+-   placeholder: PropTypes.string,
+-+  disabled: PropTypes.bool,
+- };
+-Index: .idea/workspace.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"Implement password reset functionality and update email service\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25_[Changes]/shelved.patch\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25__Changes_.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/resources/application.yaml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/resources/application.yaml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/uploads/cv/cv_18_1762615734951.pdf\" beforeDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JSX File\" />\r\n        <option value=\"JavaScript File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;LuisAssis24&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management&quot;,\r\n    &quot;accountId&quot;: &quot;744e2a3a-bde5-4768-bf04-afd756c9b8e6&quot;\r\n  }\r\n}</component>\r\n  <component name=\"KubernetesApiPersistence\">{}</component>\r\n  <component name=\"KubernetesApiProvider\">{\r\n  &quot;isMigrated&quot;: true\r\n}</component>\r\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"PHP\" />\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"34vCubPTpiW0fbRzlf0VXysOloh\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ReactDesignerToolWindowState\">\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.intellij.reactbuddy.reactComponents\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.reactInspector\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.storybook\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\admin\\SuperAdmin\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"findNameReturnsValueFromRepository\" type=\"JavaScriptTestRunnerJest\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <node-interpreter value=\"project\" />\r\n      <jest-package value=\"$PROJECT_DIR$/frontend/node_modules/jest\" />\r\n      <working-dir value=\"$PROJECT_DIR$/frontend\" />\r\n      <envs />\r\n      <scope-kind value=\"TEST\" />\r\n      <test-file value=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx\" />\r\n      <test-names>\r\n        <test-name value=\"findNameReturnsValueFromRepository\" />\r\n      </test-names>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"\" />\r\n      <created>1762084882236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762084882236</updated>\r\n      <workItem from=\"1762084883878\" duration=\"21000\" />\r\n      <workItem from=\"1762091469964\" duration=\"76000\" />\r\n      <workItem from=\"1762094001251\" duration=\"2765000\" />\r\n      <workItem from=\"1762246782593\" duration=\"518000\" />\r\n      <workItem from=\"1762251955265\" duration=\"1640000\" />\r\n      <workItem from=\"1762269561409\" duration=\"37000\" />\r\n      <workItem from=\"1762342213231\" duration=\"34000\" />\r\n      <workItem from=\"1762342346529\" duration=\"11000\" />\r\n      <workItem from=\"1762342365107\" duration=\"12000\" />\r\n      <workItem from=\"1762343724969\" duration=\"31000\" />\r\n      <workItem from=\"1762343772875\" duration=\"5000\" />\r\n      <workItem from=\"1762344150441\" duration=\"327000\" />\r\n      <workItem from=\"1762345186853\" duration=\"419000\" />\r\n      <workItem from=\"1762358190210\" duration=\"6393000\" />\r\n      <workItem from=\"1762436874748\" duration=\"230000\" />\r\n      <workItem from=\"1762438641421\" duration=\"5000\" />\r\n      <workItem from=\"1762441766047\" duration=\"281000\" />\r\n      <workItem from=\"1762442119332\" duration=\"49000\" />\r\n      <workItem from=\"1762442232719\" duration=\"101000\" />\r\n      <workItem from=\"1762443631079\" duration=\"16000\" />\r\n      <workItem from=\"1762512585602\" duration=\"531000\" />\r\n      <workItem from=\"1762515533644\" duration=\"32000\" />\r\n      <workItem from=\"1762627382488\" duration=\"2600000\" />\r\n      <workItem from=\"1762702866572\" duration=\"121000\" />\r\n      <workItem from=\"1762704320510\" duration=\"6000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"paleta certa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762094139652</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762094139652</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762342221517</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762342221517</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762345285968</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762345285968</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Implement password reset functionality and update email service\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762628616017</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762628616017</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"5\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"paleta certa\" />\r\n    <MESSAGE value=\"small changes\" />\r\n    <MESSAGE value=\"Implement password reset functionality and update email service\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Implement password reset functionality and update email service\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+---- a/.idea/workspace.xml	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/.idea/workspace.xml	(date 1762949663283)
+-@@ -4,13 +4,29 @@
+-     <option name="autoReloadType" value="SELECTIVE" />
+-   </component>
+-   <component name="ChangeListManager">
+--    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Implement password reset functionality and update email service">
+--      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25_[Changes]/shelved.patch" beforeDir="false" />
+--      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2025_13_25__Changes_.xml" beforeDir="false" />
+-+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Backend inicia, server email com problemas">
+-+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57_[Changes]/shelved.patch" beforeDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2025_08_57__Changes_.xml" beforeDir="false" />
+-       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/BackendApplication.java" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" afterDir="false" />
+--      <change beforePath="$PROJECT_DIR$/backend/uploads/cv/cv_18_1762615734951.pdf" beforeDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step1Request.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step2Request.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step3Request.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step4Request.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/dto/register/VerificationResendRequest.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/repository/ActivitySectorsRepository.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/CandidateLogin/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/CandidateLogin/Login.jsx" afterDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep1.jsx" beforeDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep2.jsx" beforeDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep3.jsx" beforeDir="false" />
+-+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/RegisterStep4.jsx" beforeDir="false" />
+-     </list>
+-     <option name="SHOW_DIALOG" value="false" />
+-     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+-@@ -63,6 +79,7 @@
+-   </component>
+-   <component name="PropertiesComponent">{
+-   &quot;keyToString&quot;: {
+-+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+-     &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,
+-     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+-@@ -95,7 +112,7 @@
+-       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin" />
+-     </key>
+-   </component>
+--  <component name="RunManager">
+-+  <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
+-     <configuration name="findNameReturnsValueFromRepository" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+-       <node-interpreter value="project" />
+-       <jest-package value="$PROJECT_DIR$/frontend/node_modules/jest" />
+-@@ -106,10 +123,25 @@
+-       <test-names>
+-         <test-name value="findNameReturnsValueFromRepository" />
+-       </test-names>
+-+      <method v="2" />
+-+    </configuration>
+-+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+-+      <deployment type="docker-compose.yml">
+-+        <settings />
+-+      </deployment>
+-+      <method v="2" />
+-+    </configuration>
+-+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+-+      <deployment type="docker-compose.yml">
+-+        <settings>
+-+          <option name="sourceFilePath" value="docker-compose.yml" />
+-+        </settings>
+-+      </deployment>
+-       <method v="2" />
+-     </configuration>
+-     <recent_temporary>
+-       <list>
+-+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+-         <item itemvalue="Jest.findNameReturnsValueFromRepository" />
+-       </list>
+-     </recent_temporary>
+-@@ -155,6 +187,11 @@
+-       <workItem from="1762627382488" duration="2600000" />
+-       <workItem from="1762702866572" duration="121000" />
+-       <workItem from="1762704320510" duration="6000" />
+-+      <workItem from="1762704336685" duration="680000" />
+-+      <workItem from="1762809067972" duration="13000" />
+-+      <workItem from="1762948677077" duration="233000" />
+-+      <workItem from="1762949436526" duration="21000" />
+-+      <workItem from="1762949521722" duration="12000" />
+-     </task>
+-     <task id="LOCAL-00001" summary="paleta certa">
+-       <option name="closed" value="true" />
+-@@ -188,7 +225,15 @@
+-       <option name="project" value="LOCAL" />
+-       <updated>1762628616017</updated>
+-     </task>
+--    <option name="localTasksCounter" value="5" />
+-+    <task id="LOCAL-00005" summary="Backend inicia, server email com problemas">
+-+      <option name="closed" value="true" />
+-+      <created>1762704711746</created>
+-+      <option name="number" value="00005" />
+-+      <option name="presentableId" value="LOCAL-00005" />
+-+      <option name="project" value="LOCAL" />
+-+      <updated>1762704711746</updated>
+-+    </task>
+-+    <option name="localTasksCounter" value="6" />
+-     <servers />
+-   </component>
+-   <component name="TypeScriptGeneratedFilesManager">
+-@@ -198,6 +243,7 @@
+-     <MESSAGE value="paleta certa" />
+-     <MESSAGE value="small changes" />
+-     <MESSAGE value="Implement password reset functionality and update email service" />
+--    <option name="LAST_COMMIT_MESSAGE" value="Implement password reset functionality and update email service" />
+-+    <MESSAGE value="Backend inicia, server email com problemas" />
+-+    <option name="LAST_COMMIT_MESSAGE" value="Backend inicia, server email com problemas" />
+-   </component>
+- </project>
+-\ No newline at end of file
+-Index: backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account.service;\r\n\r\nimport com.teamfoundry.backend.account.dto.GenericResponse;\r\nimport com.teamfoundry.backend.account.dto.Step1Request;\r\nimport com.teamfoundry.backend.account.dto.Step2Request;\r\nimport com.teamfoundry.backend.account.dto.Step3Request;\r\nimport com.teamfoundry.backend.account.dto.Step4Request;\r\nimport com.teamfoundry.backend.account.dto.VerificationResendRequest;\r\nimport com.teamfoundry.backend.account.enums.RegistrationStatus;\r\nimport com.teamfoundry.backend.account.enums.UserType;\r\nimport com.teamfoundry.backend.account.model.EmployeeAccount;\r\nimport com.teamfoundry.backend.account.repository.AccountRepository;\r\nimport com.teamfoundry.backend.account.repository.AuthTokenRepository;\r\nimport com.teamfoundry.backend.account.repository.EmployeeAccountRepository;\r\nimport com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;\r\nimport com.teamfoundry.backend.account.service.exception.DuplicateEmailException;\r\nimport com.teamfoundry.backend.account_options.model.Competence;\r\nimport com.teamfoundry.backend.account_options.model.Curriculum;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeCompetence;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeFunction;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeGeoArea;\r\nimport com.teamfoundry.backend.account_options.model.Function;\r\nimport com.teamfoundry.backend.account_options.model.GeoArea;\r\nimport com.teamfoundry.backend.account_options.repository.CompetenceRepository;\r\nimport com.teamfoundry.backend.account_options.repository.CurriculumRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;\r\nimport com.teamfoundry.backend.account_options.repository.FunctionRepository;\r\nimport com.teamfoundry.backend.account_options.repository.GeoAreaRepository;\r\nimport com.teamfoundry.backend.security.model.AuthToken;\r\nimport lombok.RequiredArgsConstructor;\r\nimport lombok.extern.slf4j.Slf4j;\r\nimport org.springframework.beans.factory.annotation.Value;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.dao.DataIntegrityViolationException;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.transaction.annotation.Transactional;\r\nimport org.springframework.util.StringUtils;\r\n\r\nimport java.io.IOException;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.nio.file.Paths;\r\nimport java.nio.file.StandardOpenOption;\r\nimport java.sql.Timestamp;\r\nimport java.time.Instant;\r\nimport java.time.temporal.ChronoUnit;\r\nimport java.security.SecureRandom;\r\nimport java.util.Base64;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\nimport java.util.Optional;\r\n\r\n@Service\r\n@RequiredArgsConstructor\r\n@Slf4j\r\npublic class CandidateRegistrationService {\r\n\r\n    private final EmployeeAccountRepository employeeAccountRepository;\r\n    private final AccountRepository accountRepository;\r\n    private final AuthTokenRepository authTokenRepository;\r\n    private final PasswordEncoder passwordEncoder;\r\n    private final FunctionRepository functionRepository;\r\n    private final EmployeeFunctionRepository employeeFunctionRepository;\r\n    private final CompetenceRepository competenceRepository;\r\n    private final EmployeeCompetenceRepository employeeCompetenceRepository;\r\n    private final GeoAreaRepository geoAreaRepository;\r\n    private final EmployeeGeoAreaRepository employeeGeoAreaRepository;\r\n    private final CurriculumRepository curriculumRepository;\r\n    private final VerificationEmailService verificationEmailService;\r\n\r\n    @Value(\"${app.registration.cv-upload-dir:uploads/cv}\")\r\n    private String cvUploadDir;\r\n\r\n    @Value(\"${app.registration.verification.expiration-minutes:30}\")\r\n    private long verificationExpirationMinutes;\r\n\r\n    private final SecureRandom secureRandom = new SecureRandom();\r\n\r\n    @Transactional\r\n    public GenericResponse handleStep1(Step1Request request) {\r\n        String normalizedEmail = request.getEmail().trim().toLowerCase();\r\n\r\n        accountRepository.findByEmail(normalizedEmail)\r\n                .filter(existing -> !(existing instanceof EmployeeAccount))\r\n                .ifPresent(existing -> {\r\n                    throw new CandidateRegistrationException(\r\n                            \"O email informado já está associado a outro tipo de conta.\",\r\n                            HttpStatus.CONFLICT\r\n                    );\r\n                });\r\n        Optional<EmployeeAccount> existingAccountOpt = employeeAccountRepository.findByEmail(normalizedEmail);\r\n\r\n        EmployeeAccount account = existingAccountOpt.orElseGet(EmployeeAccount::new);\r\n\r\n        if (existingAccountOpt.isPresent()) {\r\n            if (Boolean.TRUE.equals(account.isActive()) || RegistrationStatus.COMPLETED.equals(account.getRegistrationStatus())) {\r\n                throw new DuplicateEmailException(\"O email informado já está associado a uma conta ativa.\");\r\n            }\r\n            resetAccountForRestart(account);\r\n        } else {\r\n            account.setEmail(normalizedEmail);\r\n            account.setRole(UserType.EMPLOYEE);\r\n        }\r\n\r\n        account.setPassword(passwordEncoder.encode(request.getPassword()));\r\n        account.setRegistrationStatus(RegistrationStatus.PENDING);\r\n        account.setActive(false);\r\n\r\n        try {\r\n            employeeAccountRepository.save(account);\r\n        } catch (DataIntegrityViolationException ex) {\r\n            log.error(\"Violação de integridade ao criar conta para {}\", normalizedEmail, ex);\r\n            throw new CandidateRegistrationException(\r\n                    \"O email informado já está associado a outra conta.\",\r\n                    HttpStatus.CONFLICT\r\n            );\r\n        }\r\n\r\n        return GenericResponse.success(\"Conta criada com sucesso. Continue para o passo 2.\");\r\n    }\r\n\r\n    @Transactional\r\n    public GenericResponse handleStep2(Step2Request request) {\r\n        EmployeeAccount account = findAccountByEmail(request.getEmail());\r\n\r\n        account.setName(request.getFirstName());\r\n        account.setSurname(request.getLastName());\r\n        account.setPhone(request.getPhone());\r\n        account.setNationality(request.getNationality());\r\n        account.setBirthDate(request.getBirthDate());\r\n        account.setNif(request.getNif());\r\n\r\n        String storedPath = storeCvIfPresent(account, request.getCvFile(), request.getCvFileName());\r\n        employeeAccountRepository.save(account);\r\n\r\n        if (storedPath != null) {\r\n            Curriculum curriculum = curriculumRepository.findByEmployee(account)\r\n                    .orElseGet(() -> {\r\n                        Curriculum cv = new Curriculum();\r\n                        cv.setEmployee(account);\r\n                        return cv;\r\n                    });\r\n\r\n            deleteFileIfExists(curriculum.getCvUrl());\r\n            curriculum.setCvUrl(storedPath);\r\n            curriculumRepository.save(curriculum);\r\n        }\r\n\r\n        return GenericResponse.success(\"Dados atualizados.\");\r\n    }\r\n\r\n    @Transactional\r\n    public GenericResponse handleStep3(Step3Request request) {\r\n        EmployeeAccount account = findAccountByEmail(request.getEmail());\r\n\r\n        if (Boolean.FALSE.equals(request.getTermsAccepted())) {\r\n            throw new CandidateRegistrationException(\"É necessário aceitar os termos e condições.\", HttpStatus.BAD_REQUEST);\r\n        }\r\n\r\n        applyFunctionPreference(account, request.getRole());\r\n        applyCompetencePreferences(account, request.getSkills());\r\n        applyGeoAreaPreferences(account, request.getAreas());\r\n\r\n        issueVerificationCode(account);\r\n        return GenericResponse.success(\"Preferências guardadas. Código enviado para o seu email.\");\r\n    }\r\n\r\n    @Transactional\r\n    public GenericResponse handleStep4(Step4Request request) {\r\n        EmployeeAccount account = findAccountByEmail(request.getEmail());\r\n\r\n        AuthToken token = authTokenRepository.findByAccountAndCode(account, request.getVerificationCode())\r\n                .orElseThrow(() -> new CandidateRegistrationException(\"Código de verificação inválido.\", HttpStatus.BAD_REQUEST));\r\n\r\n        if (token.getExpireAt().before(Timestamp.from(Instant.now()))) {\r\n            throw new CandidateRegistrationException(\"O código de verificação expirou.\", HttpStatus.BAD_REQUEST);\r\n        }\r\n\r\n        account.setActive(true);\r\n        account.setRegistrationStatus(RegistrationStatus.COMPLETED);\r\n        employeeAccountRepository.save(account);\r\n\r\n        authTokenRepository.delete(token);\r\n        return GenericResponse.success(\"Conta verificada e ativa.\");\r\n    }\r\n\r\n    @Transactional\r\n    public GenericResponse resendVerificationCode(VerificationResendRequest request) {\r\n        EmployeeAccount account = findAccountByEmail(request.email());\r\n        issueVerificationCode(account);\r\n        return GenericResponse.success(\"Novo código enviado para o email informado.\");\r\n    }\r\n\r\n    private EmployeeAccount findAccountByEmail(String email) {\r\n        return employeeAccountRepository.findByEmail(email.trim().toLowerCase())\r\n                .orElseThrow(() -> new CandidateRegistrationException(\"Conta não encontrada para o email informado.\", HttpStatus.NOT_FOUND));\r\n    }\r\n\r\n    private void issueVerificationCode(EmployeeAccount account) {\r\n        authTokenRepository.deleteAllByUser(account);\r\n        AuthToken token = buildVerificationToken(account);\r\n        authTokenRepository.save(token);\r\n        verificationEmailService.sendVerificationCode(account.getEmail(), token.getToken());\r\n        log.info(\"Generated verification code {} for candidate {}\", token.getToken(), account.getEmail());\r\n    }\r\n\r\n    private AuthToken buildVerificationToken(EmployeeAccount account) {\r\n        AuthToken token = new AuthToken();\r\n        token.setUser(account);\r\n        token.setToken(generateNumericCode(6));\r\n        Instant now = Instant.now();\r\n        token.setCreatedAt(Timestamp.from(now));\r\n        token.setExpireAt(Timestamp.from(now.plus(verificationExpirationMinutes, ChronoUnit.MINUTES)));\r\n        return token;\r\n    }\r\n\r\n    private String storeCvIfPresent(EmployeeAccount account, String cvPayload, String originalName) {\r\n        if (!StringUtils.hasText(cvPayload)) {\r\n            return null;\r\n        }\r\n\r\n        try {\r\n            String base64 = extractBase64Content(cvPayload);\r\n            byte[] data = Base64.getDecoder().decode(base64);\r\n\r\n            Path uploadDirectory = Paths.get(cvUploadDir).toAbsolutePath().normalize();\r\n            Files.createDirectories(uploadDirectory);\r\n\r\n            String extension = resolveExtension(originalName);\r\n            String filename = \"cv_\" + account.getId() + \"_\" + System.currentTimeMillis() + extension;\r\n            Path filePath = uploadDirectory.resolve(filename);\r\n\r\n            Files.write(filePath, data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);\r\n            log.info(\"Stored CV for {} at {}\", account.getEmail(), filePath);\r\n            return filePath.toString();\r\n        } catch (IllegalArgumentException ex) {\r\n            throw new CandidateRegistrationException(\"O ficheiro de CV enviado é inválido.\", HttpStatus.BAD_REQUEST);\r\n        } catch (IOException ex) {\r\n            log.error(\"Error storing CV file for {}\", account.getEmail(), ex);\r\n            throw new CandidateRegistrationException(\"Não foi possível guardar o CV. Tente novamente.\", HttpStatus.INTERNAL_SERVER_ERROR);\r\n        }\r\n    }\r\n\r\n    private String extractBase64Content(String raw) {\r\n        int commaIndex = raw.indexOf(',');\r\n        return commaIndex >= 0 ? raw.substring(commaIndex + 1) : raw;\r\n    }\r\n\r\n    private String resolveExtension(String originalName) {\r\n        if (StringUtils.hasText(originalName) && originalName.contains(\".\")) {\r\n            return originalName.substring(originalName.lastIndexOf('.')).toLowerCase();\r\n        }\r\n        return \".pdf\";\r\n    }\r\n\r\n    private String generateNumericCode(int length) {\r\n        StringBuilder builder = new StringBuilder();\r\n        for (int i = 0; i < length; i++) {\r\n            builder.append(secureRandom.nextInt(10));\r\n        }\r\n        return builder.toString();\r\n    }\r\n\r\n    private void resetAccountForRestart(EmployeeAccount account) {\r\n        if (account.getId() != null) {\r\n            removeCvIfExists(account);\r\n            employeeFunctionRepository.deleteByEmployee(account);\r\n            employeeCompetenceRepository.deleteByEmployee(account);\r\n            employeeGeoAreaRepository.deleteByEmployee(account);\r\n        }\r\n        account.setName(null);\r\n        account.setSurname(null);\r\n        account.setPhone(null);\r\n        account.setNationality(null);\r\n        account.setGender(null);\r\n        account.setBirthDate(null);\r\n        account.setNif(null);\r\n    }\r\n\r\n    private void removeCvIfExists(EmployeeAccount account) {\r\n        if (account.getId() == null) {\r\n            return;\r\n        }\r\n        curriculumRepository.findByEmployee(account).ifPresent(cv -> {\r\n            deleteFileIfExists(cv.getCvUrl());\r\n            curriculumRepository.delete(cv);\r\n        });\r\n    }\r\n\r\n    private void deleteFileIfExists(String storedPath) {\r\n        if (!StringUtils.hasText(storedPath)) {\r\n            return;\r\n        }\r\n        try {\r\n            Files.deleteIfExists(Paths.get(storedPath));\r\n        } catch (IOException ex) {\r\n            log.warn(\"Falha ao remover ficheiro {}: {}\", storedPath, ex.getMessage());\r\n        }\r\n    }\r\n\r\n    private void applyFunctionPreference(EmployeeAccount account, String functionName) {\r\n        employeeFunctionRepository.deleteByEmployee(account);\r\n\r\n        if (!StringUtils.hasText(functionName)) {\r\n            throw new CandidateRegistrationException(\"Função preferencial é obrigatória.\", HttpStatus.BAD_REQUEST);\r\n        }\r\n\r\n        Function function = functionRepository.findByName(functionName.trim())\r\n                .orElseThrow(() -> new CandidateRegistrationException(\"Função não encontrada: \" + functionName, HttpStatus.BAD_REQUEST));\r\n\r\n        EmployeeFunction relation = new EmployeeFunction();\r\n        relation.setEmployee(account);\r\n        relation.setFunction(function);\r\n        employeeFunctionRepository.save(relation);\r\n    }\r\n\r\n    private void applyCompetencePreferences(EmployeeAccount account, List<String> skills) {\r\n        employeeCompetenceRepository.deleteByEmployee(account);\r\n\r\n        if (Objects.isNull(skills) || skills.isEmpty()) {\r\n            throw new CandidateRegistrationException(\"Pelo menos uma competência deve ser selecionada.\", HttpStatus.BAD_REQUEST);\r\n        }\r\n\r\n        List<EmployeeCompetence> relations = skills.stream()\r\n                .filter(StringUtils::hasText)\r\n                .map(String::trim)\r\n                .distinct()\r\n                .map(name -> {\r\n                    Competence competence = competenceRepository.findByName(name)\r\n                            .orElseThrow(() -> new CandidateRegistrationException(\"Competência não encontrada: \" + name, HttpStatus.BAD_REQUEST));\r\n                    EmployeeCompetence relation = new EmployeeCompetence();\r\n                    relation.setEmployee(account);\r\n                    relation.setCompetence(competence);\r\n                    return relation;\r\n                })\r\n                .toList();\r\n\r\n        employeeCompetenceRepository.saveAll(relations);\r\n    }\r\n\r\n    private void applyGeoAreaPreferences(EmployeeAccount account, List<String> areas) {\r\n        employeeGeoAreaRepository.deleteByEmployee(account);\r\n\r\n        if (Objects.isNull(areas) || areas.isEmpty()) {\r\n            throw new CandidateRegistrationException(\"Selecione pelo menos uma área geográfica.\", HttpStatus.BAD_REQUEST);\r\n        }\r\n\r\n        List<EmployeeGeoArea> relations = areas.stream()\r\n                .filter(StringUtils::hasText)\r\n                .map(String::trim)\r\n                .distinct()\r\n                .map(name -> {\r\n                    GeoArea area = geoAreaRepository.findByName(name)\r\n                            .orElseThrow(() -> new CandidateRegistrationException(\"Área geográfica não encontrada: \" + name, HttpStatus.BAD_REQUEST));\r\n                    EmployeeGeoArea relation = new EmployeeGeoArea();\r\n                    relation.setEmployee(account);\r\n                    relation.setGeoArea(area);\r\n                    return relation;\r\n                })\r\n                .toList();\r\n\r\n        employeeGeoAreaRepository.saveAll(relations);\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java b/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java	(date 1762876875849)
+-@@ -1,11 +1,11 @@
+- package com.teamfoundry.backend.account.service;
+- 
+- import com.teamfoundry.backend.account.dto.GenericResponse;
+--import com.teamfoundry.backend.account.dto.Step1Request;
+--import com.teamfoundry.backend.account.dto.Step2Request;
+--import com.teamfoundry.backend.account.dto.Step3Request;
+--import com.teamfoundry.backend.account.dto.Step4Request;
+--import com.teamfoundry.backend.account.dto.VerificationResendRequest;
+-+import com.teamfoundry.backend.account.dto.register.Step1Request;
+-+import com.teamfoundry.backend.account.dto.register.Step2Request;
+-+import com.teamfoundry.backend.account.dto.register.Step3Request;
+-+import com.teamfoundry.backend.account.dto.register.Step4Request;
+-+import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
+- import com.teamfoundry.backend.account.enums.RegistrationStatus;
+- import com.teamfoundry.backend.account.enums.UserType;
+- import com.teamfoundry.backend.account.model.EmployeeAccount;
+-Index: backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.security.config;\r\n\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport com.teamfoundry.backend.common.dto.ApiErrorResponse;\r\nimport com.teamfoundry.backend.security.filter.JwtAuthenticationFilter;\r\nimport com.teamfoundry.backend.security.service.AccountDetailsService;\r\nimport jakarta.servlet.http.HttpServletResponse;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.MediaType;\r\nimport org.springframework.security.authentication.AuthenticationManager;\r\nimport org.springframework.security.authentication.dao.DaoAuthenticationProvider;\r\nimport org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;\r\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\r\nimport org.springframework.security.config.http.SessionCreationPolicy;\r\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\nimport org.springframework.security.web.SecurityFilterChain;\r\nimport org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\r\nimport org.springframework.web.cors.CorsConfiguration;\r\nimport org.springframework.web.cors.CorsConfigurationSource;\r\nimport org.springframework.web.cors.UrlBasedCorsConfigurationSource;\r\n\r\nimport java.io.IOException;\r\nimport java.nio.charset.StandardCharsets;\r\nimport java.util.List;\r\n\r\n@Configuration\r\n@EnableWebSecurity\r\n@RequiredArgsConstructor\r\npublic class SecurityConfig {\r\n\r\n    private final JwtAuthenticationFilter jwtFilter;\r\n    private final AccountDetailsService userDetailsService;\r\n\r\n    @Bean\r\n    public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper) throws Exception {\r\n        http\r\n                .csrf(csrf -> csrf.disable())\r\n                .cors(cors -> cors.configurationSource(corsConfigurationSource()))\r\n                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))\r\n                .exceptionHandling(ex -> ex\r\n                        .authenticationEntryPoint((req, res, e) -> {\r\n                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);\r\n                            try {\r\n                                writeJson(res, objectMapper, ApiErrorResponse.of(HttpStatus.UNAUTHORIZED, \"Authentication required\"));\r\n                            } catch (IOException ignored) {\r\n                                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, \"Unauthorized\");\r\n                            }\r\n                        })\r\n                        .accessDeniedHandler((req, res, e) -> {\r\n                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);\r\n                            try {\r\n                                writeJson(res, objectMapper, ApiErrorResponse.of(HttpStatus.FORBIDDEN, \"Access denied\"));\r\n                            } catch (IOException ignored) {\r\n                                res.sendError(HttpServletResponse.SC_FORBIDDEN, \"Forbidden\");\r\n                            }\r\n                        })\r\n                )\r\n                .authorizeHttpRequests(auth -> auth\r\n                        .requestMatchers(\"/api/auth/**\", \"/auth/**\", \"/api/candidate/register/**\", \"/api/candidate/verification/**\", \"/api/profile-options\", \"/api/debug/**\", \"/api/admin/login\", \"/api/dev/accounts/**\", \"/h2-console/**\").permitAll()\r\n                        .anyRequest().authenticated()\r\n                )\r\n                // Opcional: permitir H2 console em dev/test\r\n                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))\r\n                .authenticationProvider(daoAuthenticationProvider())\r\n                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);\r\n\r\n        return http.build();\r\n    }\r\n\r\n    @Bean\r\n    public PasswordEncoder passwordEncoder() {\r\n        return new BCryptPasswordEncoder();\r\n    }\r\n\r\n    @Bean\r\n    public DaoAuthenticationProvider daoAuthenticationProvider() {\r\n        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();\r\n        provider.setUserDetailsService(userDetailsService);\r\n        provider.setPasswordEncoder(passwordEncoder());\r\n        return provider;\r\n    }\r\n\r\n    @Bean\r\n    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {\r\n        return configuration.getAuthenticationManager();\r\n    }\r\n\r\n    @Bean\r\n    public CorsConfigurationSource corsConfigurationSource() {\r\n        CorsConfiguration cfg = new CorsConfiguration();\r\n        cfg.setAllowedOrigins(List.of(\"http://localhost:5173\"));\r\n        cfg.setAllowedMethods(List.of(\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"));\r\n        cfg.setAllowedHeaders(List.of(\"*\"));\r\n        cfg.setAllowCredentials(true);\r\n        UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();\r\n        src.registerCorsConfiguration(\"/**\", cfg);\r\n        return src;\r\n    }\r\n\r\n    private void writeJson(HttpServletResponse response,\r\n                           ObjectMapper objectMapper,\r\n                           ApiErrorResponse payload) throws IOException {\r\n        response.setContentType(MediaType.APPLICATION_JSON_VALUE);\r\n        response.setCharacterEncoding(StandardCharsets.UTF_8.name());\r\n        objectMapper.writeValue(response.getWriter(), payload);\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java b/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java
+---- a/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/security/config/SecurityConfig.java	(date 1762878821200)
+-@@ -61,7 +61,18 @@
+-                         })
+-                 )
+-                 .authorizeHttpRequests(auth -> auth
+--                        .requestMatchers("/api/auth/**", "/auth/**", "/api/candidate/register/**", "/api/candidate/verification/**", "/api/profile-options", "/api/debug/**", "/api/admin/login", "/api/dev/accounts/**", "/h2-console/**").permitAll()
+-+                        .requestMatchers(
+-+                                "/api/auth/**",
+-+                                "/auth/**",
+-+                                "/api/candidate/register/**",
+-+                                "/api/candidate/verification/**",
+-+                                "/api/company/register/**",
+-+                                "/api/company/options/**",
+-+                                "/api/profile-options",
+-+                                "/api/debug/**",
+-+                                "/api/admin/login",
+-+                                "/api/dev/accounts/**",
+-+                                "/h2-console/**").permitAll()
+-                         .anyRequest().authenticated()
+-                 )
+-                 // Opcional: permitir H2 console em dev/test
+-Index: backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step4Request.java
+-rename from backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java
+-rename to backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step4Request.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step4Request.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step4Request.java	(date 1762876875832)
+-@@ -1,4 +1,4 @@
+--package com.teamfoundry.backend.account.dto;
+-+package com.teamfoundry.backend.account.dto.register;
+- 
+- import jakarta.validation.constraints.Email;
+- import jakarta.validation.constraints.NotBlank;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step1Request.java
+-rename from backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java
+-rename to backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step1Request.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step1Request.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step1Request.java	(date 1762876875842)
+-@@ -1,4 +1,4 @@
+--package com.teamfoundry.backend.account.dto;
+-+package com.teamfoundry.backend.account.dto.register;
+- 
+- import jakarta.validation.constraints.Email;
+- import jakarta.validation.constraints.NotBlank;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step2Request.java
+-rename from backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java
+-rename to backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step2Request.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step2Request.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step2Request.java	(date 1762876875816)
+-@@ -1,4 +1,4 @@
+--package com.teamfoundry.backend.account.dto;
+-+package com.teamfoundry.backend.account.dto.register;
+- 
+- import jakarta.validation.constraints.Email;
+- import jakarta.validation.constraints.NotBlank;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step3Request.java
+-rename from backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java
+-rename to backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step3Request.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/dto/Step3Request.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/Step3Request.java	(date 1762876875805)
+-@@ -1,4 +1,4 @@
+--package com.teamfoundry.backend.account.dto;
+-+package com.teamfoundry.backend.account.dto.register;
+- 
+- import jakarta.validation.constraints.Email;
+- import jakarta.validation.constraints.NotBlank;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account.model;\r\n\r\nimport jakarta.persistence.*;\r\nimport lombok.*;\r\n\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Entity\r\n@Table(name = \"responsavel_conta_empresa\")\r\npublic class CompanyAccountOwner {\r\n\r\n    @Id\r\n    @OneToOne\r\n    @JoinColumn(name = \"id_empresa\", referencedColumnName = \"id\", nullable = false)\r\n    private CompanyAccount companyAccount;\r\n\r\n    @Column(unique = true, nullable = false)\r\n    private String email;\r\n\r\n    @Column(nullable = false)\r\n    private String name;\r\n\r\n    @Column(nullable = false)\r\n    private String phone;\r\n\r\n    @Column(nullable = false)\r\n    private String position;\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java b/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/model/CompanyAccountOwner.java	(date 1762878704508)
+-@@ -11,7 +11,11 @@
+- public class CompanyAccountOwner {
+- 
+-     @Id
+-+    @Column(name = "id_empresa")
+-+    private Integer id;
+-+
+-     @OneToOne
+-+    @MapsId
+-     @JoinColumn(name = "id_empresa", referencedColumnName = "id", nullable = false)
+-     private CompanyAccount companyAccount;
+- 
+-Index: backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/VerificationResendRequest.java
+-rename from backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java
+-rename to backend/src/main/java/com/teamfoundry/backend/account/dto/register/VerificationResendRequest.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/dto/VerificationResendRequest.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/dto/register/VerificationResendRequest.java	(date 1762876875826)
+-@@ -1,4 +1,4 @@
+--package com.teamfoundry.backend.account.dto;
+-+package com.teamfoundry.backend.account.dto.register;
+- 
+- import jakarta.validation.constraints.Email;
+- import jakarta.validation.constraints.NotBlank;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account.controller;\r\n\r\nimport com.teamfoundry.backend.account.dto.GenericResponse;\r\nimport com.teamfoundry.backend.account.dto.Step1Request;\r\nimport com.teamfoundry.backend.account.dto.Step2Request;\r\nimport com.teamfoundry.backend.account.dto.Step3Request;\r\nimport com.teamfoundry.backend.account.dto.Step4Request;\r\nimport com.teamfoundry.backend.account.service.CandidateRegistrationService;\r\nimport com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;\r\nimport jakarta.validation.Valid;\r\nimport lombok.RequiredArgsConstructor;\r\nimport lombok.extern.slf4j.Slf4j;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.MediaType;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.validation.FieldError;\r\nimport org.springframework.web.bind.MethodArgumentNotValidException;\r\nimport org.springframework.web.bind.annotation.ExceptionHandler;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\nimport org.springframework.web.bind.annotation.RequestBody;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\nimport java.util.stream.Collectors;\r\n\r\n@RestController\r\n@RequestMapping(value = \"/api/candidate/register\", produces = MediaType.APPLICATION_JSON_VALUE)\r\n@RequiredArgsConstructor\r\n@Slf4j\r\npublic class CandidateRegistrationController {\r\n\r\n    private final CandidateRegistrationService registrationService;\r\n\r\n    @PostMapping(\"/step1\")\r\n    public ResponseEntity<GenericResponse> registerStep1(@Valid @RequestBody Step1Request request) {\r\n        GenericResponse response = registrationService.handleStep1(request);\r\n        return ResponseEntity.status(HttpStatus.CREATED).body(response);\r\n    }\r\n\r\n    @PostMapping(\"/step2\")\r\n    public ResponseEntity<GenericResponse> registerStep2(@Valid @RequestBody Step2Request request) {\r\n        GenericResponse response = registrationService.handleStep2(request);\r\n        return ResponseEntity.ok(response);\r\n    }\r\n\r\n    @PostMapping(\"/step3\")\r\n    public ResponseEntity<GenericResponse> registerStep3(@Valid @RequestBody Step3Request request) {\r\n        GenericResponse response = registrationService.handleStep3(request);\r\n        return ResponseEntity.ok(response);\r\n    }\r\n\r\n    @PostMapping(\"/step4\")\r\n    public ResponseEntity<GenericResponse> registerStep4(@Valid @RequestBody Step4Request request) {\r\n        GenericResponse response = registrationService.handleStep4(request);\r\n        return ResponseEntity.ok(response);\r\n    }\r\n\r\n    @ExceptionHandler(CandidateRegistrationException.class)\r\n    public ResponseEntity<GenericResponse> handleRegistrationException(CandidateRegistrationException exception) {\r\n        return ResponseEntity\r\n                .status(exception.getStatus())\r\n                .body(GenericResponse.failure(exception.getMessage()));\r\n    }\r\n\r\n    @ExceptionHandler(MethodArgumentNotValidException.class)\r\n    public ResponseEntity<GenericResponse> handleValidationErrors(MethodArgumentNotValidException exception) {\r\n        String errors = exception.getBindingResult()\r\n                .getFieldErrors()\r\n                .stream()\r\n                .map(FieldError::getDefaultMessage)\r\n                .collect(Collectors.joining(\"; \"));\r\n        log.warn(\"Erro de validação no registo: {}\", errors);\r\n        return ResponseEntity\r\n                .status(HttpStatus.BAD_REQUEST)\r\n                .body(GenericResponse.failure(errors));\r\n    }\r\n\r\n    @ExceptionHandler(Exception.class)\r\n    public ResponseEntity<GenericResponse> handleUnexpectedExceptions(Exception exception) {\r\n        log.error(\"Erro inesperado no fluxo de registo\", exception);\r\n        return ResponseEntity\r\n                .status(HttpStatus.INTERNAL_SERVER_ERROR)\r\n                .body(GenericResponse.failure(\"Ocorreu um erro inesperado. Tente novamente.\"));\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java b/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateRegistrationController.java	(date 1762876875820)
+-@@ -1,10 +1,10 @@
+- package com.teamfoundry.backend.account.controller;
+- 
+- import com.teamfoundry.backend.account.dto.GenericResponse;
+--import com.teamfoundry.backend.account.dto.Step1Request;
+--import com.teamfoundry.backend.account.dto.Step2Request;
+--import com.teamfoundry.backend.account.dto.Step3Request;
+--import com.teamfoundry.backend.account.dto.Step4Request;
+-+import com.teamfoundry.backend.account.dto.register.Step1Request;
+-+import com.teamfoundry.backend.account.dto.register.Step2Request;
+-+import com.teamfoundry.backend.account.dto.register.Step3Request;
+-+import com.teamfoundry.backend.account.dto.register.Step4Request;
+- import com.teamfoundry.backend.account.service.CandidateRegistrationService;
+- import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
+- import jakarta.validation.Valid;
+-Index: backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account.service;\r\n\r\nimport com.teamfoundry.backend.account.dto.GenericResponse;\r\nimport com.teamfoundry.backend.account.dto.Step1Request;\r\nimport com.teamfoundry.backend.account.dto.Step2Request;\r\nimport com.teamfoundry.backend.account.dto.Step3Request;\r\nimport com.teamfoundry.backend.account.dto.Step4Request;\r\nimport com.teamfoundry.backend.account.dto.VerificationResendRequest;\r\nimport com.teamfoundry.backend.account.enums.RegistrationStatus;\r\nimport com.teamfoundry.backend.account.enums.UserType;\r\nimport com.teamfoundry.backend.account.model.EmployeeAccount;\r\nimport com.teamfoundry.backend.account.repository.AuthTokenRepository;\r\nimport com.teamfoundry.backend.account.repository.EmployeeAccountRepository;\r\nimport com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;\r\nimport com.teamfoundry.backend.account.service.exception.DuplicateEmailException;\r\nimport com.teamfoundry.backend.account_options.model.Competence;\r\nimport com.teamfoundry.backend.account_options.model.Curriculum;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeCompetence;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeFunction;\r\nimport com.teamfoundry.backend.account_options.model.EmployeeGeoArea;\r\nimport com.teamfoundry.backend.account_options.model.Function;\r\nimport com.teamfoundry.backend.account_options.model.GeoArea;\r\nimport com.teamfoundry.backend.account_options.repository.CompetenceRepository;\r\nimport com.teamfoundry.backend.account_options.repository.CurriculumRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;\r\nimport com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;\r\nimport com.teamfoundry.backend.account_options.repository.FunctionRepository;\r\nimport com.teamfoundry.backend.account_options.repository.GeoAreaRepository;\r\nimport com.teamfoundry.backend.security.model.AuthToken;\r\nimport org.junit.jupiter.api.BeforeEach;\r\nimport org.junit.jupiter.api.DisplayName;\r\nimport org.junit.jupiter.api.Test;\r\nimport org.junit.jupiter.api.extension.ExtendWith;\r\nimport org.junit.jupiter.api.io.TempDir;\r\nimport org.mockito.ArgumentCaptor;\r\nimport org.mockito.InjectMocks;\r\nimport org.mockito.Mock;\r\nimport org.mockito.junit.jupiter.MockitoExtension;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\nimport org.springframework.test.util.ReflectionTestUtils;\r\n\r\nimport java.nio.charset.StandardCharsets;\r\nimport java.nio.file.Path;\r\nimport java.sql.Timestamp;\r\nimport java.time.Instant;\r\nimport java.time.LocalDate;\r\nimport java.util.Base64;\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\nimport static org.assertj.core.api.Assertions.assertThat;\r\nimport static org.assertj.core.api.Assertions.assertThatThrownBy;\r\nimport static org.mockito.ArgumentMatchers.any;\r\nimport static org.mockito.ArgumentMatchers.eq;\r\nimport static org.mockito.Mockito.*;\r\n\r\n/**\r\n * Testes unitários focados nos fluxos principais do {@link CandidateRegistrationService}.\r\n */\r\n@ExtendWith(MockitoExtension.class)\r\nclass CandidateRegistrationServiceTest {\r\n\r\n    @Mock\r\n    private EmployeeAccountRepository employeeAccountRepository;\r\n    @Mock\r\n    private AuthTokenRepository authTokenRepository;\r\n    @Mock\r\n    private PasswordEncoder passwordEncoder;\r\n    @Mock\r\n    private FunctionRepository functionRepository;\r\n    @Mock\r\n    private EmployeeFunctionRepository employeeFunctionRepository;\r\n    @Mock\r\n    private CompetenceRepository competenceRepository;\r\n    @Mock\r\n    private EmployeeCompetenceRepository employeeCompetenceRepository;\r\n    @Mock\r\n    private GeoAreaRepository geoAreaRepository;\r\n    @Mock\r\n    private EmployeeGeoAreaRepository employeeGeoAreaRepository;\r\n    @Mock\r\n    private CurriculumRepository curriculumRepository;\r\n    @Mock\r\n    private VerificationEmailService verificationEmailService;\r\n\r\n    @InjectMocks\r\n    private CandidateRegistrationService candidateRegistrationService;\r\n\r\n    @TempDir\r\n    Path tempDir;\r\n\r\n    private EmployeeAccount pendingAccount;\r\n\r\n    @BeforeEach\r\n    void setUp() {\r\n        pendingAccount = new EmployeeAccount();\r\n        pendingAccount.setId(1);\r\n        pendingAccount.setEmail(\"user@example.com\");\r\n        pendingAccount.setPassword(\"bcrypt\");\r\n        pendingAccount.setRole(UserType.EMPLOYEE);\r\n        pendingAccount.setRegistrationStatus(RegistrationStatus.PENDING);\r\n        ReflectionTestUtils.setField(candidateRegistrationService, \"cvUploadDir\", tempDir.toString());\r\n        ReflectionTestUtils.setField(candidateRegistrationService, \"verificationExpirationMinutes\", 30L);\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep1 grava credenciais e envia código quando email é novo\")\r\n    void handleStep1CreatesAccount() {\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.empty());\r\n        when(passwordEncoder.encode(\"Strong@123\")).thenReturn(\"encoded\");\r\n        when(employeeAccountRepository.save(any(EmployeeAccount.class))).thenReturn(pendingAccount);\r\n\r\n        Step1Request request = new Step1Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setPassword(\"Strong@123\");\r\n\r\n        candidateRegistrationService.handleStep1(request);\r\n\r\n        verify(employeeAccountRepository).save(any(EmployeeAccount.class));\r\n        verify(authTokenRepository).deleteAllByUser(pendingAccount);\r\n        verify(authTokenRepository).save(any());\r\n        verify(verificationEmailService).sendVerificationCode(eq(\"user@example.com\"), any());\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep1 lança DuplicateEmailException se email já existir e estiver ativo\")\r\n    void handleStep1ThrowsIfEmailTaken() {\r\n        EmployeeAccount active = new EmployeeAccount();\r\n        active.setActive(true);\r\n        when(employeeAccountRepository.findByEmail(\"taken@example.com\"))\r\n                .thenReturn(Optional.of(active));\r\n\r\n        Step1Request request = new Step1Request();\r\n        request.setEmail(\"taken@example.com\");\r\n        request.setPassword(\"Strong@123\");\r\n\r\n        assertThatThrownBy(() -> candidateRegistrationService.handleStep1(request))\r\n                .isInstanceOf(DuplicateEmailException.class);\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep4 ativa conta quando o token é válido\")\r\n    void handleStep4ActivatesAccount() {\r\n        Step4Request request = new Step4Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setVerificationCode(\"123456\");\r\n\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n\r\n        AuthToken token = new AuthToken();\r\n        token.setToken(\"123456\");\r\n        token.setExpireAt(Timestamp.from(Instant.now().plusSeconds(60)));\r\n        when(authTokenRepository.findByAccountAndCode(pendingAccount, \"123456\"))\r\n                .thenReturn(Optional.of(token));\r\n\r\n        candidateRegistrationService.handleStep4(request);\r\n\r\n        assertThat(pendingAccount.isActive()).isTrue();\r\n        assertThat(pendingAccount.getRegistrationStatus()).isEqualTo(RegistrationStatus.COMPLETED);\r\n        verify(authTokenRepository).delete(token);\r\n        verify(employeeAccountRepository).save(pendingAccount);\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep2 atualiza dados pessoais e guarda CV base64\")\r\n    void handleStep2UpdatesPersonalDataAndStoresCv() {\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n        when(curriculumRepository.findByEmployee(pendingAccount)).thenReturn(Optional.empty());\r\n\r\n        Step2Request request = new Step2Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setFirstName(\"Ana\");\r\n        request.setLastName(\"Silva\");\r\n        request.setNationality(\"Portuguesa\");\r\n        request.setBirthDate(LocalDate.of(1990, 1, 1));\r\n        request.setPhone(\"+351910000000\");\r\n        request.setNif(123456789);\r\n        request.setCvFile(\"data:application/pdf;base64,\" + Base64.getEncoder().encodeToString(\"cv\".getBytes(StandardCharsets.UTF_8)));\r\n        request.setCvFileName(\"curriculo.pdf\");\r\n\r\n        GenericResponse response = candidateRegistrationService.handleStep2(request);\r\n\r\n        assertThat(pendingAccount.getName()).isEqualTo(\"Ana\");\r\n        assertThat(pendingAccount.getSurname()).isEqualTo(\"Silva\");\r\n        assertThat(response.getMessage()).isEqualTo(\"Dados atualizados.\");\r\n        verify(employeeAccountRepository).save(pendingAccount);\r\n\r\n        ArgumentCaptor<Curriculum> curriculumCaptor = ArgumentCaptor.forClass(Curriculum.class);\r\n        verify(curriculumRepository).save(curriculumCaptor.capture());\r\n        assertThat(curriculumCaptor.getValue().getCvUrl()).contains(tempDir.toString());\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep3 aplica preferências e emite novo código\")\r\n    void handleStep3AppliesPreferencesAndIssuesCode() {\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n\r\n        Function function = new Function();\r\n        function.setName(\"Soldador\");\r\n        when(functionRepository.findByName(\"Soldador\")).thenReturn(Optional.of(function));\r\n\r\n        Competence competence = new Competence();\r\n        competence.setName(\"Eletricista\");\r\n        when(competenceRepository.findByName(\"Eletricista\")).thenReturn(Optional.of(competence));\r\n\r\n        GeoArea area = new GeoArea();\r\n        area.setName(\"Lisboa\");\r\n        when(geoAreaRepository.findByName(\"Lisboa\")).thenReturn(Optional.of(area));\r\n\r\n        when(authTokenRepository.save(any(AuthToken.class))).thenAnswer(invocation -> invocation.getArgument(0));\r\n\r\n        Step3Request request = new Step3Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setRole(\"Soldador\");\r\n        request.setSkills(List.of(\"Eletricista\"));\r\n        request.setAreas(List.of(\"Lisboa\"));\r\n        request.setTermsAccepted(true);\r\n\r\n        GenericResponse response = candidateRegistrationService.handleStep3(request);\r\n\r\n        assertThat(response.getMessage()).contains(\"Preferências guardadas\");\r\n        verify(employeeFunctionRepository).deleteByEmployee(pendingAccount);\r\n        verify(employeeFunctionRepository).save(any(EmployeeFunction.class));\r\n\r\n        @SuppressWarnings(\"unchecked\")\r\n        ArgumentCaptor<List<EmployeeCompetence>> competenceCaptor = ArgumentCaptor.forClass(List.class);\r\n        verify(employeeCompetenceRepository).saveAll(competenceCaptor.capture());\r\n        assertThat(competenceCaptor.getValue()).hasSize(1);\r\n\r\n        @SuppressWarnings(\"unchecked\")\r\n        ArgumentCaptor<List<EmployeeGeoArea>> areaCaptor = ArgumentCaptor.forClass(List.class);\r\n        verify(employeeGeoAreaRepository).saveAll(areaCaptor.capture());\r\n        assertThat(areaCaptor.getValue()).hasSize(1);\r\n\r\n        verify(authTokenRepository).deleteAllByUser(pendingAccount);\r\n        verify(verificationEmailService).sendVerificationCode(eq(\"user@example.com\"), any());\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep3 falha quando os termos não são aceites\")\r\n    void handleStep3ThrowsWhenTermsNotAccepted() {\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n\r\n        Step3Request request = new Step3Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setRole(\"Soldador\");\r\n        request.setSkills(List.of(\"Eletricista\"));\r\n        request.setAreas(List.of(\"Lisboa\"));\r\n        request.setTermsAccepted(false);\r\n\r\n        assertThatThrownBy(() -> candidateRegistrationService.handleStep3(request))\r\n                .isInstanceOf(CandidateRegistrationException.class)\r\n                .hasMessageContaining(\"termos\");\r\n\r\n        verifyNoInteractions(functionRepository, competenceRepository, geoAreaRepository);\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep4 lança exceção quando o código não existe\")\r\n    void handleStep4ThrowsWhenTokenMissing() {\r\n        Step4Request request = new Step4Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setVerificationCode(\"654321\");\r\n\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n        when(authTokenRepository.findByAccountAndCode(pendingAccount, \"654321\"))\r\n                .thenReturn(Optional.empty());\r\n\r\n        assertThatThrownBy(() -> candidateRegistrationService.handleStep4(request))\r\n                .isInstanceOf(CandidateRegistrationException.class)\r\n                .hasMessageContaining(\"inválido\");\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"handleStep4 falha quando o código está expirado\")\r\n    void handleStep4ThrowsWhenTokenExpired() {\r\n        Step4Request request = new Step4Request();\r\n        request.setEmail(\"user@example.com\");\r\n        request.setVerificationCode(\"123456\");\r\n\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n\r\n        AuthToken token = new AuthToken();\r\n        token.setToken(\"123456\");\r\n        token.setExpireAt(Timestamp.from(Instant.now().minusSeconds(30)));\r\n        when(authTokenRepository.findByAccountAndCode(pendingAccount, \"123456\"))\r\n                .thenReturn(Optional.of(token));\r\n\r\n        assertThatThrownBy(() -> candidateRegistrationService.handleStep4(request))\r\n                .isInstanceOf(CandidateRegistrationException.class)\r\n                .hasMessageContaining(\"expirou\");\r\n    }\r\n\r\n    @Test\r\n    @DisplayName(\"resendVerificationCode limpa tokens antigos e envia novo email\")\r\n    void resendVerificationCodeIssuesNewCode() {\r\n        when(employeeAccountRepository.findByEmail(\"user@example.com\"))\r\n                .thenReturn(Optional.of(pendingAccount));\r\n        when(authTokenRepository.save(any(AuthToken.class))).thenAnswer(invocation -> invocation.getArgument(0));\r\n\r\n        GenericResponse response = candidateRegistrationService.resendVerificationCode(new VerificationResendRequest(\"user@example.com\"));\r\n\r\n        assertThat(response.getMessage()).isEqualTo(\"Novo código enviado para o email informado.\");\r\n        verify(authTokenRepository).deleteAllByUser(pendingAccount);\r\n        verify(verificationEmailService).sendVerificationCode(eq(\"user@example.com\"), any());\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java b/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java
+---- a/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/test/java/com/teamfoundry/backend/account/service/CandidateRegistrationServiceTest.java	(date 1762876875811)
+-@@ -1,11 +1,11 @@
+- package com.teamfoundry.backend.account.service;
+- 
+- import com.teamfoundry.backend.account.dto.GenericResponse;
+--import com.teamfoundry.backend.account.dto.Step1Request;
+--import com.teamfoundry.backend.account.dto.Step2Request;
+--import com.teamfoundry.backend.account.dto.Step3Request;
+--import com.teamfoundry.backend.account.dto.Step4Request;
+--import com.teamfoundry.backend.account.dto.VerificationResendRequest;
+-+import com.teamfoundry.backend.account.dto.register.Step1Request;
+-+import com.teamfoundry.backend.account.dto.register.Step2Request;
+-+import com.teamfoundry.backend.account.dto.register.Step3Request;
+-+import com.teamfoundry.backend.account.dto.register.Step4Request;
+-+import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
+- import com.teamfoundry.backend.account.enums.RegistrationStatus;
+- import com.teamfoundry.backend.account.enums.UserType;
+- import com.teamfoundry.backend.account.model.EmployeeAccount;
+-Index: backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.teamfoundry.backend.account.controller;\r\n\r\nimport com.teamfoundry.backend.account.dto.GenericResponse;\r\nimport com.teamfoundry.backend.account.dto.VerificationResendRequest;\r\nimport com.teamfoundry.backend.account.service.CandidateRegistrationService;\r\nimport jakarta.validation.Valid;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.http.MediaType;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\nimport org.springframework.web.bind.annotation.RequestBody;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\n/**\r\n * Endpoints relacionados com a verificação via código (reenviar e validar).\r\n */\r\n@RestController\r\n@RequestMapping(value = \"/api/candidate/verification\", produces = MediaType.APPLICATION_JSON_VALUE)\r\n@RequiredArgsConstructor\r\npublic class CandidateVerificationController {\r\n\r\n    private final CandidateRegistrationService candidateRegistrationService;\r\n\r\n    /**\r\n     * Reenvia o código de verificação para o e-mail indicado.\r\n     */\r\n    @PostMapping(\"/send\")\r\n    public ResponseEntity<GenericResponse> resend(@Valid @RequestBody VerificationResendRequest request) {\r\n        return ResponseEntity.ok(candidateRegistrationService.resendVerificationCode(request));\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java b/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java
+---- a/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java	(revision 3da645b16484d4d29af7bd42fb0a90443960daa7)
+-+++ b/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateVerificationController.java	(date 1762876875837)
+-@@ -1,7 +1,7 @@
+- package com.teamfoundry.backend.account.controller;
+- 
+- import com.teamfoundry.backend.account.dto.GenericResponse;
+--import com.teamfoundry.backend.account.dto.VerificationResendRequest;
+-+import com.teamfoundry.backend.account.dto.register.VerificationResendRequest;
+- import com.teamfoundry.backend.account.service.CandidateRegistrationService;
+- import jakarta.validation.Valid;
+- import lombok.RequiredArgsConstructor;
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
++++ /dev/null	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1" date="1762949675754" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12/11/2025 12:14 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: frontend/src/components/ThemePreview.jsx
+===================================================================
+diff --git a/frontend/src/components/ThemePreview.jsx b/frontend/src/components/ThemePreview.jsx
+deleted file mode 100644
+--- a/frontend/src/components/ThemePreview.jsx	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
++++ /dev/null	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
+@@ -1,120 +0,0 @@
+-const ThemePreview = () => {
+-  return (
+-    <section className="grid gap-6 lg:grid-cols-3">
+-      <div className="card lg:col-span-2 border border-base-200 bg-base-100 shadow-xl">
+-        <div className="card-body gap-6">
+-          <div className="flex flex-wrap items-center gap-3">
+-            <span className="badge badge-secondary badge-lg uppercase tracking-wide">
+-              Operações
+-            </span>
+-            <span className="badge badge-outline">Turno manhã</span>
+-            <span className="badge badge-accent badge-outline">Equipe A</span>
+-          </div>
+-
+-          <h2 className="card-title text-3xl font-semibold text-base-content">
+-            Painel de produtividade
+-          </h2>
+-          <p className="max-w-2xl text-base-content/80">
+-            Visualize indicadores críticos e distribua tarefas com um visual alinhado à
+-            identidade da TeamFoundry.
+-          </p>
+-
+-          <div className="flex flex-wrap gap-3">
+-            <button className="btn btn-primary">Alocar equipe</button>
+-            <button className="btn btn-secondary ">Gerar relatório</button>
+-            <button className="btn btn-outline btn-accent">Ver logs</button>
+-          </div>
+-
+-          <div className="stats stats-vertical gap-4 rounded-box bg-base-200 shadow md:stats-horizontal">
+-            <div className="stat">
+-              <div className="stat-title">SLA atendido</div>
+-              <div className="stat-value text-primary">96%</div>
+-              <div className="stat-desc text-success">+4% esta semana</div>
+-            </div>
+-
+-            <div className="stat">
+-              <div className="stat-title">Escalas abertas</div>
+-              <div className="stat-value text-secondary">18</div>
+-              <div className="stat-desc">5 aguardando aprovação</div>
+-            </div>
+-
+-            <div className="stat">
+-              <div className="stat-title">Feedbacks positivos</div>
+-              <div className="stat-value text-accent">42</div>
+-              <div className="stat-desc text-info">+12 no último turno</div>
+-            </div>
+-          </div>
+-
+-          <div className="grid gap-4 md:grid-cols-2">
+-            <div className="space-y-3 rounded-box border border-base-200 bg-base-100 p-4">
+-              <h3 className="text-lg font-semibold text-base-content">Treinamentos</h3>
+-              <div className="space-y-2">
+-                <div className="flex items-center justify-between text-sm font-medium text-base-content/80">
+-                  <span>Capacitação</span>
+-                  <span>72%</span>
+-                </div>
+-                <progress className="progress progress-primary" value="72" max="100" />
+-              </div>
+-              <div className="space-y-2">
+-                <div className="flex items-center justify-between text-sm font-medium text-base-content/80">
+-                  <span>Integração</span>
+-                  <span>54%</span>
+-                </div>
+-                <progress className="progress progress-secondary" value="54" max="100" />
+-              </div>
+-            </div>
+-
+-            <div className="space-y-3 rounded-box border border-base-200 bg-base-100 p-4">
+-              <h3 className="text-lg font-semibold text-base-content">Resumos rápidos</h3>
+-              <div className="flex flex-wrap gap-2">
+-                <span className="badge badge-primary badge-outline">Horas extras</span>
+-                <span className="badge badge-secondary">Cobertura</span>
+-                <span className="badge badge-accent badge-outline">Qualidade</span>
+-              </div>
+-              <div className="divider my-2" />
+-              <p className="text-sm text-base-content/80">
+-                Use as classes utilitárias do Tailwind combinadas com componentes DaisyUI
+-                para acelerar a construção de dashboards operacionais.
+-              </p>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-
+-      <div className="card border border-base-200 bg-base-100 shadow-xl">
+-        <div className="card-body gap-4">
+-          <h3 className="card-title text-2xl font-semibold text-base-content">Alertas</h3>
+-
+-          <div role="alert" className="alert alert-info">
+-            <span>Nova solicitação de férias pendente.</span>
+-            <button className="btn btn-sm btn-ghost">Revisar</button>
+-          </div>
+-
+-          <div role="alert" className="alert alert-warning">
+-            <span>Equipe B atingiu 80% da capacidade.</span>
+-            <button className="btn btn-sm btn-outline btn-warning">Rebalancear</button>
+-          </div>
+-
+-          <div role="alert" className="alert alert-success">
+-            <span>Meta semanal de produtividade alcançada!</span>
+-          </div>
+-          <div role="alert" className="alert alert-error">
+-            <span>Meta semanal de produtividade alcançada!</span>
+-          </div>
+-
+-          <div className="rounded-box border border-dashed border-base-200 bg-base-100 p-4">
+-            <h4 className="text-base font-semibold text-base-content">Próximos passos</h4>
+-            <ul className="list-disc space-y-1 pl-5 text-sm text-base-content/80">
+-              <li>Adicionar formulários com classes `input` e `textarea`.</li>
+-              <li>Construir dashboards com `tabs` e `table` do DaisyUI.</li>
+-              <li>Configurar modo escuro com variações de tema.</li>
+-            </ul>
+-          </div>
+-        </div>
+-      </div>
+-    </section>
+-  )
+-}
+-
+-export default ThemePreview
+-
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"Verificaçoes Reset Password\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/App.jsx\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/src/App.jsx\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ResetPassword.jsx\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ComposerSettings\">\r\n    <execution />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JavaScript File\" />\r\n        <option value=\"JSX File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"EmplyeeRegister\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;LuisAssis24&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/LuisAssis24/teamfoundry-workforce-management&quot;,\r\n    &quot;accountId&quot;: &quot;744e2a3a-bde5-4768-bf04-afd756c9b8e6&quot;\r\n  }\r\n}</component>\r\n  <component name=\"KubernetesApiPersistence\">{}</component>\r\n  <component name=\"KubernetesApiProvider\">{\r\n  &quot;isMigrated&quot;: true\r\n}</component>\r\n  <component name=\"PhpWorkspaceProjectConfiguration\" interpreter_name=\"PHP\" />\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"34vCubPTpiW0fbRzlf0VXysOloh\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Docker.docker-compose.yml: Compose Deployment.executor\": \"Run\",\r\n    \"Jest.findNameReturnsValueFromRepository.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"junie.onboarding.icon.badge.shown\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs.jest.jest_package\": \"C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"to.speed.mode.migration.done\": \"true\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"DatabaseDriversLRU\": [\r\n      \"postgresql\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"ReactDesignerToolWindowState\">\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.intellij.reactbuddy.reactComponents\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.reactInspector\" value=\"false\" />\r\n        <entry key=\"com.intellij.reactbuddy.storybook\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\login\\UserLogin\" />\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\admin\\SuperAdmin\\Metrics\" />\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\admin\\SuperAdmin\\Staffing\" />\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\admin\\SuperAdmin\\Credentials\\components\" />\r\n      <recent name=\"C:\\Users\\draga\\Ambiente de Trabalho\\Trabalhos Uni\\teamfoundry-workforce-management\\frontend\\src\\pages\\admin\\SuperAdmin\\Credentials\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Docker.docker-compose.yml: Compose Deployment\">\r\n    <configuration name=\"findNameReturnsValueFromRepository\" type=\"JavaScriptTestRunnerJest\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <node-interpreter value=\"project\" />\r\n      <jest-package value=\"$PROJECT_DIR$/frontend/node_modules/jest\" />\r\n      <working-dir value=\"$PROJECT_DIR$/frontend\" />\r\n      <envs />\r\n      <scope-kind value=\"TEST\" />\r\n      <test-file value=\"$PROJECT_DIR$/frontend/src/components/Testes/SampleComponent.test.jsx\" />\r\n      <test-names>\r\n        <test-name value=\"findNameReturnsValueFromRepository\" />\r\n      </test-names>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\">\r\n      <deployment type=\"docker-compose.yml\">\r\n        <settings />\r\n      </deployment>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"docker-compose.yml: Compose Deployment\" type=\"docker-deploy\" factoryName=\"docker-compose.yml\" temporary=\"true\" server-name=\"Docker\">\r\n      <deployment type=\"docker-compose.yml\">\r\n        <settings>\r\n          <option name=\"sourceFilePath\" value=\"docker-compose.yml\" />\r\n        </settings>\r\n      </deployment>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n        <item itemvalue=\"Docker.docker-compose.yml: Compose Deployment\" />\r\n        <item itemvalue=\"Docker.docker-compose.yml: Compose Deployment\" />\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n        <item itemvalue=\"Jest.findNameReturnsValueFromRepository\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"a7dae958-fb9c-447a-93ab-f5d1d5d4e299\" name=\"Changes\" comment=\"\" />\r\n      <created>1762084882236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1762084882236</updated>\r\n      <workItem from=\"1762084883878\" duration=\"21000\" />\r\n      <workItem from=\"1762091469964\" duration=\"76000\" />\r\n      <workItem from=\"1762094001251\" duration=\"2765000\" />\r\n      <workItem from=\"1762246782593\" duration=\"518000\" />\r\n      <workItem from=\"1762251955265\" duration=\"1640000\" />\r\n      <workItem from=\"1762269561409\" duration=\"37000\" />\r\n      <workItem from=\"1762342213231\" duration=\"34000\" />\r\n      <workItem from=\"1762342346529\" duration=\"11000\" />\r\n      <workItem from=\"1762342365107\" duration=\"12000\" />\r\n      <workItem from=\"1762343724969\" duration=\"31000\" />\r\n      <workItem from=\"1762343772875\" duration=\"5000\" />\r\n      <workItem from=\"1762344150441\" duration=\"327000\" />\r\n      <workItem from=\"1762345186853\" duration=\"419000\" />\r\n      <workItem from=\"1762358190210\" duration=\"6393000\" />\r\n      <workItem from=\"1762436874748\" duration=\"230000\" />\r\n      <workItem from=\"1762438641421\" duration=\"5000\" />\r\n      <workItem from=\"1762441766047\" duration=\"281000\" />\r\n      <workItem from=\"1762442119332\" duration=\"49000\" />\r\n      <workItem from=\"1762442232719\" duration=\"101000\" />\r\n      <workItem from=\"1762443631079\" duration=\"16000\" />\r\n      <workItem from=\"1762512585602\" duration=\"531000\" />\r\n      <workItem from=\"1762515533644\" duration=\"32000\" />\r\n      <workItem from=\"1762627382488\" duration=\"2600000\" />\r\n      <workItem from=\"1762702866572\" duration=\"121000\" />\r\n      <workItem from=\"1762704320510\" duration=\"6000\" />\r\n      <workItem from=\"1762704336685\" duration=\"680000\" />\r\n      <workItem from=\"1762809067972\" duration=\"13000\" />\r\n      <workItem from=\"1762948677077\" duration=\"233000\" />\r\n      <workItem from=\"1762949436526\" duration=\"21000\" />\r\n      <workItem from=\"1762949521722\" duration=\"12000\" />\r\n      <workItem from=\"1762949627915\" duration=\"1635000\" />\r\n      <workItem from=\"1762969694442\" duration=\"2838000\" />\r\n      <workItem from=\"1762972598953\" duration=\"721000\" />\r\n      <workItem from=\"1763463924704\" duration=\"5941000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"paleta certa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762094139652</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762094139652</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762342221517</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762342221517</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"small changes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762345285968</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762345285968</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Implement password reset functionality and update email service\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762628616017</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762628616017</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Backend inicia, server email com problemas\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1762704711746</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1762704711746</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"correçao Navbar.jsx\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1763467462690</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1763467462690</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1763471752630</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1763471752630</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"Verificaçoes Reset Password\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1763472392588</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1763472392589</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"9\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"paleta certa\" />\r\n    <MESSAGE value=\"small changes\" />\r\n    <MESSAGE value=\"Implement password reset functionality and update email service\" />\r\n    <MESSAGE value=\"Backend inicia, server email com problemas\" />\r\n    <MESSAGE value=\"correçao Navbar.jsx\" />\r\n    <MESSAGE value=\"Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais\" />\r\n    <MESSAGE value=\"Verificaçoes Reset Password\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Verificaçoes Reset Password\" />\r\n  </component>\r\n  <component name=\"github-copilot-workspace\">\r\n    <instructionFileLocations>\r\n      <option value=\".github/instructions\" />\r\n    </instructionFileLocations>\r\n    <promptFileLocations>\r\n      <option value=\".github/prompts\" />\r\n    </promptFileLocations>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 9f529a98546eedc19e9f05ba063e00db69567454)
++++ b/.idea/workspace.xml	(date 1763555265469)
+@@ -4,14 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Verificaçoes Reset Password">
++    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Comentários Login e Register">
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/controller/AuthController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/security/service/AuthService.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ForgotPassword.jsx" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/ResetPassword.jsx" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/login/UserLogin/UserLogin.jsx" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/frontend/src/components/ThemePreview.jsx" beforeDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -62,33 +60,33 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+-    "Jest.findNameReturnsValueFromRepository.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "main",
+-    "junie.onboarding.icon.badge.shown": "true",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs.jest.jest_package": "C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest",
+-    "nodejs_package_manager_path": "npm",
+-    "to.speed.mode.migration.done": "true",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
++    &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   },
+-  "keyToStringList": {
+-    "DatabaseDriversLRU": [
+-      "postgresql"
++  &quot;keyToStringList&quot;: {
++    &quot;DatabaseDriversLRU&quot;: [
++      &quot;postgresql&quot;
+     ]
+   }
+-}]]></component>
++}</component>
+   <component name="ReactDesignerToolWindowState">
+     <option name="myId2Visible">
+       <map>
+@@ -193,7 +191,10 @@
+       <workItem from="1762949627915" duration="1635000" />
+       <workItem from="1762969694442" duration="2838000" />
+       <workItem from="1762972598953" duration="721000" />
+-      <workItem from="1763463924704" duration="5941000" />
++      <workItem from="1763463924704" duration="6320000" />
++      <workItem from="1763480340076" duration="218000" />
++      <workItem from="1763550194133" duration="345000" />
++      <workItem from="1763554962973" duration="300000" />
+     </task>
+     <task id="LOCAL-00001" summary="paleta certa">
+       <option name="closed" value="true" />
+@@ -259,7 +260,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1763472392589</updated>
+     </task>
+-    <option name="localTasksCounter" value="9" />
++    <task id="LOCAL-00009" summary="Comentários Login e Register">
++      <option name="closed" value="true" />
++      <created>1763473395563</created>
++      <option name="number" value="00009" />
++      <option name="presentableId" value="LOCAL-00009" />
++      <option name="project" value="LOCAL" />
++      <updated>1763473395563</updated>
++    </task>
++    <option name="localTasksCounter" value="10" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -273,7 +282,8 @@
+     <MESSAGE value="correçao Navbar.jsx" />
+     <MESSAGE value="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais" />
+     <MESSAGE value="Verificaçoes Reset Password" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Verificaçoes Reset Password" />
++    <MESSAGE value="Comentários Login e Register" />
++    <option name="LAST_COMMIT_MESSAGE" value="Comentários Login e Register" />
+   </component>
+   <component name="github-copilot-workspace">
+     <instructionFileLocations>

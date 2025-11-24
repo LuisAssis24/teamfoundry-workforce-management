@@ -3,7 +3,8 @@ import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
 import ProfileHeader from "./components/ProfileHeader.jsx";
-import { fetchCandidateProfile, updateCandidateProfile } from "../../../../api/candidateProfile.js";
+import { updateCandidateProfile } from "../../../../api/candidateProfile.js";
+import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const genderOptions = [
   { value: "MALE", label: "Masculino" },
@@ -21,7 +22,8 @@ export default function PersonalDetails() {
     nif: "",
     phone: "",
   });
-  const [displayName, setDisplayName] = useState("Nome Sobrenome");
+  const { profile, refreshProfile, personalData, setPersonalData } = useEmployeeProfile();
+  const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -31,20 +33,22 @@ export default function PersonalDetails() {
 
   useEffect(() => {
     let isMounted = true;
-    async function loadProfile() {
+    // Prefere cache do contexto; só chama refreshProfile se ainda não houver dados guardados.
+    async function syncProfile() {
       try {
-        const data = await fetchCandidateProfile();
-        if (!isMounted) return;
+        const source = personalData || profile || (await refreshProfile());
+        if (!isMounted || !source) return;
         setFormData({
-          firstName: data?.firstName ?? "",
-          lastName: data?.lastName ?? "",
-          birthDate: data?.birthDate ?? "",
-          gender: data?.gender ?? "",
-          nationality: data?.nationality ?? "",
-          nif: data?.nif?.toString() ?? "",
-          phone: data?.phone ?? "",
+          firstName: source?.firstName ?? "",
+          lastName: source?.lastName ?? "",
+          birthDate: source?.birthDate ?? "",
+          gender: source?.gender ?? "",
+          nationality: source?.nationality ?? "",
+          nif: source?.nif?.toString() ?? "",
+          phone: source?.phone ?? "",
         });
-        setDisplayName(formatName(data?.firstName, data?.lastName));
+        setDisplayName(formatName(source?.firstName, source?.lastName));
+        if (!personalData) setPersonalData(source);
       } catch (err) {
         if (isMounted) {
           setError(err.message || "Não foi possível carregar o perfil.");
@@ -54,11 +58,11 @@ export default function PersonalDetails() {
       }
     }
 
-    loadProfile();
+    syncProfile();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [profile, refreshProfile]);
 
   const handleChange = (field) => (event) => {
     const { value } = event.target;
@@ -68,6 +72,7 @@ export default function PersonalDetails() {
   };
 
   const handleSubmit = async (event) => {
+    // Persiste alterações e atualiza o cache no contexto para evitar flicker entre tabs.
     event.preventDefault();
     setSaving(true);
     setFeedback("");
@@ -80,6 +85,8 @@ export default function PersonalDetails() {
       const response = await updateCandidateProfile(payload);
       setFeedback("Dados atualizados com sucesso!");
       setDisplayName(formatName(response?.firstName, response?.lastName));
+      setPersonalData(response);
+      refreshProfile();
     } catch (err) {
       setError(err.message || "Não foi possível guardar as alterações.");
     } finally {

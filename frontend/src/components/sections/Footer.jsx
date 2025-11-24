@@ -1,4 +1,4 @@
-import logo from "../../assets/images/logo/teamFoundry_LogoPrimary.png";
+import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
 
 export default function Footer() {
   return (

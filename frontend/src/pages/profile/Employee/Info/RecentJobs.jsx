@@ -2,21 +2,24 @@ import { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
 import { listCandidateJobs } from "../../../../api/candidateJobs.js";
-import { fetchCandidateProfile } from "../../../../api/candidateProfile.js";
+import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 export default function RecentJobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [displayName, setDisplayName] = useState("Nome Sobrenome");
+  const { profile, refreshProfile, jobsData, setJobsData } = useEmployeeProfile();
+  const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
     let isMounted = true;
+    // Reutiliza cache de jobs; só chama API se ainda não houver dados.
     async function loadJobs() {
       try {
-        const data = await listCandidateJobs({ status: "COMPLETED", page: 0, size: 10 });
+        const data = jobsData || (await listCandidateJobs({ status: "COMPLETED", page: 0, size: 10 }));
         if (!isMounted) return;
         setJobs(data?.content ?? []);
+        if (!jobsData) setJobsData(data);
       } catch (err) {
         if (isMounted) setError(err.message || "Nuo foi poss??vel carregar os gltimos trabalhos.");
       } finally {
@@ -24,21 +27,22 @@ export default function RecentJobs() {
       }
     }
 
-    async function loadProfileName() {
-      try {
-        const profile = await fetchCandidateProfile();
-        if (!isMounted) return;
-        setDisplayName(formatName(profile?.firstName, profile?.lastName));
-      } catch {
-      }
-    }
-
     loadJobs();
-    loadProfileName();
+    if (!profile) {
+      refreshProfile().then((data) => {
+        if (isMounted && data) {
+          setDisplayName(formatName(data.firstName, data.lastName));
+        }
+      });
+    } else {
+      setDisplayName(formatName(profile.firstName, profile.lastName));
+    }
     return () => {
       isMounted = false;
     };
-  }, []);  return (
+  }, [profile, refreshProfile, jobsData, setJobsData]);
+
+  return (
     <section>
       <ProfileHeader name={displayName} />
       <ProfileTabs />

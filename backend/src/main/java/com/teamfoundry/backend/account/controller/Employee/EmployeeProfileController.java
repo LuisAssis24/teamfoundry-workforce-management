@@ -20,11 +20,17 @@ public class EmployeeProfileController {
 
     private final CandidateProfileService candidateProfileService;
 
+    /**
+     * Devolve os dados básicos do perfil do colaborador autenticado.
+     */
     @GetMapping
     public EmployeeProfileResponse getProfile(Authentication authentication) {
         return candidateProfileService.getProfile(resolveEmail(authentication));
     }
 
+    /**
+     * Atualiza os campos do perfil (nome, género, contactos) do colaborador autenticado.
+     */
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmployeeProfileResponse updateProfile(
             @Valid @RequestBody EmployeeProfileUpdateRequest request,

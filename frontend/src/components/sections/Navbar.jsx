@@ -14,10 +14,11 @@ const PUBLIC_ACTIONS = [{ to: "/login", label: "Entrar", variant: "secondary" }]
 
 export default function Navbar({
   variant = "private",
-  homePath = "/candidato",
+  homePath = "/",
   links = NAV_LINKS,
   actions = PUBLIC_ACTIONS,
   onLogout,
+  mobileMenuButton = null,
 }) {
   const isPublic = variant === "public";
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -51,16 +52,19 @@ export default function Navbar({
   return (
     <header className={wrapperClasses}>
       <div className="max-w-6xl mx-auto px-4 lg:px-6 py-3 flex items-center justify-between gap-6">
-        <Link to={homePath} className="flex items-center gap-3 shrink-0 group">
-          <img
-            src={logo}
-            alt="TeamFoundry"
-            className={`object-contain ${isPublic ? "h-12 w-12" : "h-10 w-10"}`}
-          />
-          <span className="font-semibold font-semibold tracking-[0.2em] uppercase text-primary-content">
-            TeamFoundry
-          </span>
-        </Link>
+        <div className="flex items-center gap-3 shrink-0 group">
+          {mobileMenuButton && <div className="md:hidden">{mobileMenuButton}</div>}
+          <Link to={homePath} className="hidden md:flex items-center gap-3">
+            <img
+              src={logo}
+              alt="TeamFoundry"
+              className={`object-contain ${isPublic ? "h-12 w-12" : "h-10 w-10"}`}
+            />
+            <span className="font-semibold tracking-[0.2em] uppercase text-primary-content">
+              TeamFoundry
+            </span>
+          </Link>
+        </div>
 
         {(!isPublic && navItems.length > 0) && (
           <nav className="hidden md:flex flex-1 justify-center">
@@ -95,7 +99,7 @@ export default function Navbar({
                 to={to}
                 label={label}
                 variant={variant}
-                className="w-auto btn-md px-6 text-white min-w-[10rem]"
+                className="w-auto btn-md px-6 text-white max-w-[10rem]"
               />
             ))}
           </div>
@@ -103,7 +107,7 @@ export default function Navbar({
           <div className="relative" ref={profileRef}>
             <button
               type="button"
-              className="btn btn-ghost btn-circle h-12 w-12 text-3xl text-primary-content"
+              className="btn btn-ghost btn-circle h-12 w-12 text-3xl text-primary-content hover:bg-transparent active:bg-transparent focus:bg-transparent"
               onClick={() => setIsProfileOpen((o) => !o)}
               aria-haspopup="true"
               aria-expanded={isProfileOpen}
@@ -113,14 +117,52 @@ export default function Navbar({
             </button>
 
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-xl border border-base-300 bg-base-100 text-base-content shadow-lg z-50">
-                <button
-                  type="button"
-                  className="w-full text-left px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150"
-                  onClick={onLogout}
-                >
-                  Fazer logout
-                </button>
+              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-base-300 bg-base-100 text-base-content shadow-lg z-50">
+                <nav>
+                  <Link
+                    to="/candidato/dados-pessoais"
+                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition rounded-t-xl"
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <i className="bi bi-person" aria-hidden="true" />
+                    <span>Perfil</span>
+                  </Link>
+                  <Link
+                    to="/candidato/ofertas"
+                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <i className="bi bi-bell" aria-hidden="true" />
+                    <span>Ofertas</span>
+                  </Link>
+                  <Link
+                    to="/candidato/documentos"
+                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <i className="bi bi-file-earmark-text" aria-hidden="true" />
+                    <span>Documentos</span>
+                  </Link>
+                  <Link
+                    to="/candidato/proximos-passos"
+                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <i className="bi bi-flag" aria-hidden="true" />
+                    <span>Próximos passos</span>
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150 border-t border-base-200 cursor-pointer rounded-b-xl"
+                    onClick={() => {
+                      setIsProfileOpen(false);
+                      onLogout?.();
+                    }}
+                  >
+                    <i className="bi bi-box-arrow-right" aria-hidden="true" />
+                    <span>Terminar sessão</span>
+                  </button>
+                </nav>
               </div>
             )}
           </div>
@@ -157,4 +199,5 @@ Navbar.propTypes = {
     })
   ),
   onLogout: PropTypes.func,
+  mobileMenuButton: PropTypes.node,
 };

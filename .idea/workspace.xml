@@ -4,22 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Comentários Login e Register">
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Ajustes Layout">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273/storage_v2/_src_/database/teamfoundry_db.UWXKRg/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273/storage_v2/_src_/database/teamfoundry_db.UWXKRg/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_12_11_2025_19_25_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_12_11_2025_19_25__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_12_14__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_17_49_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2025_17_49__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/TeamRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ThemePreview.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeeProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeeProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateProfileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/sections/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/sections/Footer.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/sections/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/sections/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/home/HomeNoLogin/HomeNoLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/home/HomeNoLogin/HomeNoLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/MultiSelect/MultiSelectDropdown.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/contexts/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeProfileContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/home/HomeAuthenticated/HomeAuthenticated.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/home/HomeAuthenticated/HomeAuthenticated.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeLayout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeSidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Education.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Education.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileHeader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileTabs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileTabs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/JobAlerts/AlertasEmprego.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,33 +77,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.findNameReturnsValueFromRepository.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.docker-compose.yml.teamfoundry_postgres: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Jest.findNameReturnsValueFromRepository.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/draga/Ambiente de Trabalho/Trabalhos Uni/teamfoundry-workforce-management",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/Users/joaog/Desktop/TeamFoundry/teamfoundry-workforce-management/frontend/node_modules/jest",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -108,14 +116,14 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\profile\Employee" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\login\UserLogin" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Metrics" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Staffing" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Credentials\components" />
-      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\admin\SuperAdmin\Credentials" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
+  <component name="RunManager" selected="Docker.docker-compose.yml.teamfoundry_postgres: Compose Deployment">
     <configuration name="findNameReturnsValueFromRepository" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <jest-package value="$PROJECT_DIR$/frontend/node_modules/jest" />
@@ -142,12 +150,25 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="docker-compose.yml.teamfoundry_postgres: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="teamfoundry_postgres" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.teamfoundry_postgres: Compose Deployment" />
         <item itemvalue="Jest.findNameReturnsValueFromRepository" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
-        <item itemvalue="Jest.findNameReturnsValueFromRepository" />
         <item itemvalue="Jest.findNameReturnsValueFromRepository" />
       </list>
     </recent_temporary>
@@ -210,7 +231,7 @@
       <workItem from="1763588064716" duration="321000" />
       <workItem from="1763590834566" duration="38000" />
       <workItem from="1763902860713" duration="34000" />
-      <workItem from="1763904317542" duration="3778000" />
+      <workItem from="1763904317542" duration="13915000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -284,11 +305,49 @@
       <option name="project" value="LOCAL" />
       <updated>1763473395563</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Ajustes Layout">
+      <option name="closed" value="true" />
+      <created>1763916689947</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1763916689947</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="107" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="81" />
+                  <entry key="Table.GitHub.CommitStatus.ColumnIdWidth" value="81" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="paleta certa" />
@@ -299,7 +358,8 @@
     <MESSAGE value="Login e Register feitos&#10;Faltam logins por email e linkedin&#10;Aguarda testes estruturais" />
     <MESSAGE value="Verificaçoes Reset Password" />
     <MESSAGE value="Comentários Login e Register" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comentários Login e Register" />
+    <MESSAGE value="Ajustes Layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajustes Layout" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/sections/Navbar.jsx";
 import Footer from "../../../components/sections/Footer.jsx";
-import { useAuth } from "../../../contexts/AuthContext.jsx";
+import { useAuthContext } from "../../../auth/AuthContext.jsx";
+import { useEmployeeProfile } from "../../profile/Employee/EmployeeProfileContext.jsx";
 import { fetchAppHomePublic } from "../../../api/siteManagement.js";
 
 const FALLBACK_METRICS = [
@@ -23,7 +24,8 @@ const FALLBACK_WEEKLY_TIP = {
 };
 
 export default function HomeAuthenticated() {
-  const { profile, loadingProfile, refreshProfile, logout } = useAuth();
+  const { profile, loadingProfile, refreshProfile } = useEmployeeProfile();
+  const { logout } = useAuthContext();
   const [homeContent, setHomeContent] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState(null);

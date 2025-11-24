@@ -20,7 +20,7 @@ import PersonalDetails from "./pages/profile/Employee/Info/PersonalDetails.jsx";
 import Education from "./pages/profile/Employee/Info/Education.jsx";
 import RecentJobs from "./pages/profile/Employee/Info/RecentJobs.jsx";
 import Preferences from "./pages/profile/Employee/Info/Preferences.jsx";
-import AlertasEmprego from "./pages/profile/Employee/JobAlerts/AlertasEmprego.jsx";
+import OfertasEmprego from "./pages/profile/Employee/JobOffers/OfertasEmprego.jsx";
 import Documentos from "./pages/profile/Employee/Documents/Documentos.jsx";
 import ProximosPassos from "./pages/profile/Employee/NextSteps/ProximosPassos.jsx";
 
@@ -79,7 +79,7 @@ function App() {
         <Route path="formacao" element={<Education />} />
         <Route path="ultimos-trabalhos" element={<RecentJobs />} />
         <Route path="preferencias" element={<Preferences />} />
-        <Route path="alertas" element={<AlertasEmprego />} />
+        <Route path="ofertas" element={<OfertasEmprego />} />
         <Route path="documentos" element={<Documentos />} />
         <Route path="proximos-passos" element={<ProximosPassos />} />
       </Route>

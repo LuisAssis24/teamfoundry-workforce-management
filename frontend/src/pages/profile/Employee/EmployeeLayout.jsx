@@ -1,18 +1,66 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "../../../components/sections/Navbar.jsx";
 import EmployeeSidebar from "./EmployeeSidebar.jsx";
+import { useAuthContext } from "../../../auth/AuthContext.jsx";
 
 export default function EmployeeLayout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [animatingOut, setAnimatingOut] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuthContext();
+
+  const closeMobileMenu = () => {
+    if (!mobileMenuOpen) return;
+    setAnimatingOut(true);
+    setTimeout(() => {
+      setMobileMenuOpen(false);
+      setAnimatingOut(false);
+    }, 150);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-base-100 text-base-content">
-      <Navbar />
+      <Navbar
+        onLogout={handleLogout}
+        mobileMenuButton={
+          <button
+            type="button"
+            className="btn btn-ghost btn-circle text-primary-content"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <i className="bi bi-list text-2xl" aria-hidden="true" />
+            <span className="sr-only">Abrir menu</span>
+          </button>
+        }
+      />
 
-      <div className="max-w-6xl mx-auto px-1 md:px-2 py-6 flex gap-6">
+      <div className="max-w-6xl mx-auto px-2 md:px-2 py-6 flex gap-6">
         <EmployeeSidebar />
         <main className="flex-1">
           <Outlet />
         </main>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={closeMobileMenu}
+            aria-hidden="true"
+          />
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[80%]">
+            <div className="h-full translate-x-0 transform transition-transform duration-200 ease-out">
+              <EmployeeSidebar isMobile animateOut={animatingOut} onNavigate={closeMobileMenu} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -21,4 +69,3 @@ export default function EmployeeLayout() {
 export function CandidateIndexRedirect() {
   return <Navigate to="dados-pessoais" replace />;
 }
-

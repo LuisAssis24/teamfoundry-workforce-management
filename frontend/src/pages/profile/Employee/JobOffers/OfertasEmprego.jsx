@@ -1,14 +1,14 @@
 import { useState } from "react";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
 
-export default function AlertasEmprego() {
+export default function OfertasEmprego() {
   const [open, setOpen] = useState(false);
 
   return (
     <section className="w-full">
       <div className="flex items-center gap-4 mb-6">
         <i className="bi bi-bell-fill text-4xl text-primary" aria-hidden="true" />
-        <h2 className="text-3xl font-semibold">Alerta de Emprego</h2>
+        <h2 className="text-3xl font-semibold">Ofertas de Trabalho</h2>
       </div>
 
       <div className="rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">

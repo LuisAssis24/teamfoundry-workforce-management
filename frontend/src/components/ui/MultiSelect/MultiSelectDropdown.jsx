@@ -14,6 +14,7 @@ export default function MultiSelectDropdown({
   onChange,
   placeholder = "Selecione uma ou mais opções",
   disabled = false,
+  maxVisibleChips = MAX_VISIBLE_CHIPS,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -24,16 +25,16 @@ export default function MultiSelectDropdown({
     typeof option === "string" ? { label: option, value: option } : option,
   );
 
-  const shouldCollapse = hasOverflowed || selectedOptions.length > MAX_VISIBLE_CHIPS;
+  const shouldCollapse = hasOverflowed || selectedOptions.length > maxVisibleChips;
 
   const { visibleChips, hiddenChips } = useMemo(() => {
     if (!shouldCollapse) {
       return { visibleChips: selectedOptions, hiddenChips: [] };
     }
-    const visible = selectedOptions.slice(0, MAX_VISIBLE_CHIPS);
-    const hidden = selectedOptions.slice(MAX_VISIBLE_CHIPS);
+    const visible = selectedOptions.slice(0, maxVisibleChips);
+    const hidden = selectedOptions.slice(maxVisibleChips);
     return { visibleChips: visible, hiddenChips: hidden };
-  }, [selectedOptions, shouldCollapse]);
+  }, [selectedOptions, shouldCollapse, maxVisibleChips]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -115,7 +116,7 @@ export default function MultiSelectDropdown({
         <div
           role="button"
           tabIndex={0}
-          className={`input input-bordered w-full flex items-center justify-between gap-2 ${disabled ? "opacity-60 cursor-not-allowed" : ""} ${
+          className={`input input-bordered w-full px-2 flex items-center justify-between gap-2 ${disabled ? "opacity-60 cursor-not-allowed" : ""} ${
             selectedOptions.length === 0 ? "text-base-content/70" : ""
           }`}
           onClick={() => !disabled && setIsOpen((prev) => !prev)}
@@ -128,12 +129,16 @@ export default function MultiSelectDropdown({
           >
             {selectedOptions.length === 0 && <span>{placeholder}</span>}
             {visibleChips.map((value) => (
-              <span key={value} className="badge badge-primary gap-1" title={value}>
+              <span
+                key={value}
+                className="badge badge-primary gap-1 rounded-md px-2 py-3 text-sm"
+                title={value}
+              >
                 {value}
                 <button
                   type="button"
                   aria-label={`Remover ${value}`}
-                  className="btn btn-ghost btn-xs"
+                  className="ml-1 h-5 w-5 flex items-center justify-center rounded-sm bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent cursor-pointer"
                   onClick={(event) => {
                     event.stopPropagation();
                     removeOption(value);
@@ -199,4 +204,5 @@ MultiSelectDropdown.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
+  maxVisibleChips: PropTypes.number,
 };

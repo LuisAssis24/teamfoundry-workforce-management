@@ -16,12 +16,18 @@ public class CandidateProfileService {
 
     private final EmployeeAccountRepository employeeAccountRepository;
 
+    /**
+     * Lê o perfil do colaborador autenticado.
+     */
     @Transactional(readOnly = true)
     public EmployeeProfileResponse getProfile(String email) {
         EmployeeAccount account = findByEmailOrThrow(email);
         return toResponse(account);
     }
 
+    /**
+     * Atualiza campos básicos do perfil e devolve a versão persistida.
+     */
     @Transactional
     public EmployeeProfileResponse updateProfile(String email, EmployeeProfileUpdateRequest request) {
         EmployeeAccount account = findByEmailOrThrow(email);
