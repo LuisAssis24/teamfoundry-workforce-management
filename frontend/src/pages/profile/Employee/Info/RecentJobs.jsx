@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
-import { listCandidateJobs } from "../../../../api/candidateJobs.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 export default function RecentJobs() {
@@ -13,21 +12,10 @@ export default function RecentJobs() {
 
   useEffect(() => {
     let isMounted = true;
-    // Reutiliza cache de jobs; só chama API se ainda não houver dados.
-    async function loadJobs() {
-      try {
-        const data = jobsData || (await listCandidateJobs({ status: "COMPLETED", page: 0, size: 10 }));
-        if (!isMounted) return;
-        setJobs(data?.content ?? []);
-        if (!jobsData) setJobsData(data);
-      } catch (err) {
-        if (isMounted) setError(err.message || "Nuo foi poss??vel carregar os gltimos trabalhos.");
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
-
-    loadJobs();
+    // Nesta versão, reutilizamos apenas os dados já carregados no contexto (sem chamadas adicionais).
+    const data = jobsData ?? { content: [] };
+    setJobs(data.content ?? []);
+    setLoading(false);
     if (!profile) {
       refreshProfile().then((data) => {
         if (isMounted && data) {

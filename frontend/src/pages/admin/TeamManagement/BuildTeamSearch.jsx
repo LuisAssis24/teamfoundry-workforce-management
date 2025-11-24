@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import SuperAdminNavbar from "../SuperAdmin/SuperAdminNavbar.jsx";
-import CandidateCard from "./CandidateCard.jsx";
+import EmployeeCard from "./EmployeeCard.jsx";
 
 const GEO_OPTIONS = ["Opcao 1", "Opcao 2"];
 const SKILL_OPTIONS = ["Opcao 1", "Opcao 2"];
 const OFFER_FILTER = "Ofertas Ativas: 5 ou Menos";
 
-const CANDIDATES = [
+const EMPLOYEES = [
   { id: 1, name: "Ceblerson", role: "Tubista", city: "Aveiro", preference: "Portugal" },
   { id: 2, name: "Anabela Duarte", role: "Soldador", city: "Lisboa", preference: "Portugal" },
   { id: 3, name: "Luiz Miguel", role: "Tornerio", city: "Porto", preference: "Espanha" },
@@ -113,8 +113,8 @@ function CandidatesPanel() {
   return (
     <section className="flex-1 rounded-2xl border border-[#111827]/20 bg-white p-4 shadow-inner">
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {CANDIDATES.map((candidate) => (
-          <CandidateCard key={candidate.id} {...candidate} />
+        {EMPLOYEES.map((employee) => (
+          <EmployeeCard key={employee.id} {...employee} />
         ))}
       </div>
     </section>

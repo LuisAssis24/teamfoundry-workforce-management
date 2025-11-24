@@ -3,7 +3,7 @@ import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
 import ProfileHeader from "./components/ProfileHeader.jsx";
-import { updateCandidateProfile } from "../../../../api/candidateProfile.js";
+import { updateEmployeeProfile } from "../../../../api/profile/employeeProfile.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const genderOptions = [
@@ -82,7 +82,7 @@ export default function PersonalDetails() {
         ...formData,
         nif: formData.nif ? Number(formData.nif) : null,
       };
-      const response = await updateCandidateProfile(payload);
+      const response = await updateEmployeeProfile(payload);
       setFeedback("Dados atualizados com sucesso!");
       setDisplayName(formatName(response?.firstName, response?.lastName));
       setPersonalData(response);

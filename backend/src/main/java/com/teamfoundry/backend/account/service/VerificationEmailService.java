@@ -1,6 +1,6 @@
 package com.teamfoundry.backend.account.service;
 
-import com.teamfoundry.backend.account.service.exception.CandidateRegistrationException;
+import com.teamfoundry.backend.account.service.exception.EmployeeRegistrationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +51,7 @@ public class VerificationEmailService {
             log.info("Email de verificação enviado para {}", destination);
         } catch (MailException ex) {
             log.error("Falha ao enviar email de verificação para {}", destination, ex);
-            throw new CandidateRegistrationException(
+            throw new EmployeeRegistrationException(
                     "Não foi possível enviar o e-mail de verificação. Tente novamente mais tarde.",
                     HttpStatus.SERVICE_UNAVAILABLE
             );

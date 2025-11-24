@@ -53,9 +53,9 @@ app:
     portuguese-sources: ${NEWSAPI_PORTUGUESE_SOURCES:publico,observador,jn}
     language: ${NEWSAPI_LANGUAGE:pt}
     query: ${NEWSAPI_QUERY:Portugal}
-  candidate:
+  employee:
     certificates-upload-dir: ${APP_CERTIFICATES_UPLOAD_DIR:uploads/certificates}
-    payslips-upload-dir: ${APP_PAYSLIPS_UPLOAD_DIR:uploads/payslips}
+
   registration:
     cv-upload-dir: uploads/cv
     verification:
