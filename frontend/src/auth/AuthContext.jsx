@@ -18,6 +18,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     refreshAuth();
+    const handler = () => refreshAuth();
+    window.addEventListener("auth-change", handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener("auth-change", handler);
+      window.removeEventListener("storage", handler);
+    };
   }, [refreshAuth]);
 
   const value = useMemo(

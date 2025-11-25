@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { fetchEmployeeProfile } from "../../../api/profile/employeeProfile.js";
 import { useAuthContext } from "../../../auth/AuthContext.jsx";
 
+// Contexto central do perfil de colaborador (dados base + caches de tabs).
 const EmployeeProfileContext = createContext(null);
 
 export function EmployeeProfileProvider({ children }) {
@@ -17,7 +18,7 @@ export function EmployeeProfileProvider({ children }) {
   const { isAuthenticated } = useAuthContext();
 
   const refreshProfile = useCallback(async () => {
-    // Recarrega o perfil do candidato se existir sessão. Caso contrário, limpa o cache.
+    // Recarrega o perfil se existir sessão; caso contrário, limpa qualquer cache.
     if (!isAuthenticated) {
       setProfile(null);
       return null;
@@ -77,6 +78,7 @@ EmployeeProfileProvider.propTypes = {
 };
 
 export function useEmployeeProfile() {
+  // Hook de conveniência para aceder ao contexto já validado.
   const ctx = useContext(EmployeeProfileContext);
   if (!ctx) {
     throw new Error("useEmployeeProfile deve ser usado dentro de EmployeeProfileProvider");

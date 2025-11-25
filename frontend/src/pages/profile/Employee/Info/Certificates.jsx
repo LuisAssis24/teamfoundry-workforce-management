@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import ProfileHeader from "./components/ProfileHeader.jsx";
-import ProfileTabs from "./components/ProfileTabs.jsx";
+import InfoLayout from "./components/InfoLayout.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
+import CertificateCard from "./components/CertificateCard.jsx";
 import {
-  createEmployeeEducation,
-  listEmployeeEducation,
-} from "../../../../api/profile/employeeEducation.js";
+  createEmployeeCertification,
+  listEmployeeCertifications,
+  updateEmployeeCertification,
+  deleteEmployeeCertification,
+} from "../../../../api/profile/employeeCertifications.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
+import { formatName } from "../utils/profileUtils.js";
 
 const initialForm = {
   name: "",
@@ -19,10 +22,12 @@ const initialForm = {
   file: null,
 };
 
-export default function Education() {
+export default function Certificates() {
   const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  const [deleting, setDeleting] = useState(false);
   const [educations, setEducations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -36,7 +41,7 @@ export default function Education() {
     let isMounted = true;
     async function loadEducation() {
       try {
-        const data = educationData || (await listEmployeeEducation());
+        const data = educationData || (await listEmployeeCertifications());
         if (!isMounted) return;
         setEducations(Array.isArray(data) ? data : []);
         if (!educationData) setEducationData(data);
@@ -67,12 +72,14 @@ export default function Education() {
   }, []);
 
   const handleChange = (event) => {
+    // Atualiza campo simples e limpa erro daquele campo.
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleFileSelect = (event) => {
+    // Guarda o ficheiro escolhido pelo utilizador.
     const file = event.target.files?.[0] || null;
     setForm((prev) => ({ ...prev, file }));
   };
@@ -88,6 +95,7 @@ export default function Education() {
   const prevent = (event) => event.preventDefault();
 
   const validateForm = () => {
+    // Validação mínima antes do upload.
     const newErrors = {};
     if (!form.name.trim()) newErrors.name = "O nome da formação é obrigatório.";
     if (!form.institution.trim()) newErrors.institution = "A instituição é obrigatória.";
@@ -97,6 +105,7 @@ export default function Education() {
   };
 
   const handleSubmit = async () => {
+    // Envia a formação com certificado; em sucesso fecha modal e atualiza lista local.
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -109,9 +118,15 @@ export default function Education() {
 
     try {
       const payload = await buildPayload(form);
-      const created = await createEmployeeEducation(payload);
-      setEducations((prev) => [created, ...prev]);
-      setSuccessMessage("Formação adicionada com sucesso.");
+      if (editingId) {
+        const updated = await updateEmployeeCertification(editingId, payload);
+        setEducations((prev) => prev.map((e) => (e.id === editingId ? updated : e)));
+        setSuccessMessage("Certificação atualizada com sucesso.");
+      } else {
+        const created = await createEmployeeCertification(payload);
+        setEducations((prev) => [created, ...prev]);
+        setSuccessMessage("Certificação adicionada com sucesso.");
+      }
       closeModal();
     } catch (error) {
       setErrorMessage(error.message || "Não foi possível guardar a formação.");
@@ -120,8 +135,38 @@ export default function Education() {
     }
   };
 
+  const handleEdit = (education) => {
+    setEditingId(education.id);
+    setForm({
+      name: education.name || "",
+      institution: education.institution || "",
+      location: education.location || "",
+      completionDate: education.completionDate || "",
+      description: education.description || "",
+      file: null,
+    });
+    setOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!editingId) return;
+    setDeleting(true);
+    setErrorMessage("");
+    try {
+      await deleteEmployeeCertification(editingId);
+      setEducations((prev) => prev.filter((e) => e.id !== editingId));
+      setSuccessMessage("Certificação removida com sucesso.");
+      closeModal();
+    } catch (err) {
+      setErrorMessage(err.message || "Não foi possível remover a certificação.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const closeModal = () => {
     setOpen(false);
+    setEditingId(null);
     setForm(initialForm);
     setErrors({});
     if (fileInputRef.current) {
@@ -133,6 +178,7 @@ export default function Education() {
     setSuccessMessage("");
     setErrorMessage("");
     setForm(initialForm);
+    setEditingId(null);
     setErrors({});
     setOpen(true);
     if (fileInputRef.current) {
@@ -141,10 +187,7 @@ export default function Education() {
   };
 
   return (
-    <section>
-      <ProfileHeader name={displayName} />
-      <ProfileTabs />
-
+    <InfoLayout name={displayName}>
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">
         <div className="p-4 md:p-6 space-y-4">
           {errorMessage && (
@@ -158,6 +201,10 @@ export default function Education() {
             </div>
           )}
 
+          <div className="flex justify-end">
+            <Button label="Adicionar Certificação" onClick={openModal} />
+          </div>
+
           {loading ? (
             <SkeletonList />
           ) : educations.length === 0 ? (
@@ -165,37 +212,42 @@ export default function Education() {
           ) : (
             <div className="space-y-4 max-w-3xl mx-auto">
               {educations.map((education) => (
-                <EducationCard key={education.id} education={education} />
+                <CertificateCard key={education.id} education={education} onEdit={handleEdit} />
               ))}
             </div>
           )}
-
-          <div className="mt-6 flex justify-center">
-            <div className="w-56">
-              <Button label="Adicionar Formação" onClick={openModal} />
-            </div>
-          </div>
         </div>
       </div>
 
       <Modal
         open={open}
         onClose={closeModal}
-        title="Nova Formação"
+        title="Nova Certificação"
+        className="max-w-3xl max-h-[90vh] overflow-y-auto"
         actions={
           <>
-            <button type="button" className="btn btn-neutral" onClick={closeModal} disabled={saving}>
+            {editingId && (
+              <button
+                type="button"
+                className="btn btn-error btn-outline"
+                onClick={handleDelete}
+                disabled={saving || deleting}
+              >
+                {deleting ? "A eliminar..." : "Eliminar"}
+              </button>
+            )}
+            <button type="button" className="btn btn-neutral" onClick={closeModal} disabled={saving || deleting}>
               Cancelar
             </button>
-            <button type="button" className="btn btn-primary" onClick={handleSubmit} disabled={saving}>
-              {saving ? "A guardar..." : "Adicionar"}
+            <button type="button" className="btn btn-primary" onClick={handleSubmit} disabled={saving || deleting}>
+              {saving ? "A guardar..." : editingId ? "Atualizar" : "Adicionar"}
             </button>
           </>
         }
       >
         <div className="space-y-4">
           <InputField
-            label="Nome da Formação"
+            label="Nome da Certificação"
             name="name"
             placeholder="Ex.: Ensino Secundário"
             value={form.name}
@@ -265,36 +317,7 @@ export default function Education() {
           </div>
         </div>
       </Modal>
-    </section>
-  );
-}
-
-function EducationCard({ education }) {
-  const { name, institution, location, completionDate, description } = education;
-  return (
-    <div className="rounded-xl border border-base-300 bg-base-100 shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-md bg-base-200 flex items-center justify-center">
-            <i className="bi bi-mortarboard" aria-hidden="true" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-semibold">{name}</span>
-            <span className="text-sm text-base-content/70">
-              Instituição: {institution}
-              {location ? ` · ${location}` : ""}
-            </span>
-          </div>
-        </div>
-        <span className="px-3 py-1 rounded-full bg-primary text-primary-content text-xs">
-          Certificado
-        </span>
-      </div>
-      <div className="border-t border-base-300 px-4 py-3 flex flex-col gap-1 text-sm">
-        <span className="text-base-content/80">Concluído em: {formatDate(completionDate)}</span>
-        {description && <span className="text-base-content/80">{description}</span>}
-      </div>
-    </div>
+    </InfoLayout>
   );
 }
 
@@ -311,17 +334,11 @@ function SkeletonList() {
 function EmptyState() {
   return (
     <div className="text-center text-base-content/70 py-12 border border-dashed border-base-300 rounded-xl">
-      Ainda não adicionou formações. Clique em “Adicionar Formação” para registar a primeira.
+      Ainda não adicionou certificações. Clique em “Adicionar Certificação” para registar a primeira.
     </div>
   );
 }
 
-function formatName(firstName, lastName) {
-  const trimmedFirst = firstName?.trim();
-  const trimmedLast = lastName?.trim();
-  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
-  return full || "Nome Sobrenome";
-}
 async function buildPayload(form) {
   const certificateFile = form.file ? await fileToBase64(form.file) : null;
   return {
@@ -342,15 +359,6 @@ function fileToBase64(file) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-}
-
-function formatDate(date) {
-  if (!date) return "-";
-  try {
-    return new Date(date).toLocaleDateString("pt-PT");
-  } catch {
-    return date;
-  }
 }
 
 

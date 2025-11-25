@@ -4,37 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Refactors e mais refactors">
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Seeders e Historico de Trabalho Perfil">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/CandidateCertificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/EmployeeCertificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeePreferencesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/employee/EmployeePreferencesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeeProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/employee/EmployeeProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeeRegistrationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/employee/EmployeeRegistrationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/Employee/EmployeeVerificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/controller/employee/EmployeeVerificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateCertificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/EmployeeCertificationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidatePreferencesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/EmployeePreferencesService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/EmployeeProfileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CandidateRegistrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/EmployeeRegistrationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account/service/CompanyOptionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/CompanyOptionsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/controller/CandidateJobController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/dto/CandidateJobRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/dto/CandidateJobResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/enums/JobSource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/enums/JobStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/enums/PayUnit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/model/CandidateJob.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/repository/CandidateJobRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/jobs/service/CandidateJobService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/candidateEducation.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/profile/profileEducation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/candidateJobs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/profile/profileJobs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/candidatePreferences.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/profile/profilePreferences.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/candidateProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/profile/profileProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeProfileContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/EmployeeProfileContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Education.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Education.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/Modal/Modal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/Modal/Modal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Documents/Documentos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Documents/Documentos.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Certificates.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Certificates.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileTabs.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,11 +104,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\profile\Employee\Info" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\backend\src\main\java\com\teamfoundry\backend\account_options\service" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\api\profile" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\home" />
       <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\profile\Employee" />
-      <recent name="C:\Users\draga\Ambiente de Trabalho\Trabalhos Uni\teamfoundry-workforce-management\frontend\src\pages\login\UserLogin" />
     </key>
   </component>
   <component name="RunManager" selected="Docker.docker-compose.yml.teamfoundry_postgres: Compose Deployment">
@@ -241,6 +221,7 @@
       <workItem from="1763902860713" duration="34000" />
       <workItem from="1763904317542" duration="15932000" />
       <workItem from="1763989419419" duration="1009000" />
+      <workItem from="1764078411961" duration="4960000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -330,7 +311,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763942605831</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Seeders e Historico de Trabalho Perfil">
+      <option name="closed" value="true" />
+      <created>1764079041220</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1764079041220</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -377,7 +366,8 @@
     <MESSAGE value="Comentários Login e Register" />
     <MESSAGE value="Ajustes Layout" />
     <MESSAGE value="Refactors e mais refactors" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactors e mais refactors" />
+    <MESSAGE value="Seeders e Historico de Trabalho Perfil" />
+    <option name="LAST_COMMIT_MESSAGE" value="Seeders e Historico de Trabalho Perfil" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

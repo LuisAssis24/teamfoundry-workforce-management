@@ -54,6 +54,7 @@ public class EmployeePreferencesService {
     }
 
     private EmployeePreferencesResponse toResponse(EmployeeAccount account) {
+        // Constrói DTO a partir das relações atuais nas tabelas de junção.
         String role = employeeFunctionRepository.findFirstByEmployee(account)
                 .map(rel -> rel.getFunction().getName())
                 .orElse(null);
@@ -82,6 +83,7 @@ public class EmployeePreferencesService {
     }
 
     private void applyFunctionPreference(EmployeeAccount account, String functionName) {
+        // Apenas uma função preferencial é mantida; limpamos e regravamos.
         employeeFunctionRepository.deleteByEmployee(account);
 
         if (!StringUtils.hasText(functionName)) {
@@ -101,6 +103,7 @@ public class EmployeePreferencesService {
     }
 
     private void applyCompetencePreferences(EmployeeAccount account, List<String> skills) {
+        // Zera competências atuais e recria as relações com base no request.
         employeeCompetenceRepository.deleteByEmployee(account);
 
         List<String> normalized = normalizeList(skills, "competência");
@@ -126,6 +129,7 @@ public class EmployeePreferencesService {
     }
 
     private void applyGeoAreaPreferences(EmployeeAccount account, List<String> areas) {
+        // Zera áreas atuais e recria relações com base no request.
         employeeGeoAreaRepository.deleteByEmployee(account);
 
         List<String> normalized = normalizeList(areas, "área geográfica");

@@ -150,4 +150,44 @@ public class SiteAdminController {
     public void deleteAppHomeMetric(@PathVariable Long id) {
         service.deleteHomeLoginMetric(id);
     }
+
+    // --- Weekly tips ---
+    @GetMapping("/weekly-tips")
+    public List<WeeklyTipResponse> listWeeklyTips() {
+        return service.listWeeklyTips();
+    }
+
+    @PostMapping("/weekly-tips")
+    @ResponseStatus(HttpStatus.CREATED)
+    public WeeklyTipResponse createWeeklyTip(@Valid @RequestBody WeeklyTipRequest request) {
+        return service.createWeeklyTip(request);
+    }
+
+    @PutMapping("/weekly-tips/{id}")
+    public WeeklyTipResponse updateWeeklyTip(@PathVariable Long id,
+                                             @Valid @RequestBody WeeklyTipRequest request) {
+        return service.updateWeeklyTip(id, request);
+    }
+
+    @PatchMapping("/weekly-tips/{id}/visibility")
+    public WeeklyTipResponse toggleWeeklyTipVisibility(@PathVariable Long id,
+                                                       @Valid @RequestBody ToggleVisibilityRequest request) {
+        return service.toggleWeeklyTipVisibility(id, request.active());
+    }
+
+    @PatchMapping("/weekly-tips/{id}/featured")
+    public WeeklyTipResponse markWeeklyTipFeatured(@PathVariable Long id) {
+        return service.markWeeklyTipFeatured(id);
+    }
+
+    @PutMapping("/weekly-tips/reorder")
+    public List<WeeklyTipResponse> reorderWeeklyTips(@Valid @RequestBody ReorderRequest request) {
+        return service.reorderWeeklyTips(request.ids());
+    }
+
+    @DeleteMapping("/weekly-tips/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWeeklyTip(@PathVariable Long id) {
+        service.deleteWeeklyTip(id);
+    }
 }

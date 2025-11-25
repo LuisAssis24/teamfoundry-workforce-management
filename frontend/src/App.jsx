@@ -17,7 +17,7 @@ import EmployeeLayout, {
   CandidateIndexRedirect,
 } from "./pages/profile/Employee/EmployeeLayout.jsx";
 import PersonalDetails from "./pages/profile/Employee/Info/PersonalDetails.jsx";
-import Education from "./pages/profile/Employee/Info/Education.jsx";
+import Certificates from "./pages/profile/Employee/Info/Certificates.jsx";
 import RecentJobs from "./pages/profile/Employee/Info/RecentJobs.jsx";
 import Preferences from "./pages/profile/Employee/Info/Preferences.jsx";
 import OfertasEmprego from "./pages/profile/Employee/JobOffers/OfertasEmprego.jsx";
@@ -32,11 +32,13 @@ import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
 import TeamManagement from "./pages/admin/TeamManagement/TeamManagement.jsx";
 import BuildTeamSearch from "./pages/admin/TeamManagement/BuildTeamSearch.jsx";
 import HomeLayout from "./pages/home/HomeLayout.jsx";
+import WeeklyTipsPage from "./pages/home/WeeklyTipsPage.jsx";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeLayout />} />
+      <Route path="/dicas" element={<WeeklyTipsPage />} />
       <Route path="/login" element={<CandidateLogin />} />
       <Route
         path="/forgot-password"
@@ -73,7 +75,7 @@ function App() {
       <Route path="/candidato" element={<EmployeeLayout />}>
         <Route index element={<CandidateIndexRedirect />} />
         <Route path="dados-pessoais" element={<PersonalDetails />} />
-        <Route path="formacao" element={<Education />} />
+        <Route path="certificacoes" element={<Certificates />} />
         <Route path="ultimos-trabalhos" element={<RecentJobs />} />
         <Route path="preferencias" element={<Preferences />} />
         <Route path="ofertas" element={<OfertasEmprego />} />

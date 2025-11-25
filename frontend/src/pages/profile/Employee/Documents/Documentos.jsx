@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import DropZone from "../../../../components/ui/Upload/DropZone.jsx";
+import Tabs from "../../../../components/sections/Tabs.jsx";
 
 export default function Documentos() {
   const [active, setActive] = useState("identificacao");
@@ -25,20 +26,15 @@ export default function Documentos() {
         <h2 className="text-2xl font-semibold">Documentos</h2>
       </div>
 
-      <div className="mb-4 border-b border-base-300 flex gap-6">
-        <button
-          className={["pb-2 -mb-px", active === "identificacao" ? "border-b-2 border-base-content font-semibold" : "text-base-content/70"].join(" ")}
-          onClick={() => setActive("identificacao")}
-        >
-          Identificação
-        </button>
-        <button
-          className={["pb-2 -mb-px", active === "curriculo" ? "border-b-2 border-base-content font-semibold" : "text-base-content/70"].join(" ")}
-          onClick={() => setActive("curriculo")}
-        >
-          Currículo
-        </button>
-      </div>
+      <Tabs
+        tabs={[
+          { key: "identificacao", label: "Identificação" },
+          { key: "curriculo", label: "Currículo" },
+        ]}
+        activeKey={active}
+        onTabChange={setActive}
+        className="mt-0"
+      />
 
       {active === "identificacao" && (
         <div className="rounded-xl border border-base-300 bg-base-100 shadow p-6">

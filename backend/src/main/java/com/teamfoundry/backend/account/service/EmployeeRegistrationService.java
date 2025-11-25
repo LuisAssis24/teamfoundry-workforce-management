@@ -14,7 +14,7 @@ import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.service.exception.EmployeeRegistrationException;
 import com.teamfoundry.backend.account.service.exception.DuplicateEmailException;
 import com.teamfoundry.backend.account_options.model.Competence;
-import com.teamfoundry.backend.account_options.model.Curriculum;
+import com.teamfoundry.backend.account_options.model.EmployeeCurriculum;
 import com.teamfoundry.backend.account_options.model.EmployeeCompetence;
 import com.teamfoundry.backend.account_options.model.EmployeeFunction;
 import com.teamfoundry.backend.account_options.model.EmployeeGeoArea;
@@ -137,9 +137,9 @@ public class EmployeeRegistrationService {
         employeeAccountRepository.save(account);
 
         if (storedPath != null) {
-            Curriculum curriculum = curriculumRepository.findByEmployee(account)
+            EmployeeCurriculum curriculum = curriculumRepository.findByEmployee(account)
                     .orElseGet(() -> {
-                        Curriculum cv = new Curriculum();
+                        EmployeeCurriculum cv = new EmployeeCurriculum();
                         cv.setEmployee(account);
                         return cv;
                     });
