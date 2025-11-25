@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "cv")
-public class Curriculum {
+public class EmployeeCurriculum {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

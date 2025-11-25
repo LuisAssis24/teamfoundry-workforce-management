@@ -5,9 +5,10 @@ import Button from "../../../../components/ui/Button/Button.jsx";
 import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
 import {
-  createEmployeeEducation,
-  listEmployeeEducation,
-} from "../../../../api/profile/employeeEducation.js";
+  createEmployeeCertification,
+  listEmployeeCertifications,
+  updateEmployeeCertification,
+} from "../../../../api/profile/employeeCertifications.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 
 const initialForm = {
@@ -19,8 +20,9 @@ const initialForm = {
   file: null,
 };
 
-export default function Education() {
+export default function Certificates() {
   const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [educations, setEducations] = useState([]);
@@ -36,7 +38,7 @@ export default function Education() {
     let isMounted = true;
     async function loadEducation() {
       try {
-        const data = educationData || (await listEmployeeEducation());
+        const data = educationData || (await listEmployeeCertifications());
         if (!isMounted) return;
         setEducations(Array.isArray(data) ? data : []);
         if (!educationData) setEducationData(data);
@@ -113,9 +115,15 @@ export default function Education() {
 
     try {
       const payload = await buildPayload(form);
-      const created = await createEmployeeEducation(payload);
-      setEducations((prev) => [created, ...prev]);
-      setSuccessMessage("Formação adicionada com sucesso.");
+      if (editingId) {
+        const updated = await updateEmployeeCertification(editingId, payload);
+        setEducations((prev) => prev.map((e) => (e.id === editingId ? updated : e)));
+        setSuccessMessage("Certificação atualizada com sucesso.");
+      } else {
+        const created = await createEmployeeCertification(payload);
+        setEducations((prev) => [created, ...prev]);
+        setSuccessMessage("Certificação adicionada com sucesso.");
+      }
       closeModal();
     } catch (error) {
       setErrorMessage(error.message || "Não foi possível guardar a formação.");
@@ -124,8 +132,22 @@ export default function Education() {
     }
   };
 
+  const handleEdit = (education) => {
+    setEditingId(education.id);
+    setForm({
+      name: education.name || "",
+      institution: education.institution || "",
+      location: education.location || "",
+      completionDate: education.completionDate || "",
+      description: education.description || "",
+      file: null,
+    });
+    setOpen(true);
+  };
+
   const closeModal = () => {
     setOpen(false);
+    setEditingId(null);
     setForm(initialForm);
     setErrors({});
     if (fileInputRef.current) {
@@ -137,6 +159,7 @@ export default function Education() {
     setSuccessMessage("");
     setErrorMessage("");
     setForm(initialForm);
+    setEditingId(null);
     setErrors({});
     setOpen(true);
     if (fileInputRef.current) {
@@ -162,6 +185,10 @@ export default function Education() {
             </div>
           )}
 
+          <div className="flex justify-end">
+            <Button label="Adicionar Certificação" onClick={openModal} />
+          </div>
+
           {loading ? (
             <SkeletonList />
           ) : educations.length === 0 ? (
@@ -169,23 +196,17 @@ export default function Education() {
           ) : (
             <div className="space-y-4 max-w-3xl mx-auto">
               {educations.map((education) => (
-                <EducationCard key={education.id} education={education} />
+                <EducationCard key={education.id} education={education} onEdit={handleEdit} />
               ))}
             </div>
           )}
-
-          <div className="mt-6 flex justify-center">
-            <div className="w-56">
-              <Button label="Adicionar Formação" onClick={openModal} />
-            </div>
-          </div>
         </div>
       </div>
 
       <Modal
         open={open}
         onClose={closeModal}
-        title="Nova Formação"
+        title="Nova Certificação"
         actions={
           <>
             <button type="button" className="btn btn-neutral" onClick={closeModal} disabled={saving}>
@@ -199,7 +220,7 @@ export default function Education() {
       >
         <div className="space-y-4">
           <InputField
-            label="Nome da Formação"
+            label="Nome da Certificação"
             name="name"
             placeholder="Ex.: Ensino Secundário"
             value={form.name}
@@ -273,8 +294,8 @@ export default function Education() {
   );
 }
 
-function EducationCard({ education }) {
-  const { name, institution, location, completionDate, description } = education;
+function EducationCard({ education, onEdit }) {
+  const { id, name, institution, location, completionDate, description, certificateUrl } = education;
   return (
     <div className="rounded-xl border border-base-300 bg-base-100 shadow-sm overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3">
@@ -290,13 +311,29 @@ function EducationCard({ education }) {
             </span>
           </div>
         </div>
-        <span className="px-3 py-1 rounded-full bg-primary text-primary-content text-xs">
-          Certificado
-        </span>
+        <button
+          type="button"
+          className="btn btn-sm btn-ghost"
+          onClick={() => onEdit(education)}
+        >
+          <i className="bi bi-pencil-square mr-1" aria-hidden="true" />
+          Editar
+        </button>
       </div>
       <div className="border-t border-base-300 px-4 py-3 flex flex-col gap-1 text-sm">
         <span className="text-base-content/80">Concluído em: {formatDate(completionDate)}</span>
         {description && <span className="text-base-content/80">{description}</span>}
+        {certificateUrl && (
+          <a
+            href={certificateUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="link link-primary text-sm mt-1 inline-flex items-center gap-1"
+          >
+            <i className="bi bi-paperclip" aria-hidden="true" />
+            Ver certificado
+          </a>
+        )}
       </div>
     </div>
   );
@@ -315,7 +352,7 @@ function SkeletonList() {
 function EmptyState() {
   return (
     <div className="text-center text-base-content/70 py-12 border border-dashed border-base-300 rounded-xl">
-      Ainda não adicionou formações. Clique em “Adicionar Formação” para registar a primeira.
+      Ainda não adicionou certificações. Clique em “Adicionar Certificação” para registar a primeira.
     </div>
   );
 }

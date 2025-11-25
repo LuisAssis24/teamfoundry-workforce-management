@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
 import ProfileTabs from "./components/ProfileTabs.jsx";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
+import RecentJobCard from "./components/RecentJobCard.jsx";
+import { listEmployeeJobs } from "../../../../api/profile/profileJobs.js";
 
 export default function RecentJobs() {
   const [jobs, setJobs] = useState([]);
@@ -12,10 +14,26 @@ export default function RecentJobs() {
 
   useEffect(() => {
     let isMounted = true;
-    // Reutiliza apenas os dados já carregados no contexto (sem chamadas adicionais ao backend).
-    const data = jobsData ?? { content: [] };
-    setJobs(data.content ?? []);
-    setLoading(false);
+
+    async function loadJobs() {
+      try {
+        if (jobsData) {
+          setJobs(jobsData);
+          return;
+        }
+        const data = await listEmployeeJobs();
+        if (!isMounted) return;
+        setJobs(Array.isArray(data) ? data : []);
+        setJobsData(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (isMounted) setError(err.message || "Não foi possível carregar os trabalhos.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadJobs();
+
     if (!profile) {
       refreshProfile().then((data) => {
         if (isMounted && data) {
@@ -25,6 +43,7 @@ export default function RecentJobs() {
     } else {
       setDisplayName(formatName(profile.firstName, profile.lastName));
     }
+
     return () => {
       isMounted = false;
     };
@@ -50,49 +69,13 @@ export default function RecentJobs() {
           ) : (
             <div className="space-y-4 max-w-3xl mx-auto">
               {jobs.map((job) => (
-                <JobCard key={job.id} job={job} />
+                <RecentJobCard key={job.requestId ?? job.id} job={job} />
               ))}
             </div>
           )}
         </div>
       </div>
     </section>
-  );
-}
-
-function JobCard({ job }) {
-  return (
-    <div className="rounded-xl border border-base-300 bg-base-100 shadow-sm overflow-hidden">
-      <div className="flex items-start justify-between px-4 py-3">
-        <div className="flex items-center gap-3">
-          <i className="bi bi-building text-lg" aria-hidden="true" />
-          <div className="flex flex-col">
-            <span className="font-semibold">{job.companyName}</span>
-            <span className="text-sm text-base-content/70">
-              {job.location || "Local não informado"}
-            </span>
-          </div>
-        </div>
-        <div className="text-right text-sm text-base-content/70">
-          <div>{formatDateRange(job.startDate, job.endDate)}</div>
-          {job.status && (
-            <span className="badge badge-ghost mt-1">{toStatusLabel(job.status)}</span>
-          )}
-        </div>
-      </div>
-
-      <div className="border-t border-base-300 px-4 py-3 flex items-center gap-3 text-sm">
-        <i className="bi bi-briefcase" aria-hidden="true" />
-        <span className="text-base-content/90">Função: {job.role}</span>
-      </div>
-
-      <div className="border-t border-base-300 px-4 py-3 flex items-center gap-3 text-sm">
-        <i className="bi bi-cash-coin" aria-hidden="true" />
-        <span className="text-base-content/90">
-          Pagamento: {formatPay(job.payRate, job.payUnit)}
-        </span>
-      </div>
-    </div>
   );
 }
 
@@ -109,7 +92,7 @@ function SkeletonList() {
 function EmptyState() {
   return (
     <div className="text-center text-base-content/70 py-12 border border-dashed border-base-300 rounded-xl">
-      Ainda não existem registos de trabalhos concluídos para este candidato.
+      Ainda não existem registos de trabalhos concluídos.
     </div>
   );
 }
@@ -125,21 +108,4 @@ function formatDateRange(start, end) {
   const format = (date) => (date ? new Date(date).toLocaleDateString("pt-PT", options) : "—");
   return `${format(start)} · ${format(end)}`;
 }
-
-function formatPay(rate, unit) {
-  if (!rate || !unit) return "Não informado";
-  const unitLabel = { HOUR: "hora", DAY: "dia", MONTH: "mês" }[unit] || unit.toLowerCase();
-  return `${Number(rate).toFixed(2)} € / ${unitLabel}`;
-}
-
-function toStatusLabel(status) {
-  const labels = {
-    COMPLETED: "Concluído",
-    ACTIVE: "Ativo",
-    PLANNED: "Planeado",
-    CANCELLED: "Cancelado",
-  };
-  return labels[status] || status;
-}
-
 

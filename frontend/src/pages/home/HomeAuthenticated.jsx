@@ -69,7 +69,7 @@ export default function HomeAuthenticated() {
 
   return (
     <div className="min-h-screen flex flex-col bg-base-100 text-base-content">
-      <Navbar variant="private" homePath="/home-login" links={[]} onLogout={logout} />
+      <Navbar variant="private" homePath="/" links={[]} onLogout={logout} />
       <main className="flex-1">
         {contentError && (
           <div className="alert alert-warning shadow mx-auto mt-4 w-full max-w-3xl">
@@ -96,10 +96,7 @@ function HeroPanel({ displayName, loading, section, loadingContent }) {
   const subtitle = section?.subtitle ?? "Perfil =%";
   const contentLines = section?.content
     ? section.content.split("\n").filter(Boolean)
-    : [
-        "Equipa atual: Montagem - Empresa Alfa",
-        "Requisicoes disponiveis: 2 novas oportunidades",
-      ];
+    : [];
   const ctaLabel = section?.primaryCtaLabel ?? "Atualizar perfil";
   const ctaUrl = section?.primaryCtaUrl ?? "/candidato/dados-pessoais";
 

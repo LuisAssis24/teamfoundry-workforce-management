@@ -34,6 +34,6 @@ public class EmployeeRequest {
     @Column(nullable = false)
     private State state;
 
-    @Column(name = "date_accepted", nullable = false)
+    @Column(name = "date_accepted")
     private LocalDateTime acceptedDate;
 }

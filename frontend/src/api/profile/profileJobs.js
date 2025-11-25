@@ -1,15 +1,6 @@
-import { httpDelete, httpGet, httpPost, httpPut } from "../http.js";
+import { httpGet } from "../http.js";
 
 const BASE_PATH = "/api/employee/jobs";
 
-export const listEmployeeJobs = ({ status = "COMPLETED", page = 0, size = 5 } = {}) =>
-  httpGet(`${BASE_PATH}?status=${encodeURIComponent(status)}&page=${page}&size=${size}`);
-
-export const createManualJob = (payload) =>
-  httpPost(`${BASE_PATH}/manual`, payload);
-
-export const updateManualJob = (id, payload) =>
-  httpPut(`${BASE_PATH}/manual/${id}`, payload);
-
-export const deleteManualJob = (id) =>
-  httpDelete(`${BASE_PATH}/manual/${id}`);
+// Devolve histórico de jobs do colaborador autenticado.
+export const listEmployeeJobs = () => httpGet(BASE_PATH);

@@ -4,7 +4,7 @@ import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificatio
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificationResponse;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
-import com.teamfoundry.backend.account_options.model.Certifications;
+import com.teamfoundry.backend.account_options.model.EmployeeCertifications;
 import com.teamfoundry.backend.account_options.repository.CertificationsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +48,11 @@ public class EmployeeCertificationService {
         EmployeeAccount account = resolveAccount(email);
         ensureNotDuplicate(account, request, null);
 
-        Certifications certification = new Certifications();
+        EmployeeCertifications certification = new EmployeeCertifications();
         certification.setEmployee(account);
         applyRequest(certification, request, true);
 
-        Certifications saved = certificationsRepository.save(certification);
+        EmployeeCertifications saved = certificationsRepository.save(certification);
         return toResponse(saved);
     }
 
@@ -61,21 +61,21 @@ public class EmployeeCertificationService {
                                                 String email,
                                                 EmployeeCertificationRequest request) {
         EmployeeAccount account = resolveAccount(email);
-        Certifications certification = certificationsRepository
+        EmployeeCertifications certification = certificationsRepository
                 .findByIdAndEmployee(certificationId, account)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Formação não encontrada."));
 
         ensureNotDuplicate(account, request, certificationId);
         applyRequest(certification, request, false);
 
-        Certifications saved = certificationsRepository.save(certification);
+        EmployeeCertifications saved = certificationsRepository.save(certification);
         return toResponse(saved);
     }
 
     @Transactional
     public void delete(int certificationId, String email) {
         EmployeeAccount account = resolveAccount(email);
-        Certifications certification = certificationsRepository
+        EmployeeCertifications certification = certificationsRepository
                 .findByIdAndEmployee(certificationId, account)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Formação não encontrada."));
 
@@ -83,7 +83,7 @@ public class EmployeeCertificationService {
         certificationsRepository.delete(certification);
     }
 
-    private void applyRequest(Certifications certification,
+    private void applyRequest(EmployeeCertifications certification,
                               EmployeeCertificationRequest request,
                               boolean isCreate) {
         certification.setName(request.getName().trim());
@@ -103,7 +103,7 @@ public class EmployeeCertificationService {
         }
     }
 
-    private EmployeeCertificationResponse toResponse(Certifications certification) {
+    private EmployeeCertificationResponse toResponse(EmployeeCertifications certification) {
         return EmployeeCertificationResponse.builder()
                 .id(certification.getId())
                 .name(certification.getName())
