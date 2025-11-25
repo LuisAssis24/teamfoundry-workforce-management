@@ -1,6 +1,7 @@
 ﻿import { apiFetch } from "./client.js";
 
 const ADMIN_BASE = "/api/super-admin/site";
+const FUNCTIONS_BASE = "/api/functions";
 
 async function toJsonOrThrow(resp, defaultMessage) {
   if (!resp.ok) {
@@ -203,6 +204,83 @@ export async function deleteAppMetric(metricId) {
   });
   if (!resp.ok) {
     const error = new Error("Não foi possível eliminar a métrica.");
+    error.status = resp.status;
+    throw error;
+  }
+}
+
+// --- Funcoes ---
+export async function fetchFunctions() {
+  const resp = await apiFetch(FUNCTIONS_BASE);
+  return toJsonOrThrow(resp, "Nao foi possivel carregar as funcoes.");
+}
+
+export async function createFunction(payload) {
+  const resp = await apiFetch(FUNCTIONS_BASE, jsonOptions("POST", payload));
+  return toJsonOrThrow(resp, "Nao foi possivel criar a funcao.");
+}
+
+export async function deleteFunction(functionId) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/${functionId}`, { method: "DELETE" });
+  if (!resp.ok) {
+    const error = new Error("Nao foi possivel eliminar a funcao.");
+    error.status = resp.status;
+    throw error;
+  }
+}
+
+export async function fetchCompetences() {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/competences`);
+  return toJsonOrThrow(resp, "Nao foi possivel carregar competencias.");
+}
+
+export async function createCompetence(payload) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/competences`, jsonOptions("POST", payload));
+  return toJsonOrThrow(resp, "Nao foi possivel criar a competencia.");
+}
+
+export async function deleteCompetence(id) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/competences/${id}`, { method: "DELETE" });
+  if (!resp.ok) {
+    const error = new Error("Nao foi possivel eliminar a competencia.");
+    error.status = resp.status;
+    throw error;
+  }
+}
+
+export async function fetchGeoAreas() {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/geo-areas`);
+  return toJsonOrThrow(resp, "Nao foi possivel carregar areas geograficas.");
+}
+
+export async function createGeoArea(payload) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/geo-areas`, jsonOptions("POST", payload));
+  return toJsonOrThrow(resp, "Nao foi possivel criar a area geografica.");
+}
+
+export async function deleteGeoArea(id) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/geo-areas/${id}`, { method: "DELETE" });
+  if (!resp.ok) {
+    const error = new Error("Nao foi possivel eliminar a area geografica.");
+    error.status = resp.status;
+    throw error;
+  }
+}
+
+export async function fetchActivitySectors() {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/activity-sectors`);
+  return toJsonOrThrow(resp, "Nao foi possivel carregar setores de atividade.");
+}
+
+export async function createActivitySector(payload) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/activity-sectors`, jsonOptions("POST", payload));
+  return toJsonOrThrow(resp, "Nao foi possivel criar o setor de atividade.");
+}
+
+export async function deleteActivitySector(id) {
+  const resp = await apiFetch(`${FUNCTIONS_BASE}/activity-sectors/${id}`, { method: "DELETE" });
+  if (!resp.ok) {
+    const error = new Error("Nao foi possivel eliminar o setor de atividade.");
     error.status = resp.status;
     throw error;
   }

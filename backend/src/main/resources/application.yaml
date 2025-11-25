@@ -43,7 +43,7 @@ app:
       storage-dir: ${APP_SITE_MEDIA_DIR:uploads/site}
       public-path: /media/site
   news:
-    enabled: ${NEWSAPI_ENABLED:true}
+    enabled: ${NEWSAPI_ENABLED:false}
     api-key: ${NEWSAPI_KEY:56ac4b5c930f41979fdf586909a7a7b8}
     base-url: ${NEWSAPI_BASE_URL:https://newsapi.org/v2}
     top-headlines-path: ${NEWSAPI_TOP_HEADLINES_PATH:/top-headlines}

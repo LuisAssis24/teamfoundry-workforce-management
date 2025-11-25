@@ -13,6 +13,18 @@ import {
   uploadSiteImage,
   deleteIndustry,
   deletePartner,
+  fetchFunctions,
+  createFunction,
+  deleteFunction,
+  fetchCompetences,
+  createCompetence,
+  deleteCompetence,
+  fetchGeoAreas,
+  createGeoArea,
+  deleteGeoArea,
+  fetchActivitySectors,
+  createActivitySector,
+  deleteActivitySector,
 } from "../../../../api/siteManagement.js";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
 import DropZone from "../../../../components/ui/Upload/DropZone.jsx";
@@ -73,6 +85,36 @@ export default function VariableManagement() {
   const [loadError, setLoadError] = useState(null);
   const [activeView, setActiveView] = useState("publicHome");
 
+  const [globalOptions, setGlobalOptions] = useState({
+    functions: [],
+    competences: [],
+    geoAreas: [],
+    activitySectors: [],
+  });
+  const optionLabels = {
+    functions: "funcao",
+    competences: "competencia",
+    geoAreas: "area geografica",
+    activitySectors: "setor de atividade",
+  };
+  const [manageModal, setManageModal] = useState({
+    open: false,
+    type: null,
+    search: "",
+  });
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    type: null,
+    record: null,
+    password: "",
+    saving: false,
+    error: null,
+  });
+  const [optionsLoading, setOptionsLoading] = useState(false);
+  const [optionsError, setOptionsError] = useState(null);
+  const [optionsLoaded, setOptionsLoaded] = useState(false);
+  const [optionModal, setOptionModal] = useState({ open: false, type: null, name: "", saving: false });
+
   const [banner, setBanner] = useState(null);
 
   const [heroForm, setHeroForm] = useState(null);
@@ -118,6 +160,42 @@ export default function VariableManagement() {
       mountedRef.current = false;
     };
   }, [loadConfig]);
+
+  const loadGlobalOptions = useCallback(async () => {
+    setOptionsLoading(true);
+    setOptionsError(null);
+    try {
+      const [functions, competences, geoAreas, activitySectors] = await Promise.all([
+        fetchFunctions(),
+        fetchCompetences(),
+        fetchGeoAreas(),
+        fetchActivitySectors(),
+      ]);
+      if (!mountedRef.current) return;
+      setGlobalOptions({
+        functions: sortByName(functions),
+        competences: sortByName(competences),
+        geoAreas: sortByName(geoAreas),
+        activitySectors: sortByName(activitySectors),
+      });
+      setOptionsLoaded(true);
+    } catch (err) {
+      if (!mountedRef.current) return;
+      if (err?.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      setOptionsError(err.message || "Nao foi possivel carregar as opcoes globais.");
+    } finally {
+      if (mountedRef.current) setOptionsLoading(false);
+    }
+  }, [handleUnauthorized]);
+
+  useEffect(() => {
+    if (activeView === "globalVars" && !optionsLoaded) {
+      loadGlobalOptions();
+    }
+  }, [activeView, optionsLoaded, loadGlobalOptions]);
 
   const heroSection = useMemo(
     () => config?.sections?.find((section) => section.type === "HERO"),
@@ -295,6 +373,132 @@ export default function VariableManagement() {
     }
   };
 
+  const openOptionModal = (type) => {
+    setOptionModal({ open: true, type, name: "", saving: false });
+  };
+
+
+  const closeOptionModal = () => {
+    setOptionModal({ open: false, type: null, name: "", saving: false });
+  };
+
+  const handleOptionSubmit = async (event) => {
+    event.preventDefault();
+    if (!optionModal.type) return;
+    const trimmed = optionModal.name.trim();
+    if (!trimmed) {
+      setOptionsError("Informe o nome.");
+      return;
+    }
+    setOptionModal((prev) => ({ ...prev, saving: true }));
+    setOptionsError(null);
+    try {
+      const created = await createOption(optionModal.type, trimmed);
+      setGlobalOptions((prev) => ({
+        ...prev,
+        [optionModal.type]: sortByName([...prev[optionModal.type], created]),
+      }));
+      closeOptionModal();
+    } catch (err) {
+      if (err?.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      setOptionsError(err.message || "Nao foi possivel criar o registo.");
+      setOptionModal((prev) => ({ ...prev, saving: false }));
+    }
+  };
+
+  const handleDeleteOption = async (type, record) => {
+    if (!type || !record) return;
+    // A confirmacao real e feita via modal de password.
+    try {
+      await deleteOption(type, record.id);
+      setGlobalOptions((prev) => ({
+        ...prev,
+        [type]: prev[type].filter((item) => item.id !== record.id),
+      }));
+    } catch (err) {
+      if (err?.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+      throw err;
+    }
+  };
+
+  const createOption = (type, name) => {
+    const payload = { name };
+    switch (type) {
+      case "functions":
+        return createFunction(payload);
+      case "competences":
+        return createCompetence(payload);
+      case "geoAreas":
+        return createGeoArea(payload);
+      case "activitySectors":
+        return createActivitySector(payload);
+      default:
+        return Promise.reject(new Error("Tipo desconhecido."));
+    }
+  };
+
+  const deleteOption = (type, id) => {
+    switch (type) {
+      case "functions":
+        return deleteFunction(id);
+      case "competences":
+        return deleteCompetence(id);
+      case "geoAreas":
+        return deleteGeoArea(id);
+      case "activitySectors":
+        return deleteActivitySector(id);
+      default:
+        return Promise.reject(new Error("Tipo desconhecido."));
+    }
+  };
+
+  const openDeleteModal = (type, record) => {
+    setDeleteModal({
+      open: true,
+      type,
+      record,
+      password: "",
+      saving: false,
+      error: null,
+    });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      open: false,
+      type: null,
+      record: null,
+      password: "",
+      saving: false,
+      error: null,
+    });
+  };
+
+  const confirmDeleteOption = async (event) => {
+    event.preventDefault();
+    if (!deleteModal.password.trim()) {
+      setDeleteModal((prev) => ({ ...prev, error: "Informe a password do super admin." }));
+      return;
+    }
+    setDeleteModal((prev) => ({ ...prev, saving: true, error: null }));
+    try {
+      await handleDeleteOption(deleteModal.type, deleteModal.record);
+      closeDeleteModal();
+    } catch (err) {
+      setDeleteModal((prev) => ({
+        ...prev,
+        saving: false,
+        error: err.message || "Nao foi possivel eliminar o registo.",
+      }));
+    }
+  };
+
   const openModal = (entity, record = null) => {
     const mode = record ? "edit" : "create";
     setModalState({ open: true, entity, mode, record });
@@ -417,12 +621,7 @@ export default function VariableManagement() {
     }
 
     if (activeView === "globalVars") {
-      return (
-        <TabPlaceholder
-          title="Variaveis globais"
-          description="Texto, links e dados partilhados entre paginas. Em breve."
-        />
-      );
+      return renderGlobalVariables();
     }
 
     if (activeView === "otherPages") {
@@ -436,6 +635,231 @@ export default function VariableManagement() {
 
     return renderPublicHome();
   };
+
+  function renderGlobalVariables() {
+    return (
+      <div className="space-y-6">
+        {optionsError && (
+          <div className="alert alert-error shadow flex justify-between">
+            <span>{optionsError}</span>
+            <button
+              type="button"
+              className="btn btn-ghost btn-xs"
+              onClick={() => setOptionsError(null)}
+            >
+              Fechar
+            </button>
+          </div>
+        )}
+
+
+          <div className="card-body space-y-6">
+            {optionsLoading ? (
+              <div className="flex min-h-[200px] items-center justify-center">
+                <span className="loading loading-spinner loading-lg text-primary" />
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <section className="space-y-3 card bg-base-100 shadow-lg p-4">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-2xl font-semibold">Funcionário</h3>
+                    <span className="badge badge-ghost text-xs">Funções, Competências, Áreas Geográficas</span>
+                  </div>
+                  <div className="space-y-3">
+                    {renderOptionCard("functions", "Funções", true)}
+                    {renderOptionCard("competences", "Competências", true)}
+                    {renderOptionCard("geoAreas", "Áreas geográficas", true)}
+                  </div>
+                </section>
+                <section className="space-y-3 card bg-base-100 shadow-lg p-4">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-2xl font-semibold">Empresa</h3>
+                    <span className="badge badge-ghost text-xs">Setores de atividade</span>
+                  </div>
+                  <div className="space-y-3">
+                    {renderOptionCard("activitySectors", "Setores de atividade", true)}
+                  </div>
+                </section>
+              </div>
+            )}
+          </div>
+
+        {manageModal.open && (
+          <Modal
+            open
+            title={`Gerir ${manageTitle(manageModal.type)}`}
+            onClose={() => setManageModal({ open: false, type: null, search: "" })}
+            actions={
+              <div className="flex justify-center w-full">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => openOptionModal(manageModal.type)}
+                >
+                  Adicionar
+                </button>
+              </div>
+            }
+          >
+            <div className="space-y-5 min-h-[360px]">
+              <div className="space-y-2">
+                <label className="label-text font-semibold">Pesquisar</label>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  placeholder="Digite para filtrar"
+                  value={manageModal.search}
+                  onChange={(e) =>
+                    setManageModal((prev) => ({ ...prev, search: e.target.value }))
+                  }
+                />
+              </div>
+              <div className="max-h-[320px] overflow-auto space-y-2 pr-1">
+                {filteredManageItems(manageModal.type, globalOptions, manageModal.search).map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-xl border border-base-200 bg-base-100 px-3 py-2"
+                  >
+                    <span className="font-medium">{item.name}</span>
+                    <button
+                      type="button"
+                      className="btn btn-xs btn-error btn-square transition-all duration-150 hover:scale-105"
+                      title="Apagar"
+                      onClick={() => openDeleteModal(manageModal.type, item)}
+                    >
+                      <i className="bi bi-x-lg text-white" />
+                    </button>
+                  </div>
+                ))}
+                {filteredManageItems(manageModal.type, globalOptions, manageModal.search).length === 0 && (
+                  <p className="text-sm text-base-content/60 text-center py-6">
+                    Nenhum item encontrado.
+                  </p>
+                )}
+              </div>
+              <div className="pt-1" />
+            </div>
+          </Modal>
+        )}
+
+        {optionModal.open && (
+          <Modal
+            open
+            title={`Adicionar ${optionLabels[optionModal.type] || "item"}`}
+            onClose={closeOptionModal}
+            actions={
+              <>
+                <button type="button" className="btn btn-ghost" onClick={closeOptionModal}>
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  form="function-form"
+                  className="btn btn-primary"
+                  disabled={optionModal.saving}
+                >
+                  {optionModal.saving ? (
+                    <>
+                      <span className="loading loading-spinner loading-sm" />
+                      A guardar!
+                    </>
+                  ) : (
+                    "Adicionar"
+                  )}
+                </button>
+              </>
+            }
+          >
+            <form id="function-form" className="space-y-4" onSubmit={handleOptionSubmit}>
+              <label className="form-control">
+                <span className="label-text font-semibold">
+                  Nome da {optionLabels[optionModal.type] || "opcao"}
+                </span>
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  value={optionModal.name}
+                  onChange={(e) => setOptionModal((prev) => ({ ...prev, name: e.target.value }))}
+                  placeholder="Ex.: Soldador"
+                  required
+                />
+              </label>
+              <p className="text-sm text-base-content/60">
+                Insira o nome exatamente como deseja que apareca para os utilizadores.
+              </p>
+            </form>
+          </Modal>
+        )}
+
+        {deleteModal.open && (
+          <Modal
+            open
+            title="Confirmar apagamento"
+            onClose={closeDeleteModal}
+            actions={
+              <>
+                <button type="button" className="btn btn-ghost" onClick={closeDeleteModal} disabled={deleteModal.saving}>
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  form="delete-form"
+                  className="btn btn-error"
+                  disabled={deleteModal.saving}
+                >
+                  {deleteModal.saving ? (
+                    <>
+                      <span className="loading loading-spinner loading-sm" />
+                      A apagar...
+                    </>
+                  ) : (
+                    "Apagar"
+                  )}
+                </button>
+              </>
+            }
+          >
+            <form id="delete-form" className="space-y-4" onSubmit={confirmDeleteOption}>
+              <p className="text-base-content/80">
+                Para apagar <strong>{deleteModal.record?.name}</strong>, digite a password do super admin.
+              </p>
+              <label className="form-control">
+                <span className="label-text font-semibold">Password do super admin</span>
+                <input
+                  type="password"
+                  className="input input-bordered"
+                  value={deleteModal.password}
+                  onChange={(e) => setDeleteModal((prev) => ({ ...prev, password: e.target.value }))}
+                  required
+                />
+              </label>
+              {deleteModal.error && <p className="text-sm text-error">{deleteModal.error}</p>}
+            </form>
+          </Modal>
+        )}
+      </div>
+    );
+  }
+
+function renderOptionCard(type, title, fullWidth = false) {
+  return (
+    <div className={`rounded-2xl border border-base-300 bg-base-100 p-4 space-y-3 shadow-sm ${fullWidth ? "w-full" : ""}`}>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h3 className="text-xl font-semibold">{title}</h3>
+          <p className="text-base text-base-content/70">Gerir {title.toLowerCase()} disponiveis.</p>
+        </div>
+        <button
+          type="button"
+          className="btn btn-sm btn-primary"
+          onClick={() => setManageModal({ open: true, type, search: "" })}
+        >
+          Gerir
+        </button>
+      </div>
+    </div>
+  );
+}
 
   function renderPublicHome() {
     return (
@@ -1031,6 +1455,32 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
       </form>
     </Modal>
   );
+}
+
+function sortByName(list = []) {
+  return [...list].sort((a, b) => (a?.name || "").localeCompare(b?.name || ""));
+}
+
+function manageTitle(type) {
+  switch (type) {
+    case "functions":
+      return "Funcoes";
+    case "competences":
+      return "Competencias";
+    case "geoAreas":
+      return "Areas geograficas";
+    case "activitySectors":
+      return "Setores de atividade";
+    default:
+      return "Itens";
+  }
+}
+
+function filteredManageItems(type, options, search) {
+  const list = (options && options[type]) || [];
+  const query = (search || "").toLowerCase().trim();
+  if (!query) return list;
+  return list.filter((item) => (item.name || "").toLowerCase().includes(query));
 }
 
 function moveItemInList(list, id, direction) {
