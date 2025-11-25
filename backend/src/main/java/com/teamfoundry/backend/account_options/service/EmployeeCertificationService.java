@@ -1,7 +1,7 @@
 package com.teamfoundry.backend.account_options.service;
 
-import com.teamfoundry.backend.account.dto.EmployeeCertificationRequest;
-import com.teamfoundry.backend.account.dto.EmployeeCertificationResponse;
+import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificationRequest;
+import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificationResponse;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account_options.model.Certifications;

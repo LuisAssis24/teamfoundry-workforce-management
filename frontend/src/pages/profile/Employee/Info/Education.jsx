@@ -67,12 +67,14 @@ export default function Education() {
   }, []);
 
   const handleChange = (event) => {
+    // Atualiza campo simples e limpa erro daquele campo.
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleFileSelect = (event) => {
+    // Guarda o ficheiro escolhido pelo utilizador.
     const file = event.target.files?.[0] || null;
     setForm((prev) => ({ ...prev, file }));
   };
@@ -88,6 +90,7 @@ export default function Education() {
   const prevent = (event) => event.preventDefault();
 
   const validateForm = () => {
+    // Validação mínima antes do upload.
     const newErrors = {};
     if (!form.name.trim()) newErrors.name = "O nome da formação é obrigatório.";
     if (!form.institution.trim()) newErrors.institution = "A instituição é obrigatória.";
@@ -97,6 +100,7 @@ export default function Education() {
   };
 
   const handleSubmit = async () => {
+    // Envia a formação com certificado; em sucesso fecha modal e atualiza lista local.
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);

@@ -12,7 +12,7 @@ export default function RecentJobs() {
 
   useEffect(() => {
     let isMounted = true;
-    // Nesta versão, reutilizamos apenas os dados já carregados no contexto (sem chamadas adicionais).
+    // Reutiliza apenas os dados já carregados no contexto (sem chamadas adicionais ao backend).
     const data = jobsData ?? { content: [] };
     setJobs(data.content ?? []);
     setLoading(false);

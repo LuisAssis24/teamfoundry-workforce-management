@@ -1,4 +1,4 @@
-package com.teamfoundry.backend.account.dto;
+package com.teamfoundry.backend.account_options.dto.employee;
 
 import lombok.Builder;
 import lombok.Value;

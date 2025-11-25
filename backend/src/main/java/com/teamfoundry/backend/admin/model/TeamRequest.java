@@ -29,6 +29,9 @@ public class TeamRequest {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "location")
+    private String location;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private State state;

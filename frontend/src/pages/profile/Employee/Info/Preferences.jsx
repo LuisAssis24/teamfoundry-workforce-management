@@ -78,12 +78,14 @@ export default function Preferences() {
   }, [profile, refreshProfile, preferencesData, setPreferencesData]);
 
   const functionOptions = useMemo(() => {
+    // Garante que funções já escolhidas continuam visíveis mesmo que não venham da API.
     const list = Array.isArray(options.functions) ? [...options.functions] : [];
     const extras = (form.roles || []).filter((r) => r && !list.includes(r));
     return [...extras, ...list];
   }, [options.functions, form.roles]);
 
   const handleSubmit = async (event) => {
+    // Valida e guarda preferências, sincronizando o contexto local.
     event.preventDefault();
     setFeedback("");
     setError("");
@@ -115,24 +117,28 @@ export default function Preferences() {
   };
 
   const clearFieldError = (field) => {
+    // Remove erro específico e limpa alertas globais.
     setFieldErrors((prev) => ({ ...prev, [field]: "" }));
     if (error) setError("");
     if (feedback) setFeedback("");
   };
 
   const handleRoleDropdownChange = (values) => {
+    // Normaliza seleção de funções (sem duplicados/nulos).
     const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
     setForm((prev) => ({ ...prev, roles: normalized }));
     clearFieldError("role");
   };
 
   const handleAreasChange = (values) => {
+    // Normaliza áreas geográficas.
     const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
     setForm((prev) => ({ ...prev, areas: normalized }));
     clearFieldError("areas");
   };
 
   const handleSkillsChange = (values) => {
+    // Normaliza competências.
     const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
     setForm((prev) => ({ ...prev, skills: normalized }));
     clearFieldError("skills");

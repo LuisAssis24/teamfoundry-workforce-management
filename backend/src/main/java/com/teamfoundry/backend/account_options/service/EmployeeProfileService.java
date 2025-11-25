@@ -45,6 +45,7 @@ public class EmployeeProfileService {
     }
 
     private EmployeeAccount findByEmailOrThrow(String email) {
+        // Normaliza e valida email antes de carregar a conta.
         String normalizedEmail = email == null ? null : email.trim().toLowerCase();
         if (normalizedEmail == null || normalizedEmail.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utilizador nao autenticado.");

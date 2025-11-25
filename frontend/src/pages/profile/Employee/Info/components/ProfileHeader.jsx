@@ -1,5 +1,6 @@
 import { useEmployeeProfile } from "../../EmployeeProfileContext.jsx";
 
+// Concatena nome/apelido respeitando valores em falta.
 const formatName = (first, last) => {
   if (!first && !last) return "";
   return `${first ?? ""} ${last ?? ""}`.trim();
