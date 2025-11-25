@@ -3,6 +3,7 @@ package com.teamfoundry.backend.admin.model;
 import com.teamfoundry.backend.admin.enums.State;
 import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.model.CompanyAccount;
+import com.teamfoundry.backend.account.model.EmployeeAccount;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -21,6 +22,10 @@ public class EmployeeRequest {
     @ManyToOne
     @JoinColumn(name = "id_team_request", nullable = false)
     private TeamRequest teamRequest;
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario")
+    private EmployeeAccount employee;
 
     @Column(name = "requested_role", nullable = false)
     private String requestedRole;
