@@ -1,10 +1,10 @@
-﻿import { apiFetch } from "./client.js";
+import { apiFetch } from "./client.js";
 
 const ADMIN_BASE = "/api/super-admin/site";
 
 async function toJsonOrThrow(resp, defaultMessage) {
   if (!resp.ok) {
-    const fallback = defaultMessage || "OperaÃ§Ã£o nÃ£o pÃ´de ser concluÃ­da.";
+    const fallback = defaultMessage || "Opera��ǜo nǜo p��de ser conclu��da.";
     const error = new Error(fallback);
     error.status = resp.status;
     throw error;
@@ -23,13 +23,13 @@ function jsonOptions(method, body) {
 // --- Public ---
 export async function fetchPublicHomepage() {
   const resp = await apiFetch("/api/site/homepage", {}, { autoRefresh: false });
-  return toJsonOrThrow(resp, "Falha ao carregar a home page pÃºblica.");
+  return toJsonOrThrow(resp, "Falha ao carregar a home page pǧblica.");
 }
 
 // --- Homepage sections ---
 export async function fetchHomepageConfig() {
   const resp = await apiFetch(`${ADMIN_BASE}/homepage`);
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel carregar as configuraÃ§Ãµes do site.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel carregar as configura����es do site.");
 }
 
 export async function updateSection(sectionId, payload) {
@@ -37,7 +37,7 @@ export async function updateSection(sectionId, payload) {
     `${ADMIN_BASE}/homepage/sections/${sectionId}`,
     jsonOptions("PUT", payload)
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel guardar a secÃ§Ã£o.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel guardar a sec��ǜo.");
 }
 
 export async function reorderSections(sectionIds) {
@@ -45,13 +45,13 @@ export async function reorderSections(sectionIds) {
     `${ADMIN_BASE}/homepage/sections/reorder`,
     jsonOptions("PUT", { ids: sectionIds })
   );
-  return toJsonOrThrow(resp, "OrdenaÃ§Ã£o das secÃ§Ãµes falhou.");
+  return toJsonOrThrow(resp, "Ordena��ǜo das sec����es falhou.");
 }
 
 // --- Industries ---
 export async function createIndustry(payload) {
   const resp = await apiFetch(`${ADMIN_BASE}/industries`, jsonOptions("POST", payload));
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel criar a indÃºstria.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel criar a indǧstria.");
 }
 
 export async function updateIndustry(industryId, payload) {
@@ -59,7 +59,7 @@ export async function updateIndustry(industryId, payload) {
     `${ADMIN_BASE}/industries/${industryId}`,
     jsonOptions("PUT", payload)
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel atualizar a indÃºstria.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel atualizar a indǧstria.");
 }
 
 export async function toggleIndustry(industryId, active) {
@@ -67,7 +67,7 @@ export async function toggleIndustry(industryId, active) {
     `${ADMIN_BASE}/industries/${industryId}/visibility`,
     jsonOptions("PATCH", { active })
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel alterar a visibilidade da indÃºstria.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel alterar a visibilidade da indǧstria.");
 }
 
 export async function reorderIndustries(ids) {
@@ -75,7 +75,7 @@ export async function reorderIndustries(ids) {
     `${ADMIN_BASE}/industries/reorder`,
     jsonOptions("PUT", { ids })
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel reordenar indÃºstrias.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel reordenar indǧstrias.");
 }
 
 export async function deleteIndustry(industryId) {
@@ -83,7 +83,7 @@ export async function deleteIndustry(industryId) {
     method: "DELETE",
   });
   if (!resp.ok) {
-    const error = new Error("NÃ£o foi possÃ­vel eliminar a indÃºstria.");
+    const error = new Error("Nǜo foi poss��vel eliminar a indǧstria.");
     error.status = resp.status;
     throw error;
   }
@@ -92,7 +92,7 @@ export async function deleteIndustry(industryId) {
 // --- Partners ---
 export async function createPartner(payload) {
   const resp = await apiFetch(`${ADMIN_BASE}/partners`, jsonOptions("POST", payload));
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel criar o parceiro.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel criar o parceiro.");
 }
 
 export async function updatePartner(partnerId, payload) {
@@ -100,7 +100,7 @@ export async function updatePartner(partnerId, payload) {
     `${ADMIN_BASE}/partners/${partnerId}`,
     jsonOptions("PUT", payload)
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel atualizar o parceiro.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel atualizar o parceiro.");
 }
 
 export async function togglePartner(partnerId, active) {
@@ -108,7 +108,7 @@ export async function togglePartner(partnerId, active) {
     `${ADMIN_BASE}/partners/${partnerId}/visibility`,
     jsonOptions("PATCH", { active })
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel alterar a visibilidade do parceiro.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel alterar a visibilidade do parceiro.");
 }
 
 export async function reorderPartners(ids) {
@@ -116,7 +116,7 @@ export async function reorderPartners(ids) {
     `${ADMIN_BASE}/partners/reorder`,
     jsonOptions("PUT", { ids })
   );
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel reordenar parceiros.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel reordenar parceiros.");
 }
 
 export async function deletePartner(partnerId) {
@@ -124,7 +124,7 @@ export async function deletePartner(partnerId) {
     method: "DELETE",
   });
   if (!resp.ok) {
-    const error = new Error("NÃ£o foi possÃ­vel eliminar o parceiro.");
+    const error = new Error("Nǜo foi poss��vel eliminar o parceiro.");
     error.status = resp.status;
     throw error;
   }
@@ -138,7 +138,7 @@ export async function uploadSiteImage(file) {
     method: "POST",
     body: formData,
   });
-  return toJsonOrThrow(resp, "NÃ£o foi possÃ­vel carregar a imagem.");
+  return toJsonOrThrow(resp, "Nǜo foi poss��vel carregar a imagem.");
 }
 
 // --- Authenticated home ---
@@ -147,9 +147,64 @@ export async function fetchAppHomePublic() {
   return toJsonOrThrow(resp, "Falha ao carregar a home autenticada.");
 }
 
+// --- Weekly tips ---
+export async function fetchWeeklyTipsPage() {
+  const resp = await apiFetch("/api/site/weekly-tips", {}, { autoRefresh: false });
+  return toJsonOrThrow(resp, "Falha ao carregar as dicas.");
+}
+
+export async function fetchWeeklyTipsAdmin() {
+  const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips`);
+  return toJsonOrThrow(resp, "N�o foi poss�vel carregar as dicas da semana.");
+}
+
+export async function createWeeklyTip(payload) {
+  const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips`, jsonOptions("POST", payload));
+  return toJsonOrThrow(resp, "N�o foi poss�vel criar a dica.");
+}
+
+export async function updateWeeklyTip(id, payload) {
+  const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}`, jsonOptions("PUT", payload));
+  return toJsonOrThrow(resp, "N�o foi poss�vel atualizar a dica.");
+}
+
+export async function toggleWeeklyTipVisibility(id, active) {
+  const resp = await apiFetch(
+    `${ADMIN_BASE}/weekly-tips/${id}/visibility`,
+    jsonOptions("PATCH", { active })
+  );
+  return toJsonOrThrow(resp, "N�o foi poss�vel alterar a visibilidade da dica.");
+}
+
+export async function markWeeklyTipFeatured(id) {
+  const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}/featured`, {
+    method: "PATCH",
+  });
+  return toJsonOrThrow(resp, "N�o foi poss�vel definir a dica da semana.");
+}
+
+export async function reorderWeeklyTips(ids) {
+  const resp = await apiFetch(
+    `${ADMIN_BASE}/weekly-tips/reorder`,
+    jsonOptions("PUT", { ids })
+  );
+  return toJsonOrThrow(resp, "N�o foi poss�vel reordenar as dicas.");
+}
+
+export async function deleteWeeklyTip(id) {
+  const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}`, {
+    method: "DELETE",
+  });
+  if (!resp.ok) {
+    const error = new Error("N�o foi poss�vel eliminar a dica.");
+    error.status = resp.status;
+    throw error;
+  }
+}
+
 export async function fetchAppHomeConfig() {
   const resp = await apiFetch(`${ADMIN_BASE}/app-home`);
-  return toJsonOrThrow(resp, "Não foi possível carregar a home autenticada.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel carregar a home autenticada.");
 }
 
 export async function updateAppHomeSection(sectionId, payload) {
@@ -157,7 +212,7 @@ export async function updateAppHomeSection(sectionId, payload) {
     `${ADMIN_BASE}/app-home/sections/${sectionId}`,
     jsonOptions("PUT", payload)
   );
-  return toJsonOrThrow(resp, "Não foi possível atualizar a secção.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel atualizar a sec��o.");
 }
 
 export async function reorderAppHomeSections(ids) {
@@ -165,12 +220,12 @@ export async function reorderAppHomeSections(ids) {
     `${ADMIN_BASE}/app-home/sections/reorder`,
     jsonOptions("PUT", { ids })
   );
-  return toJsonOrThrow(resp, "Não foi possível reordenar as secções.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel reordenar as sec��es.");
 }
 
 export async function createAppMetric(payload) {
   const resp = await apiFetch(`${ADMIN_BASE}/app-home/metrics`, jsonOptions("POST", payload));
-  return toJsonOrThrow(resp, "Não foi possível criar a métrica.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel criar a m�trica.");
 }
 
 export async function updateAppMetric(metricId, payload) {
@@ -178,7 +233,7 @@ export async function updateAppMetric(metricId, payload) {
     `${ADMIN_BASE}/app-home/metrics/${metricId}`,
     jsonOptions("PUT", payload)
   );
-  return toJsonOrThrow(resp, "Não foi possível atualizar a métrica.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel atualizar a m�trica.");
 }
 
 export async function toggleAppMetric(metricId, active) {
@@ -186,7 +241,7 @@ export async function toggleAppMetric(metricId, active) {
     `${ADMIN_BASE}/app-home/metrics/${metricId}/visibility`,
     jsonOptions("PATCH", { active })
   );
-  return toJsonOrThrow(resp, "Não foi possível alterar a visibilidade da métrica.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel alterar a visibilidade da m�trica.");
 }
 
 export async function reorderAppMetrics(ids) {
@@ -194,7 +249,7 @@ export async function reorderAppMetrics(ids) {
     `${ADMIN_BASE}/app-home/metrics/reorder`,
     jsonOptions("PUT", { ids })
   );
-  return toJsonOrThrow(resp, "Não foi possível reordenar as métricas.");
+  return toJsonOrThrow(resp, "N�o foi poss�vel reordenar as m�tricas.");
 }
 
 export async function deleteAppMetric(metricId) {
@@ -202,8 +257,9 @@ export async function deleteAppMetric(metricId) {
     method: "DELETE",
   });
   if (!resp.ok) {
-    const error = new Error("Não foi possível eliminar a métrica.");
+    const error = new Error("N�o foi poss�vel eliminar a m�trica.");
     error.status = resp.status;
     throw error;
   }
 }
+

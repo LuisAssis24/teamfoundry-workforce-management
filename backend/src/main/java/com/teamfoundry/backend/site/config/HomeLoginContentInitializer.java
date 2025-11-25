@@ -3,8 +3,10 @@ package com.teamfoundry.backend.site.config;
 import com.teamfoundry.backend.site.enums.HomeLoginSectionType;
 import com.teamfoundry.backend.site.model.HomeLoginMetric;
 import com.teamfoundry.backend.site.model.HomeLoginSection;
+import com.teamfoundry.backend.site.model.WeeklyTip;
 import com.teamfoundry.backend.site.repository.HomeLoginMetricRepository;
 import com.teamfoundry.backend.site.repository.HomeLoginSectionRepository;
+import com.teamfoundry.backend.site.repository.WeeklyTipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ public class HomeLoginContentInitializer implements CommandLineRunner {
 
     private final HomeLoginSectionRepository sections;
     private final HomeLoginMetricRepository metrics;
+    private final WeeklyTipRepository weeklyTips;
 
     @Override
     public void run(String... args) {
@@ -29,6 +32,9 @@ public class HomeLoginContentInitializer implements CommandLineRunner {
         }
         if (metrics.count() == 0) {
             metrics.saveAll(defaultMetrics());
+        }
+        if (weeklyTips.count() == 0) {
+            weeklyTips.saveAll(defaultWeeklyTips());
         }
     }
 
@@ -53,8 +59,8 @@ public class HomeLoginContentInitializer implements CommandLineRunner {
                         "Dica da Semana",
                         "Seguranca em primeiro lugar!",
                         "Antes de comecares o turno, confirma se todos os equipamentos estao em boas condicoes.\nPequenos cuidados evitam grandes acidentes.",
-                        "Ver mais",
-                        "#",
+                        "Ver mais dicas",
+                        "/dicas",
                         false,
                         null,
                         null,
@@ -135,5 +141,17 @@ public class HomeLoginContentInitializer implements CommandLineRunner {
         metric.setDescription(description);
         metric.setActive(true);
         return metric;
+    }
+
+    private List<WeeklyTip> defaultWeeklyTips() {
+        WeeklyTip tip = new WeeklyTip();
+        tip.setCategory("Seguranca");
+        tip.setTitle("Seguranca em primeiro lugar!");
+        tip.setDescription("Antes de comecares o turno, confirma se todos os equipamentos estao em boas condicoes.\nPequenos cuidados evitam grandes acidentes.");
+        tip.setPublishedAt(java.time.LocalDate.now());
+        tip.setFeatured(true);
+        tip.setActive(true);
+        tip.setDisplayOrder(0);
+        return List.of(tip);
     }
 }

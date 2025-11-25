@@ -2,6 +2,7 @@ package com.teamfoundry.backend.site.controller;
 
 import com.teamfoundry.backend.site.dto.HomeLoginConfigResponse;
 import com.teamfoundry.backend.site.dto.HomepageConfigResponse;
+import com.teamfoundry.backend.site.dto.WeeklyTipsPageResponse;
 import com.teamfoundry.backend.site.service.SiteContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,5 +24,10 @@ public class SitePublicController {
     @GetMapping("/app-home")
     public HomeLoginConfigResponse appHome() {
         return service.getPublicHomeLogin();
+    }
+
+    @GetMapping("/weekly-tips")
+    public WeeklyTipsPageResponse weeklyTips() {
+        return service.getPublicWeeklyTips();
     }
 }
