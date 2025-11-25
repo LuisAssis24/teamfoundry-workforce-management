@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import ProfileHeader from "./components/ProfileHeader.jsx";
-import ProfileTabs from "./components/ProfileTabs.jsx";
+import InfoLayout from "./components/InfoLayout.jsx";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 import RecentJobCard from "./components/RecentJobCard.jsx";
 import { listEmployeeJobs } from "../../../../api/profile/profileJobs.js";
+import { formatName } from "../utils/profileUtils.js";
 
 export default function RecentJobs() {
   const [jobs, setJobs] = useState([]);
@@ -50,10 +51,7 @@ export default function RecentJobs() {
   }, [profile, refreshProfile, jobsData, setJobsData]);
 
   return (
-    <section>
-      <ProfileHeader name={displayName} />
-      <ProfileTabs />
-
+    <InfoLayout name={displayName}>
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">
         <div className="p-4 md:p-6 space-y-4">
           {error && (
@@ -75,7 +73,7 @@ export default function RecentJobs() {
           )}
         </div>
       </div>
-    </section>
+    </InfoLayout>
   );
 }
 
@@ -97,12 +95,6 @@ function EmptyState() {
   );
 }
 
-function formatName(firstName, lastName) {
-  const trimmedFirst = firstName?.trim();
-  const trimmedLast = lastName?.trim();
-  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
-  return full || "Nome Sobrenome";
-}
 function formatDateRange(start, end) {
   const options = { year: "numeric", month: "short" };
   const format = (date) => (date ? new Date(date).toLocaleDateString("pt-PT", options) : "—");

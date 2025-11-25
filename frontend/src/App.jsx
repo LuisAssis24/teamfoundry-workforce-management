@@ -73,7 +73,7 @@ function App() {
       <Route path="/candidato" element={<EmployeeLayout />}>
         <Route index element={<CandidateIndexRedirect />} />
         <Route path="dados-pessoais" element={<PersonalDetails />} />
-        <Route path="formacao" element={<Certificates />} />
+        <Route path="certificacoes" element={<Certificates />} />
         <Route path="ultimos-trabalhos" element={<RecentJobs />} />
         <Route path="preferencias" element={<Preferences />} />
         <Route path="ofertas" element={<OfertasEmprego />} />

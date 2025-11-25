@@ -1,10 +1,10 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
-import ProfileTabs from "./components/ProfileTabs.jsx";
-import ProfileHeader from "./components/ProfileHeader.jsx";
+import InfoLayout from "./InfoLayout.jsx";
 import { updateEmployeeProfile } from "../../../../api/profile/employeeProfile.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
+import { formatName } from "../utils/profileUtils.js";
 
 const genderOptions = [
   { value: "MALE", label: "Masculino" },
@@ -95,11 +95,7 @@ export default function PersonalDetails() {
   };
 
   return (
-    <section>
-      <ProfileHeader name={displayName} />
-
-      <ProfileTabs />
-
+    <InfoLayout name={displayName}>
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow">
         <form onSubmit={handleSubmit}>
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -183,13 +179,7 @@ export default function PersonalDetails() {
           </div>
         </form>
       </div>
-    </section>
+    </InfoLayout>
   );
 }
 
-function formatName(firstName, lastName) {
-  const trimmedFirst = firstName?.trim();
-  const trimmedLast = lastName?.trim();
-  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
-  return full || "Nome Sobrenome";
-}
