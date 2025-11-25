@@ -1,6 +1,5 @@
 package com.teamfoundry.backend.admin.repository;
 
-import com.teamfoundry.backend.admin.dto.WorkRequestResponse;
 import com.teamfoundry.backend.admin.enums.State;
 import com.teamfoundry.backend.admin.model.TeamRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,24 +13,7 @@ public interface TeamRequestRepository extends JpaRepository<TeamRequest, Intege
 
     long countByState(State state);
 
-    @Query("""
-            SELECT new com.teamfoundry.backend.admin.dto.WorkRequestResponse(
-                tr.id,
-                c.name,
-                c.email,
-                tr.teamName,
-                tr.description,
-                tr.state,
-                tr.responsibleAdminId,
-                tr.startDate,
-                tr.endDate,
-                tr.createdAt
-            )
-            FROM TeamRequest tr
-            JOIN tr.company c
-            ORDER BY tr.createdAt DESC
-            """)
-    List<WorkRequestResponse> findAllForSuperAdmin();
+    List<TeamRequest> findByResponsibleAdminId(Integer adminId);
 
     @Query("""
             SELECT tr.responsibleAdminId AS adminId, COUNT(tr) AS total

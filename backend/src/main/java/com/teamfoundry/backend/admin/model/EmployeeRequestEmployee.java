@@ -1,6 +1,7 @@
 package com.teamfoundry.backend.admin.model;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.admin.enums.State;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,4 +23,7 @@ public class EmployeeRequestEmployee {
     @ManyToOne
     @JoinColumn(name = "id_funcionario", nullable = false)
     private EmployeeAccount employee;
+
+    @Column(nullable = false)
+    private boolean active;
 }

@@ -8,14 +8,14 @@ async function parseJson(resp) {
   }
 }
 
-async function handleResponse(resp, defaultMessage) {
+async function handleResponse(resp, fallbackMessage) {
   if (resp.ok) {
     if (resp.status === 204) return null;
     return (await parseJson(resp)) ?? null;
   }
 
   const payload = await parseJson(resp);
-  throw new Error(payload?.error || defaultMessage);
+  throw new Error(payload?.error || fallbackMessage);
 }
 
 export const teamRequestsAPI = {
@@ -46,5 +46,13 @@ export const teamRequestsAPI = {
     );
     if (!data) throw new Error("Resposta inesperada do servidor.");
     return data;
+  },
+
+  async getAssignedToMe() {
+    const data = await handleResponse(
+        await apiFetch("/api/admin/work-requests"),
+        "Falha ao carregar as requisições atribuídas."
+    );
+    return Array.isArray(data) ? data : [];
   },
 };

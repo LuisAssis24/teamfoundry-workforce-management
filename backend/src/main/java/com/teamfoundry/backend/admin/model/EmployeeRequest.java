@@ -31,4 +31,5 @@ public class EmployeeRequest {
 
     @Column(name = "date_accepted", nullable = false)
     private LocalDateTime acceptedDate;
+
 }
