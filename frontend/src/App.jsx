@@ -32,11 +32,13 @@ import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
 import TeamManagement from "./pages/admin/TeamManagement/TeamManagement.jsx";
 import BuildTeamSearch from "./pages/admin/TeamManagement/BuildTeamSearch.jsx";
 import HomeLayout from "./pages/home/HomeLayout.jsx";
+import WeeklyTipsPage from "./pages/home/WeeklyTipsPage.jsx";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeLayout />} />
+      <Route path="/dicas" element={<WeeklyTipsPage />} />
       <Route path="/login" element={<CandidateLogin />} />
       <Route
         path="/forgot-password"
