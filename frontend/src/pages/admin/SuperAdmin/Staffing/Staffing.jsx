@@ -1,49 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import WorkRequestCard from '../../../../components/ui/WorkManagement/WorkRequestCard';
 import AssignAdminModal from '../../../../components/ui/WorkManagement/AssignAdminModal';
-
-const mockRequests = [
-  {
-    id: 1,
-    company: { name: 'Empresa Alpha' },
-    teamName: 'Equipe Comercial',
-    description: 'Nova equipa para expansão de vendas.',
-    state: 'PENDING',
-    responsibleAdminId: null,
-    startDate: '2024-10-01',
-    endDate: '2024-11-30',
-    createdAt: '2024-09-15',
-  },
-  {
-    id: 2,
-    company: { name: 'Empresa Beta' },
-    teamName: 'Equipe Tech',
-    description: 'Squad para novo produto mobile.',
-    state: 'INCOMPLETE',
-    responsibleAdminId: 12,
-    startDate: '2024-08-10',
-    endDate: null,
-    createdAt: '2024-08-01',
-  },
-  {
-    id: 3,
-    company: { name: 'Empresa Gamma' },
-    teamName: 'Equipe Suporte',
-    description: 'Equipe de suporte ao cliente.',
-    state: 'COMPLETE',
-    responsibleAdminId: 5,
-    startDate: '2024-07-01',
-    endDate: '2024-07-30',
-    createdAt: '2024-06-20',
-  },
-];
+import { teamRequestsAPI } from '../../../../api/teamRequests.js';
 
 export default function GestaoTrabalho() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [adminList] = useState([]);
-  const [workRequests] = useState(mockRequests);
+  const [workRequests, setWorkRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+useEffect(() => {
+  const fetchRequests = async () => {
+    try {
+      const data = await teamRequestsAPI.getAll();
+      setWorkRequests(data);
+    } catch (err) {
+      setError("Erro ao carregar requisições");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRequests();
+}, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);

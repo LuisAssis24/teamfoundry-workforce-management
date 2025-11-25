@@ -33,6 +33,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import com.teamfoundry.backend.account.service.VerificationEmailService;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import com.teamfoundry.backend.site.config.HomeLoginContentInitializer;
+
 
 
 import java.time.LocalDate;
@@ -40,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,6 +70,9 @@ class EmployeeRegistrationIntegrationTest {
 
     @MockBean
     VerificationEmailService verificationEmailService;
+
+    @MockBean
+    HomeLoginContentInitializer homeLoginContentInitializer;
 
 
     private final String email = "Candidate@Test.com";
