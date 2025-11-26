@@ -1,18 +1,18 @@
 import React from 'react';
-import Button from '../Button/Button';
 import PropTypes from 'prop-types';
+import Button from '../../../../../components/ui/Button/Button.jsx';
 
 const WorkRequestCard = ({
-  company,
-  teamName,
-  description,
-  state,
-  responsibleAdminId,
-  startDate,
-  endDate,
-  createdAt,
-  onAssignAdmin,
-}) => {
+                           company,
+                           teamName,
+                           description,
+                           state,
+                           responsibleAdminId,
+                           startDate,
+                           endDate,
+                           createdAt,
+                           onAssignAdmin,
+                         }) => {
   const getStatus = () => {
     switch (state) {
       case 'PENDING':
@@ -30,68 +30,66 @@ const WorkRequestCard = ({
     if (!dateValue) return 'N/A';
     const parsedDate = new Date(dateValue);
     return Number.isNaN(parsedDate.getTime())
-      ? 'N/A'
-      : parsedDate.toLocaleDateString('pt-PT');
+        ? 'N/A'
+        : parsedDate.toLocaleDateString('pt-PT');
   };
 
   const { label: statusLabel, color: statusColor } = getStatus();
 
   return (
-    <div className="bg-base-100 rounded-box shadow-sm p-6 mb-4 border border-base-200">
-      <div className="flex justify-between items-start gap-6">
-        <div className="flex-1">
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <p className="text-label font-medium text-base-content">
-                <span className="font-semibold">Empresa:</span> {company?.name || 'N/A'}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Equipe:</span> {teamName || 'N/A'}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Descricao:</span> {description || 'N/A'}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Responsavel:</span>{' '}
-                {responsibleAdminId ? `Admin #${responsibleAdminId}` : 'N/A'}
-              </p>
-            </div>
+      <div className="bg-base-100 rounded-box shadow-sm p-6 mb-4 border border-base-200">
+        <div className="flex justify-between items-start gap-6">
+          <div className="flex-1">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <p className="text-label font-medium text-base-content">
+                  <span className="font-semibold">Empresa:</span> {company?.name || 'N/A'}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Equipe:</span> {teamName || 'N/A'}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Descricao:</span> {description || 'N/A'}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Responsavel:</span>{' '}
+                  {responsibleAdminId ? `Admin #${responsibleAdminId}` : 'N/A'}
+                </p>
+              </div>
 
-            <div className="space-y-2">
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Data de inicio:</span> {formatDate(startDate)}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Data de finalizacao:</span> {formatDate(endDate)}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Criado em:</span> {formatDate(createdAt)}
-              </p>
-              <p className="text-label text-base-content">
-                <span className="font-semibold">Status:</span>{' '}
-                <span className={`font-semibold ${statusColor}`}>{statusLabel}</span>
-              </p>
+              <div className="space-y-2">
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Data de inicio:</span> {formatDate(startDate)}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Data de finalizacao:</span> {formatDate(endDate)}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Criado em:</span> {formatDate(createdAt)}
+                </p>
+                <p className="text-label text-base-content">
+                  <span className="font-semibold">Status:</span>{' '}
+                  <span className={`font-semibold ${statusColor}`}>{statusLabel}</span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex-shrink-0">
-          <Button
-            variant={!responsibleAdminId ? 'success' : 'primary'}
-            onClick={onAssignAdmin}
-            label={!responsibleAdminId ? 'Atribuir Responsavel' : 'Modificar Responsavel'}
-            className="w-auto"
-          />
+          <div className="flex-shrink-0">
+            <Button
+                variant={!responsibleAdminId ? 'success' : 'primary'}
+                onClick={onAssignAdmin}
+                label={!responsibleAdminId ? 'Atribuir Responsavel' : 'Modificar Responsavel'}
+                className="w-auto"
+            />
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
 WorkRequestCard.propTypes = {
-  company: PropTypes.shape({
-    name: PropTypes.string,
-  }),
+  company: PropTypes.shape({ name: PropTypes.string }),
   teamName: PropTypes.string.isRequired,
   description: PropTypes.string,
   state: PropTypes.string.isRequired,
