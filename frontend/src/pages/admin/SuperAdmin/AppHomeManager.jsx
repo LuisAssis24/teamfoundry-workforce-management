@@ -509,7 +509,6 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
   );
 }
 
-
 function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
   if (!form) return null;
 
