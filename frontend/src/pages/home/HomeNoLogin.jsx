@@ -88,7 +88,7 @@ export function HomeNoLogin() {
             orderedSections.map(renderSection)
           ) : (
             <div className="max-w-6xl mx-auto px-6 py-24">
-              <EmptyState message="Nenhuma sec��ǜo foi ativada ainda." />
+              <EmptyState message="Nenhuma secção foi ativada ainda." />
             </div>
           )}
           <Footer />
@@ -141,11 +141,12 @@ function HeroSection({ section }) {
 
 function IndustriesSection({ section, industries }) {
   return (
-    <section id="industrias" className="bg-base-100 py-16">
-      <div className="max-w-6xl mx-auto px-6 space-y-10">
+    <section id="industrias" className="relative bg-base-100 py-16 overflow-hidden">
+      <div className="absolute inset-0 bg-neutral/50" aria-hidden="true" />
+      <div className="relative max-w-6xl mx-auto px-6 space-y-10">
         <SectionHeader
           section={section}
-          fallbackTitle="Indǧstrias em que atuamos"
+          fallbackTitle="Industrias em que atuamos"
           fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
         />
         {industries?.length ? (
@@ -167,7 +168,7 @@ function IndustriesSection({ section, industries }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda nǜo hǭ indǧstrias destacadas." />
+          <EmptyState message="Ainda não há industrias destacadas." />
         )}
       </div>
     </section>
@@ -215,7 +216,7 @@ function PartnersSection({ section, partners }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda nǜo hǭ parceiros publicados." />
+          <EmptyState message="Ainda não há parceiros publicados." />
         )}
       </div>
     </section>
