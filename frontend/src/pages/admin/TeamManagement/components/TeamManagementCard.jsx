@@ -14,7 +14,7 @@ export default function TeamManagementCard({ id, company, email, phone, workforc
       </dl>
 
       <Link
-        to={`/admin/team-management/build?team=${id ?? ""}`}
+        to={`/admin/team-management/requests?team=${id ?? ""}`}
         className="absolute right-6 top-1/2 -translate-y-1/2 rounded-xl bg-[#1F2959] px-8 py-2 text-center text-sm font-semibold text-white shadow"
       >
         Montar
