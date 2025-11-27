@@ -168,7 +168,7 @@ function IndustriesSection({ section, industries }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda nǜo hǭ indǧstrias destacadas." />
+          <EmptyState message="Ainda não há industrias destacadas." />
         )}
       </div>
     </section>
@@ -216,7 +216,7 @@ function PartnersSection({ section, partners }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda nǜo hǭ parceiros publicados." />
+          <EmptyState message="Ainda não há parceiros publicados." />
         )}
       </div>
     </section>
