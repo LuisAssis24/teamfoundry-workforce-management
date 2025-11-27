@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -85,16 +87,26 @@ public class SiteContentService {
 
     @Transactional(readOnly = true)
     public WeeklyTipsPageResponse getPublicWeeklyTips() {
-        List<WeeklyTip> tipEntities = weeklyTips.findAllByOrderByDisplayOrderAsc();
-        List<WeeklyTip> activeTips = tipEntities.stream()
+        List<WeeklyTip> activeTips = weeklyTips.findAllByOrderByDisplayOrderAsc().stream()
                 .filter(WeeklyTip::isActive)
                 .toList();
 
-        WeeklyTip tipOfWeek = weeklyTips.findFirstByFeaturedIsTrueAndActiveIsTrueOrderByDisplayOrderAsc()
-                .orElseGet(() -> activeTips.stream().findFirst().orElse(null));
+        // Limit the rotation pool to at most 11 tips
+        List<WeeklyTip> rotationPool = activeTips.stream()
+                .sorted(Comparator.comparingInt(WeeklyTip::getDisplayOrder))
+                .limit(11)
+                .toList();
 
-        WeeklyTipResponse highlighted = tipOfWeek != null ? mapWeeklyTip(tipOfWeek) : null;
-        List<WeeklyTipResponse> all = activeTips.stream()
+        WeeklyTipResponse highlighted = null;
+        if (!rotationPool.isEmpty()) {
+            LocalDate today = LocalDate.now();
+            int weekOfYear = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+            int index = (weekOfYear - 1) % rotationPool.size();
+            WeeklyTip tipOfWeek = rotationPool.get(index);
+            highlighted = mapWeeklyTip(tipOfWeek);
+        }
+
+        List<WeeklyTipResponse> all = rotationPool.stream()
                 .map(this::mapWeeklyTip)
                 .toList();
 
@@ -366,6 +378,13 @@ public class SiteContentService {
     }
 
     public WeeklyTipResponse createWeeklyTip(WeeklyTipRequest request) {
+        // Limit total number of tips to 11
+        long totalTips = weeklyTips.count();
+        if (totalTips >= 11) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ja existem 11 dicas configuradas. Edite ou remova uma dica antes de criar outra.");
+        }
+
         WeeklyTip tip = new WeeklyTip();
         tip.setCategory(request.category());
         tip.setTitle(request.title());

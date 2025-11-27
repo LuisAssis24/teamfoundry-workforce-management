@@ -168,7 +168,7 @@ function IndustriesSection({ section, industries }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda não há industrias destacadas." />
+          <EmptyState message="Ainda nǜo hǭ indǧstrias destacadas." />
         )}
       </div>
     </section>

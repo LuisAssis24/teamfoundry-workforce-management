@@ -134,7 +134,7 @@ function TipOfWeekCard({ tip, loading }) {
 
 function AllTipsGrid({ tips, loading }) {
   const hasTips = tips && tips.length > 0;
-  const items = hasTips ? tips : loading ? [] : [];
+  const items = hasTips ? tips.slice(0, 10) : [];
 
   return (
     <section className="space-y-6">
@@ -163,7 +163,7 @@ function AllTipsGrid({ tips, loading }) {
       )}
 
       {hasTips && (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2">
           {items.map((tip) => (
             <article
               key={tip.id}

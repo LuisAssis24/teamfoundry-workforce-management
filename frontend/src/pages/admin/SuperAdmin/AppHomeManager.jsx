@@ -454,38 +454,33 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
           <h2 className="card-title text-3xl">Dica da semana</h2>
         </div>
         <form className="space-y-4" onSubmit={onSubmit}>
+          {/* Título da secção na home autenticada */}
           <FieldGroup
-            label="Tí­tulo"
+            label="Titulo"
             value={form.title}
             onChange={(value) => onFieldChange("title", value)}
-            placeholder="Segurança em primeiro lugar"
+            placeholder="Dica da semana"
           />
-          <FieldGroup
-            label="Subtí­tulo"
-            value={form.subtitle}
-            onChange={(value) => onFieldChange("subtitle", value)}
-            placeholder="Resumo curto"
-          />
-          <label className="form-control">
-            <span className="label-text font-semibold">Conteúdo</span>
-            <textarea
-              className="textarea textarea-bordered min-h-[120px]"
-              value={form.content}
-              onChange={(e) => onFieldChange("content", e.target.value)}
+
+          {/* Texto + URL do botão na mesma linha */}
+          <div className="flex flex-col gap-4 md:flex-row">
+            <FieldGroup
+              label="Texto do botão"
+              value={form.primaryCtaLabel}
+              onChange={(value) => onFieldChange("primaryCtaLabel", value)}
+              placeholder="Ver mais"
+              className="flex-1"
             />
-          </label>
-          <FieldGroup
-            label="Texto do CTA"
-            value={form.primaryCtaLabel}
-            onChange={(value) => onFieldChange("primaryCtaLabel", value)}
-            placeholder="Ver mais"
-          />
-          <FieldGroup
-            label="URL do CTA"
-            value={form.primaryCtaUrl}
-            onChange={(value) => onFieldChange("primaryCtaUrl", value)}
-            placeholder="#"
-          />
+            <FieldGroup
+              label="URL do botão"
+              value={form.primaryCtaUrl}
+              onChange={(value) => onFieldChange("primaryCtaUrl", value)}
+              placeholder="/dicas"
+              className="flex-1"
+            />
+          </div>
+
+          {/* Visibilidade da secção */}
           <label className="label cursor-pointer gap-3">
             <input
               type="checkbox"
@@ -495,6 +490,7 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
             />
             <span className="label-text">Mostrar secção</span>
           </label>
+
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? (
@@ -512,6 +508,7 @@ function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
     </div>
   );
 }
+
 
 function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
   if (!form) return null;

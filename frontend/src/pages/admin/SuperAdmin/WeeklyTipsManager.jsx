@@ -280,7 +280,7 @@ function TipsTable({ tips, onEdit, onMove, onToggle, onMarkFeatured }) {
         <thead>
           <tr className="text-xs uppercase tracking-wide text-base-content/60">
             <th />
-            <th>Categoria</th>
+            <th>Subtitulo</th>
             <th>Titulo</th>
             <th>Data</th>
             <th>Estado</th>
@@ -371,7 +371,7 @@ function WeeklyTipModal({ state, form, saving, onChange, onSubmit, onClose, onDe
 
   return (
     <Modal
-      isOpen={state.open}
+      open={state.open}
       onClose={saving ? null : onClose}
       title={isEdit ? "Editar dica" : "Nova dica"}
       actions={
@@ -404,7 +404,7 @@ function WeeklyTipModal({ state, form, saving, onChange, onSubmit, onClose, onDe
       <form id="weekly-tip-form" className="space-y-4" onSubmit={onSubmit}>
         <div className="grid gap-4 md:grid-cols-[1.5fr_1fr]">
           <label className="form-control">
-            <span className="label-text font-semibold">Categoria</span>
+            <span className="label-text font-semibold">Subtitulo</span>
             <input
               type="text"
               className="input input-bordered"

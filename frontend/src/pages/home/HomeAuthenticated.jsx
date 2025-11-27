@@ -188,11 +188,13 @@ function MetricsSection({ metrics }) {
 
 function WeeklyTipSection({ section, tipOfWeek, error }) {
   const hasTip = Boolean(tipOfWeek);
-  const title = hasTip ? tipOfWeek.title : section?.subtitle ?? FALLBACK_WEEKLY_TIP.title;
-  const descriptionText = hasTip ? tipOfWeek.description : section?.content;
+  const title = section?.title ?? FALLBACK_WEEKLY_TIP.title;
+  const descriptionText = hasTip
+    ? tipOfWeek.description
+    : FALLBACK_WEEKLY_TIP.description.join("\n");
   const paragraphs = descriptionText
     ? descriptionText.split("\n").filter(Boolean)
-    : FALLBACK_WEEKLY_TIP.description;
+    : [];
   const ctaLabel = section?.primaryCtaLabel ?? "Ver mais dicas";
   const ctaUrl = section?.primaryCtaUrl ?? "/dicas";
 
