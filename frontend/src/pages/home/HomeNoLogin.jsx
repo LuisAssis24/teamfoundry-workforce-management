@@ -142,8 +142,8 @@ function HeroSection({ section }) {
 function IndustriesSection({ section, industries }) {
   return (
     <section id="industrias" className="relative bg-base-100 py-16 overflow-hidden">
-  <div className="absolute inset-0 bg-neutral/50" aria-hidden="true" />
-  <div className="relative max-w-6xl mx-auto px-6 space-y-10">
+      <div className="absolute inset-0 bg-neutral/50" aria-hidden="true" />
+      <div className="relative max-w-6xl mx-auto px-6 space-y-10">
         <SectionHeader
           section={section}
           fallbackTitle="Indǧstrias em que atuamos"
