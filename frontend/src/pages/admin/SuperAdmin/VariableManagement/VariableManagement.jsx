@@ -92,9 +92,9 @@ export default function VariableManagement() {
     activitySectors: [],
   });
   const optionLabels = {
-    functions: "funcao",
-    competences: "competencia",
-    geoAreas: "area geografica",
+    functions: "função",
+    competences: "competência",
+    geoAreas: "área geográfica",
     activitySectors: "setor de atividade",
   };
   const [manageModal, setManageModal] = useState({
@@ -638,7 +638,7 @@ export default function VariableManagement() {
 
   function renderGlobalVariables() {
     return (
-      <div className="space-y-6">
+      <div className="space-y-10 pt-4">
         {optionsError && (
           <div className="alert alert-error shadow flex justify-between">
             <span>{optionsError}</span>
@@ -653,7 +653,7 @@ export default function VariableManagement() {
         )}
 
 
-          <div className="card-body space-y-6">
+          <div className="space-y-6">
             {optionsLoading ? (
               <div className="flex min-h-[200px] items-center justify-center">
                 <span className="loading loading-spinner loading-lg text-primary" />
@@ -690,7 +690,7 @@ export default function VariableManagement() {
             title={`Gerir ${manageTitle(manageModal.type)}`}
             onClose={() => setManageModal({ open: false, type: null, search: "" })}
             actions={
-              <div className="flex justify-center w-full">
+              <div className="flex justify-center w-full mt-4">
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -702,11 +702,11 @@ export default function VariableManagement() {
             }
           >
             <div className="space-y-5 min-h-[360px]">
-              <div className="space-y-2">
-                <label className="label-text font-semibold">Pesquisar</label>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="label-text font-semibold">Pesquisar</span>
                 <input
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered flex-1 min-w-[220px]"
                   placeholder="Digite para filtrar"
                   value={manageModal.search}
                   onChange={(e) =>
@@ -723,11 +723,11 @@ export default function VariableManagement() {
                     <span className="font-medium">{item.name}</span>
                     <button
                       type="button"
-                      className="btn btn-xs btn-error btn-square transition-all duration-150 hover:scale-105"
+                      className="btn btn-xs btn-outline btn-error btn-square transition-all duration-150 hover:scale-105"
                       title="Apagar"
                       onClick={() => openDeleteModal(manageModal.type, item)}
                     >
-                      <i className="bi bi-x-lg text-white" />
+                      <i className="bi bi-x-lg text-error" />
                     </button>
                   </div>
                 ))}
@@ -771,19 +771,20 @@ export default function VariableManagement() {
             }
           >
             <form id="function-form" className="space-y-4" onSubmit={handleOptionSubmit}>
-              <label className="form-control">
-                <span className="label-text font-semibold">
-                  Nome da {optionLabels[optionModal.type] || "opcao"}
-                </span>
+              <div className="form-control w-full">
+                <label htmlFor="option-name" className="label-text font-semibold mb-1">
+                  Nome da {optionLabels[optionModal.type] || "opção"}
+                </label>
                 <input
+                  id="option-name"
                   type="text"
-                  className="input input-bordered"
+                  className="input input-bordered w-full"
                   value={optionModal.name}
                   onChange={(e) => setOptionModal((prev) => ({ ...prev, name: e.target.value }))}
                   placeholder="Ex.: Soldador"
                   required
                 />
-              </label>
+              </div>
               <p className="text-sm text-base-content/60">
                 Insira o nome exatamente como deseja que apareca para os utilizadores.
               </p>
@@ -804,7 +805,7 @@ export default function VariableManagement() {
                 <button
                   type="submit"
                   form="delete-form"
-                  className="btn btn-error"
+                  className="btn btn-outline btn-error"
                   disabled={deleteModal.saving}
                 >
                   {deleteModal.saving ? (
@@ -1000,7 +1001,7 @@ function renderOptionCard(type, title, fullWidth = false) {
   }
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-12 pt-8">
       <header>
         <p className="text-sm uppercase tracking-[0.35em] text-primary/80">
           Gestão do site
@@ -1008,7 +1009,7 @@ function renderOptionCard(type, title, fullWidth = false) {
         <h1 className="text-4xl font-extrabold text-primary">Configurações do site</h1>
       </header>
 
-      <nav className="tabs tabs-boxed bg-base-100 shadow-sm w-fit">
+      <nav className="tabs tabs-boxed bg-base-100 shadow-sm w-full md:w-fit">
         {VIEW_TABS.map((tab) => (
           <button
             key={tab.id}
@@ -1464,11 +1465,11 @@ function sortByName(list = []) {
 function manageTitle(type) {
   switch (type) {
     case "functions":
-      return "Funcoes";
+      return "Funções";
     case "competences":
-      return "Competencias";
+      return "Competências";
     case "geoAreas":
-      return "Areas geograficas";
+      return "Áreas geográficas";
     case "activitySectors":
       return "Setores de atividade";
     default:
