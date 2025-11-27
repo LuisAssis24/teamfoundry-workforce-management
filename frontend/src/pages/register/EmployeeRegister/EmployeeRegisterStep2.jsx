@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
-import { registerStep2 } from "../../../api/auth.js";
+import { registerStep2 } from "../../../api/auth/auth.js";
 
 const phoneRegex = /^\+?[0-9\s\-().]{9,15}$/;
 const nifRegex = /^\d{9}$/;

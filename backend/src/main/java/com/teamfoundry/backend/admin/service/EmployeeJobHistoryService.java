@@ -5,6 +5,8 @@ import com.teamfoundry.backend.admin.model.EmployeeRequest;
 import com.teamfoundry.backend.admin.model.TeamRequest;
 import com.teamfoundry.backend.admin.repository.EmployeeRequestRepository;
 import com.teamfoundry.backend.account.model.CompanyAccount;
+import com.teamfoundry.backend.account.model.EmployeeAccount;
+import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.List;
 public class EmployeeJobHistoryService {
 
     private final EmployeeRequestRepository employeeRequestRepository;
+    private final EmployeeAccountRepository employeeAccountRepository;
 
     /**
      * Lista os pedidos (requests) associados ao colaborador, já aceites/associados.
@@ -35,6 +38,46 @@ public class EmployeeJobHistoryService {
                 .toList();
     }
 
+    /**
+     * Lista ofertas ainda não associadas a nenhum colaborador.
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeJobSummary> listOpenOffers() {
+        List<EmployeeRequest> requests = employeeRequestRepository.findByEmployeeIsNullOrderByCreatedAtDesc();
+        return requests.stream()
+                .map(this::toSummary)
+                .toList();
+    }
+
+    /**
+     * Associa a oferta ao colaborador autenticado.
+     */
+    @Transactional
+    public EmployeeJobSummary acceptOffer(Integer requestId, String email) {
+        if (!StringUtils.hasText(email)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Utilizador não autenticado.");
+        }
+        String normalizedEmail = email.trim().toLowerCase();
+        EmployeeAccount employee = findEmployee(normalizedEmail);
+
+        EmployeeRequest request = employeeRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Oferta não encontrada."));
+
+        if (request.getEmployee() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Oferta já foi atribuída.");
+        }
+
+        request.setEmployee(employee);
+        request.setAcceptedDate(java.time.LocalDateTime.now());
+        EmployeeRequest saved = employeeRequestRepository.save(request);
+        return toSummary(saved);
+    }
+
+    private EmployeeAccount findEmployee(String normalizedEmail) {
+        return employeeAccountRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Conta não encontrada."));
+    }
+
     private EmployeeJobSummary toSummary(EmployeeRequest req) {
         TeamRequest teamRequest = req.getTeamRequest();
         CompanyAccount company = teamRequest != null ? teamRequest.getCompany() : null;
@@ -49,7 +92,6 @@ public class EmployeeJobHistoryService {
                 .endDate(teamRequest != null ? teamRequest.getEndDate() : null)
                 .acceptedDate(req.getAcceptedDate())
                 .requestedRole(req.getRequestedRole())
-                .state(req.getState())
                 .build();
     }
 }

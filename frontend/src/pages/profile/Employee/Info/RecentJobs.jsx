@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import ProfileHeader from "./components/ProfileHeader.jsx";
-import InfoLayout from "./components/InfoLayout.jsx";
+import InfoLayout from "./InfoLayout.jsx";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
 import RecentJobCard from "./components/RecentJobCard.jsx";
 import { listEmployeeJobs } from "../../../../api/profile/profileJobs.js";
 import { formatName } from "../utils/profileUtils.js";
+import Button from "../../../../components/ui/Button/Button.jsx";
 
 export default function RecentJobs() {
   const [jobs, setJobs] = useState([]);
@@ -67,7 +67,11 @@ export default function RecentJobs() {
           ) : (
             <div className="space-y-4 max-w-3xl mx-auto">
               {jobs.map((job) => (
-                <RecentJobCard key={job.requestId ?? job.id} job={job} />
+                <RecentJobCard
+                  key={job.requestId ?? job.id}
+                  job={job}
+                  actionSlot={<Button label="Ver contrato" variant="primary" fullWidth={false} />}
+                />
               ))}
             </div>
           )}
@@ -94,10 +98,3 @@ function EmptyState() {
     </div>
   );
 }
-
-function formatDateRange(start, end) {
-  const options = { year: "numeric", month: "short" };
-  const format = (date) => (date ? new Date(date).toLocaleDateString("pt-PT", options) : "—");
-  return `${format(start)} · ${format(end)}`;
-}
-

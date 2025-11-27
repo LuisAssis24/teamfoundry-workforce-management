@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import InfoLayout from "./components/InfoLayout.jsx";
+import InfoLayout from "./InfoLayout.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import InputField from "../../../../components/ui/Input/InputField.jsx";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";

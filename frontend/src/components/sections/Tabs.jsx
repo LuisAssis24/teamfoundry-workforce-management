@@ -67,8 +67,10 @@ export default function Tabs({ tabs, className = "", activeKey, onTabChange }) {
               ref={(el) => {
                 itemRefs.current[index] = el;
               }}
-              className={classes}
+              className={`${classes} cursor-pointer`}
               onClick={() => onTabChange(key)}
+              draggable={false}
+              onDragStart={(e) => e.preventDefault()}
             >
               {label}
             </button>
@@ -86,8 +88,10 @@ export default function Tabs({ tabs, className = "", activeKey, onTabChange }) {
               const state = navActive
                 ? "text-base-content font-semibold"
                 : "text-base-content/70 hover:text-base-content";
-              return `${baseClasses} ${state}`;
+              return `${baseClasses} ${state} cursor-pointer`;
             }}
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
           >
             {label}
           </NavLink>

@@ -14,6 +14,9 @@ public interface EmployeeRequestRepository extends JpaRepository<EmployeeRequest
     @EntityGraph(attributePaths = {"teamRequest", "teamRequest.company"})
     List<EmployeeRequest> findByEmployee_EmailOrderByAcceptedDateDesc(String email);
 
+    @EntityGraph(attributePaths = {"teamRequest", "teamRequest.company"})
+    List<EmployeeRequest> findByEmployeeIsNullOrderByCreatedAtDesc();
+
     @Query("""
             SELECT er.teamRequest.id AS requestId, COUNT(er) AS total
             FROM EmployeeRequest er

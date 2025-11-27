@@ -1,8 +1,5 @@
 package com.teamfoundry.backend.admin.model;
 
-import com.teamfoundry.backend.admin.enums.State;
-import com.teamfoundry.backend.account.model.AdminAccount;
-import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,10 +27,9 @@ public class EmployeeRequest {
     @Column(name = "requested_role", nullable = false)
     private String requestedRole;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private State state;
-
     @Column(name = "date_accepted")
     private LocalDateTime acceptedDate;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

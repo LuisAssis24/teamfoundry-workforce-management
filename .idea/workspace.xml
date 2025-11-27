@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Seeders e Historico de Trabalho Perfil">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0bcc5bfb-b187-4b8f-8655-480697605273.xml" afterDir="false" />
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Componente Tabs reutilizavel&#10;Perfil Info quase completo, a espera do banco de dados para as certificações">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/Modal/Modal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/Modal/Modal.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Documents/Documentos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Documents/Documentos.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Certificates.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Certificates.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/PersonalDetails.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/Preferences.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/RecentJobs.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/Employee/Info/components/ProfileTabs.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +212,11 @@
       <workItem from="1763902860713" duration="34000" />
       <workItem from="1763904317542" duration="15932000" />
       <workItem from="1763989419419" duration="1009000" />
-      <workItem from="1764078411961" duration="4960000" />
+      <workItem from="1764078411961" duration="5049000" />
+      <workItem from="1764085620638" duration="68000" />
+      <workItem from="1764151885978" duration="12000" />
+      <workItem from="1764152243290" duration="257000" />
+      <workItem from="1764153095769" duration="153000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -319,7 +314,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764079041220</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Componente Tabs reutilizavel&#10;Perfil Info quase completo, a espera do banco de dados para as certificações">
+      <option name="closed" value="true" />
+      <created>1764085237510</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1764085237510</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -367,7 +370,8 @@
     <MESSAGE value="Ajustes Layout" />
     <MESSAGE value="Refactors e mais refactors" />
     <MESSAGE value="Seeders e Historico de Trabalho Perfil" />
-    <option name="LAST_COMMIT_MESSAGE" value="Seeders e Historico de Trabalho Perfil" />
+    <MESSAGE value="Componente Tabs reutilizavel&#10;Perfil Info quase completo, a espera do banco de dados para as certificações" />
+    <option name="LAST_COMMIT_MESSAGE" value="Componente Tabs reutilizavel&#10;Perfil Info quase completo, a espera do banco de dados para as certificações" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

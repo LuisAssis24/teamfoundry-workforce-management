@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
-import { registerStep1 } from "../../../api/auth.js";
+import { registerStep1 } from "../../../api/auth/auth.js";
 
 const passwordRequirements = [
     {

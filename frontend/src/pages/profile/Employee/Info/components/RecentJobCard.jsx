@@ -1,7 +1,7 @@
 /**
  * Cartão reutilizável para exibir participação do colaborador numa equipa/projeto.
  */
-export default function RecentJobCard({ job }) {
+export default function RecentJobCard({ job, showAccepted = true, actionSlot = null }) {
   const {
     teamName,
     companyName,
@@ -42,12 +42,23 @@ export default function RecentJobCard({ job }) {
         </div>
       )}
 
-      <div className="border-t border-base-300 px-4 py-3 flex items-center gap-3 text-sm">
-        <i className="bi bi-calendar-check" aria-hidden="true" />
-        <span className="text-base-content/90">
-          Associado em: {formatDate(acceptedDate)}
-        </span>
-      </div>
+      {showAccepted && (
+        <div className="border-t border-base-300 px-4 py-3 flex items-center justify-between gap-3 text-sm">
+          <div className="flex items-center gap-3">
+            <i className="bi bi-calendar-check" aria-hidden="true" />
+            <span className="text-base-content/90">
+              Associado em: {formatDate(acceptedDate)}
+            </span>
+          </div>
+          {actionSlot && <div className="flex items-center gap-2">{actionSlot}</div>}
+        </div>
+      )}
+
+      {!showAccepted && actionSlot && (
+        <div className="border-t border-base-300 px-4 py-3 flex justify-end gap-2">
+          {actionSlot}
+        </div>
+      )}
     </div>
   );
 }

@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Button from "../../../components/ui/Button/Button.jsx";
 import MultiSelectDropdown from "../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
-import { registerStep3 } from "../../../api/auth.js";
-import { fetchProfileOptions } from "../../../api/profileOptions.js";
+import { registerStep3 } from "../../../api/auth/auth.js";
+import { fetchProfileOptions } from "../../../api/profile/profileOptions.js";
 
 const FALLBACK_FUNCTIONS = ["Eletricista", "Canalizador", "Soldador", "Carpinteiro", "Pedreiro"];
 const FALLBACK_COMPETENCES = ["Eletricista", "Canalizador", "Soldador", "Técnico de AVAC", "Pintor"];

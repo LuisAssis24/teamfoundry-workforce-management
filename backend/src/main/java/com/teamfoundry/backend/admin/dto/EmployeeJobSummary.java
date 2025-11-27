@@ -1,6 +1,5 @@
 package com.teamfoundry.backend.admin.dto;
 
-import com.teamfoundry.backend.admin.enums.State;
 import lombok.Builder;
 import lombok.Value;
 
@@ -18,5 +17,4 @@ public class EmployeeJobSummary {
     LocalDateTime endDate;
     LocalDateTime acceptedDate;
     String requestedRole;
-    State state;
 }

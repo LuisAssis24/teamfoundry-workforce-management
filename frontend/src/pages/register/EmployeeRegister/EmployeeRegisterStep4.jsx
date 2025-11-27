@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
-import { registerStep4, resendVerificationCode } from "../../../api/auth.js";
+import { registerStep4, resendVerificationCode } from "../../../api/auth/auth.js";
 
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 30;

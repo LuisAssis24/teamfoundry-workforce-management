@@ -1,4 +1,4 @@
-import { apiFetch } from "./client.js";
+import { apiFetch } from "./auth/client.js";
 
 const ADMIN_BASE = "/api/super-admin/site";
 
