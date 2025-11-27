@@ -366,41 +366,55 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
         <div>
           <h2 className="card-title text-3xl">Hero</h2>
         </div>
-        <form className="space-y-4" onSubmit={onSubmit}>
+
+        <form className="flex flex-col gap-6" onSubmit={onSubmit}>
+          {/* Título – linha própria */}
           <FieldGroup
-            label="Titulo"
+            label="Título"
             value={form.title}
             onChange={(value) => onFieldChange("title", value)}
             placeholder="Olá João!"
           />
+
+          {/* Subtítulo – linha própria */}
           <label className="form-control">
-            <span className="label-text font-semibold">Subtitulo</span>
+            <span className="label-text font-semibold">Subtítulo</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               value={form.subtitle}
               onChange={(e) => onFieldChange("subtitle", e.target.value)}
             />
           </label>
+
+          {/* Conteúdo complementar – linha própria */}
           <label className="form-control">
-            <span className="label-text font-semibold">Conteudo complementar</span>
+            <span className="label-text font-semibold">Conteúdo complementar</span>
             <textarea
               className="textarea textarea-bordered min-h-[120px]"
               value={form.content}
               onChange={(e) => onFieldChange("content", e.target.value)}
             />
           </label>
-          <FieldGroup
-            label="Texto do CTA"
-            value={form.primaryCtaLabel}
-            onChange={(value) => onFieldChange("primaryCtaLabel", value)}
-            placeholder="Atualizar perfil"
-          />
-          <FieldGroup
-            label="URL do CTA"
-            value={form.primaryCtaUrl}
-            onChange={(value) => onFieldChange("primaryCtaUrl", value)}
-            placeholder="/candidato/dados-pessoais"
-          />
+
+          {/* Texto + URL do botão na MESMA linha */}
+          <div className="flex flex-col gap-4 md:flex-row">
+            <FieldGroup
+              label="Texto do botão"
+              value={form.primaryCtaLabel}
+              onChange={(value) => onFieldChange("primaryCtaLabel", value)}
+              placeholder="Atualizar perfil"
+              className="flex-1"
+            />
+            <FieldGroup
+              label="URL do botão"
+              value={form.primaryCtaUrl}
+              onChange={(value) => onFieldChange("primaryCtaUrl", value)}
+              placeholder="/candidato/dados-pessoais"
+              className="flex-1"
+            />
+          </div>
+
+          {/* Slider de visibilidade – linha própria */}
           <label className="label cursor-pointer gap-3">
             <input
               type="checkbox"
@@ -410,6 +424,8 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
             />
             <span className="label-text">Mostrar secção</span>
           </label>
+
+          {/* Botão guardar – linha própria */}
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? (
@@ -427,6 +443,7 @@ function AppHeroSection({ form, saving, onFieldChange, onSubmit }) {
     </div>
   );
 }
+
 
 function AppWeeklyTipSection({ form, saving, onFieldChange, onSubmit }) {
   if (!form) return null;
@@ -809,9 +826,9 @@ function MetricModal({ state, form, saving, onClose, onChange, onSubmit, onDelet
   );
 }
 
-function FieldGroup({ label, value, onChange, placeholder }) {
+function FieldGroup({ label, value, onChange, placeholder, className }) {
   return (
-    <label className="form-control">
+    <label className={`form-control w-full${className ? ` ${className}` : ""}`}>
       <span className="label-text font-semibold">{label}</span>
       <input
         type="text"
