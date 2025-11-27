@@ -188,7 +188,9 @@ function MetricsSection({ metrics }) {
 
 function WeeklyTipSection({ section, tipOfWeek, error }) {
   const hasTip = Boolean(tipOfWeek);
-  const title = section?.title ?? FALLBACK_WEEKLY_TIP.title;
+  const sectionTitle = section?.title ?? "Dica da Semana";
+  const tipTitle = hasTip ? tipOfWeek.title : FALLBACK_WEEKLY_TIP.title;
+  const category = hasTip ? tipOfWeek.category : null;
   const descriptionText = hasTip
     ? tipOfWeek.description
     : FALLBACK_WEEKLY_TIP.description.join("\n");
@@ -201,9 +203,20 @@ function WeeklyTipSection({ section, tipOfWeek, error }) {
   return (
     <section className="max-w-6xl mx-auto px-6 pb-14">
       <div className="rounded-3xl border border-base-200 bg-base-100 shadow p-8 space-y-4">
-        <p className="text-sm uppercase tracking-[0.4em] text-primary/80">Dica da Semana</p>
+        <p className="text-sm uppercase tracking-[0.4em] text-primary/80">
+          {sectionTitle}
+        </p>
         <div className="flex flex-col gap-2">
-          <h3 className="text-2xl font-semibold text-base-content">{title}</h3>
+          {tipTitle && (
+            <h3 className="text-2xl font-semibold text-base-content">
+              {tipTitle}
+            </h3>
+          )}
+          {category && (
+            <p className="text-sm font-medium text-base-content/70">
+              {category}
+            </p>
+          )}
           {error && (
             <p className="text-xs text-error/80">
               {error}

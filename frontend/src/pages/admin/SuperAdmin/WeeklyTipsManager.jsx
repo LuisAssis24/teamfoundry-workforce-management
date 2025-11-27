@@ -280,7 +280,7 @@ function TipsTable({ tips, onEdit, onMove, onToggle, onMarkFeatured }) {
         <thead>
           <tr className="text-xs uppercase tracking-wide text-base-content/60">
             <th />
-            <th>Subtitulo</th>
+            <th>Categoria</th>
             <th>Titulo</th>
             <th>Data</th>
             <th>Estado</th>
@@ -404,7 +404,7 @@ function WeeklyTipModal({ state, form, saving, onChange, onSubmit, onClose, onDe
       <form id="weekly-tip-form" className="space-y-4" onSubmit={onSubmit}>
         <div className="grid gap-4 md:grid-cols-[1.5fr_1fr]">
           <label className="form-control">
-            <span className="label-text font-semibold">Subtitulo</span>
+            <span className="label-text font-semibold">Categoria</span>
             <input
               type="text"
               className="input input-bordered"
@@ -439,15 +439,15 @@ function WeeklyTipModal({ state, form, saving, onChange, onSubmit, onClose, onDe
         </label>
 
         <label className="form-control">
-          <span className="label-text font-semibold">Descri��o</span>
-          <textarea
-            className="textarea textarea-bordered min-h-[140px]"
-            required
-            maxLength={2000}
-            value={form.description}
-            onChange={(e) => onChange("description", e.target.value)}
-          />
-        </label>
+            <br /><span className="label-text font-semibold">Descrição</span>
+            <textarea
+              className="textarea textarea-bordered min-h-[140px]"
+              required
+              maxLength={2000}
+              value={form.description}
+              onChange={(e) => onChange("description", e.target.value)}
+            />
+          </label>
 
         <div className="flex flex-wrap items-center gap-6">
           <label className="label cursor-pointer gap-3">
