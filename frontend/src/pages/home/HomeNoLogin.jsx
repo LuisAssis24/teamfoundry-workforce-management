@@ -11,7 +11,7 @@ const SECTION_COMPONENTS = {
 
 const SECTION_NAV_LINKS = {
   HERO: { to: "#hero", label: "Topo" },
-  INDUSTRIES: { to: "#industrias", label: "Indústrias" },
+  INDUSTRIES: { to: "#industrias", label: "Indǧstrias" },
   PARTNERS: { to: "#parceiros", label: "Parceiros" },
 };
 
@@ -31,7 +31,7 @@ export function HomeNoLogin() {
         }
       })
       .catch((err) => {
-        if (active) setError(err.message || "Falha ao carregar a página inicial.");
+        if (active) setError(err.message || "Falha ao carregar a pǭgina inicial.");
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -88,7 +88,7 @@ export function HomeNoLogin() {
             orderedSections.map(renderSection)
           ) : (
             <div className="max-w-6xl mx-auto px-6 py-24">
-              <EmptyState message="Nenhuma secção foi ativada ainda." />
+              <EmptyState message="Nenhuma sec��ǜo foi ativada ainda." />
             </div>
           )}
           <Footer />
@@ -101,16 +101,25 @@ export function HomeNoLogin() {
 function HeroSection({ section }) {
   const subtitle =
     section?.subtitle ??
-    "A forma mais fácil de conectar profissionais a projetos industriais e criar equipas de alto desempenho.";
+    "A forma mais fǭcil de conectar profissionais a projetos industriais e criar equipas de alto desempenho.";
 
   return (
-    <section id="hero" className="bg-base-100 text-base-content">
-      <div className="max-w-6xl mx-auto px-6 py-20 text-center space-y-5">
+    <section
+      id="hero"
+      className="relative text-primary-content overflow-hidden"
+      style={{
+        backgroundImage: "url('/hero-home.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="absolute inset-0 bg-primary/50" aria-hidden="true" />
+      <div className="relative max-w-6xl mx-auto px-6 py-20 text-center space-y-5">
         <div className="flex items-center justify-center gap-3" />
-        <h1 className="text-4xl md:text-5xl font-extrabold text-base-content">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
           Team Foundry
         </h1>
-        <p className="text-lg text-base-content/70 leading-relaxed -mt-2">
+        <p className="text-lg text-primary-content/80 leading-relaxed -mt-2">
           {subtitle}
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
@@ -136,7 +145,7 @@ function IndustriesSection({ section, industries }) {
       <div className="max-w-6xl mx-auto px-6 space-y-10">
         <SectionHeader
           section={section}
-          fallbackTitle="Indústrias em que atuamos"
+          fallbackTitle="Indǧstrias em que atuamos"
           fallbackSubtitle="Segmentos onde ligamos empresas e profissionais especializados."
         />
         {industries?.length ? (
@@ -158,7 +167,7 @@ function IndustriesSection({ section, industries }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda não há indústrias destacadas." />
+          <EmptyState message="Ainda nǜo hǭ indǧstrias destacadas." />
         )}
       </div>
     </section>
@@ -206,7 +215,7 @@ function PartnersSection({ section, partners }) {
             ))}
           </div>
         ) : (
-          <EmptyState message="Ainda não há parceiros publicados." />
+          <EmptyState message="Ainda nǜo hǭ parceiros publicados." />
         )}
       </div>
     </section>
