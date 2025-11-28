@@ -29,11 +29,13 @@ export default function Button({
   icon,
   variant = "primary",
   className = "",
+  fullWidth = true,
   as: Component = "button",
   ...props
 }) {
   const variantClass = getButtonVariantClass(variant);
-  const baseClass = `btn ${variantClass} w-full flex items-center justify-center gap-2 ${className}`;
+  const widthClass = fullWidth ? "w-full" : "w-auto";
+  const baseClass = `btn ${variantClass} ${widthClass} flex items-center justify-center gap-2 ${className}`;
   const finalProps =
     Component === "button" && !("type" in props)
       ? { ...props, type: "button" }
@@ -61,5 +63,6 @@ Button.propTypes = {
     "success",
   ]),
   className: PropTypes.string,
+  fullWidth: PropTypes.bool,
   as: PropTypes.elementType,
 };

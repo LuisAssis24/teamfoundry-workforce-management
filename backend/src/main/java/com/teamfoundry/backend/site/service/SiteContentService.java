@@ -7,17 +7,21 @@ import com.teamfoundry.backend.site.model.HomeLoginSection;
 import com.teamfoundry.backend.site.model.HomepageSection;
 import com.teamfoundry.backend.site.model.IndustryShowcase;
 import com.teamfoundry.backend.site.model.PartnerShowcase;
+import com.teamfoundry.backend.site.model.WeeklyTip;
 import com.teamfoundry.backend.site.repository.HomeLoginMetricRepository;
 import com.teamfoundry.backend.site.repository.HomeLoginSectionRepository;
 import com.teamfoundry.backend.site.repository.HomepageSectionRepository;
 import com.teamfoundry.backend.site.repository.IndustryShowcaseRepository;
 import com.teamfoundry.backend.site.repository.PartnerShowcaseRepository;
+import com.teamfoundry.backend.site.repository.WeeklyTipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.temporal.IsoFields;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,6 +36,7 @@ public class SiteContentService {
     private final PartnerShowcaseRepository partners;
     private final HomeLoginSectionRepository appHomeSections;
     private final HomeLoginMetricRepository appHomeMetrics;
+    private final WeeklyTipRepository weeklyTips;
     private final NewsApiService newsApiService;
 
     /*
@@ -78,6 +83,34 @@ public class SiteContentService {
     @Transactional(readOnly = true)
     public HomeLoginConfigResponse getAdminHomeLogin() {
         return buildHomeLoginConfig(true, true);
+    }
+
+    @Transactional(readOnly = true)
+    public WeeklyTipsPageResponse getPublicWeeklyTips() {
+        List<WeeklyTip> activeTips = weeklyTips.findAllByOrderByDisplayOrderAsc().stream()
+                .filter(WeeklyTip::isActive)
+                .toList();
+
+        // Limit the rotation pool to at most 11 tips
+        List<WeeklyTip> rotationPool = activeTips.stream()
+                .sorted(Comparator.comparingInt(WeeklyTip::getDisplayOrder))
+                .limit(11)
+                .toList();
+
+        WeeklyTipResponse highlighted = null;
+        if (!rotationPool.isEmpty()) {
+            LocalDate today = LocalDate.now();
+            int weekOfYear = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+            int index = (weekOfYear - 1) % rotationPool.size();
+            WeeklyTip tipOfWeek = rotationPool.get(index);
+            highlighted = mapWeeklyTip(tipOfWeek);
+        }
+
+        List<WeeklyTipResponse> all = rotationPool.stream()
+                .map(this::mapWeeklyTip)
+                .toList();
+
+        return new WeeklyTipsPageResponse(highlighted, all);
     }
 
     /*
@@ -335,6 +368,98 @@ public class SiteContentService {
     }
 
     /*
+     * WEEKLY TIPS
+     */
+    @Transactional(readOnly = true)
+    public List<WeeklyTipResponse> listWeeklyTips() {
+        return weeklyTips.findAllByOrderByDisplayOrderAsc().stream()
+                .map(this::mapWeeklyTip)
+                .toList();
+    }
+
+    public WeeklyTipResponse createWeeklyTip(WeeklyTipRequest request) {
+        // Limit total number of tips to 11
+        long totalTips = weeklyTips.count();
+        if (totalTips >= 11) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ja existem 11 dicas configuradas. Edite ou remova uma dica antes de criar outra.");
+        }
+
+        WeeklyTip tip = new WeeklyTip();
+        tip.setCategory(request.category());
+        tip.setTitle(request.title());
+        tip.setDescription(request.description());
+        tip.setPublishedAt(request.publishedAt());
+        tip.setActive(Boolean.TRUE.equals(request.active()));
+        tip.setFeatured(Boolean.TRUE.equals(request.featured()));
+        tip.setDisplayOrder(nextWeeklyTipOrder());
+
+        if (tip.isFeatured()) {
+            clearOtherFeaturedTips(null);
+        }
+
+        return mapWeeklyTip(weeklyTips.save(tip));
+    }
+
+    public WeeklyTipResponse updateWeeklyTip(Long id, WeeklyTipRequest request) {
+        WeeklyTip tip = weeklyTips.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Weekly tip not found"));
+
+        tip.setCategory(request.category());
+        tip.setTitle(request.title());
+        tip.setDescription(request.description());
+        tip.setPublishedAt(request.publishedAt());
+        if (request.active() != null) {
+            tip.setActive(request.active());
+        }
+        if (request.featured() != null) {
+            tip.setFeatured(request.featured());
+        }
+
+        if (tip.isFeatured()) {
+            clearOtherFeaturedTips(tip.getId());
+        }
+
+        return mapWeeklyTip(weeklyTips.save(tip));
+    }
+
+    public WeeklyTipResponse toggleWeeklyTipVisibility(Long id, boolean active) {
+        WeeklyTip tip = weeklyTips.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Weekly tip not found"));
+        tip.setActive(active);
+        return mapWeeklyTip(weeklyTips.save(tip));
+    }
+
+    public WeeklyTipResponse markWeeklyTipFeatured(Long id) {
+        WeeklyTip tip = weeklyTips.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Weekly tip not found"));
+
+        clearOtherFeaturedTips(id);
+        tip.setFeatured(true);
+
+        return mapWeeklyTip(weeklyTips.save(tip));
+    }
+
+    public List<WeeklyTipResponse> reorderWeeklyTips(List<Long> ids) {
+        List<WeeklyTip> current = weeklyTips.findAllByOrderByDisplayOrderAsc();
+        ensureSameElements(ids, current, WeeklyTip::getId, "weekly tips");
+
+        applyNewOrder(ids, current, WeeklyTip::getId, (item, order) -> item.setDisplayOrder(order));
+        weeklyTips.saveAll(current);
+
+        return current.stream()
+                .sorted(Comparator.comparingInt(WeeklyTip::getDisplayOrder))
+                .map(this::mapWeeklyTip)
+                .toList();
+    }
+
+    public void deleteWeeklyTip(Long id) {
+        WeeklyTip tip = weeklyTips.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Weekly tip not found"));
+        weeklyTips.delete(tip);
+    }
+
+    /*
      * HELPERS
      */
     private HomepageSectionResponse mapSection(HomepageSection section) {
@@ -480,6 +605,38 @@ public class SiteContentService {
                 .mapToInt(HomeLoginMetric::getDisplayOrder)
                 .max()
                 .orElse(-1) + 1;
+    }
+
+    private int nextWeeklyTipOrder() {
+        return weeklyTips.findAll().stream()
+                .mapToInt(WeeklyTip::getDisplayOrder)
+                .max()
+                .orElse(-1) + 1;
+    }
+
+    private WeeklyTipResponse mapWeeklyTip(WeeklyTip tip) {
+        return new WeeklyTipResponse(
+                tip.getId(),
+                tip.getCategory(),
+                tip.getTitle(),
+                tip.getDescription(),
+                tip.getPublishedAt(),
+                tip.isFeatured(),
+                tip.isActive(),
+                tip.getDisplayOrder()
+        );
+    }
+
+    private void clearOtherFeaturedTips(Long keepId) {
+        List<WeeklyTip> featured = weeklyTips.findAll().stream()
+                .filter(WeeklyTip::isFeatured)
+                .filter(tip -> keepId == null || !tip.getId().equals(keepId))
+                .toList();
+        if (featured.isEmpty()) {
+            return;
+        }
+        featured.forEach(tip -> tip.setFeatured(false));
+        weeklyTips.saveAll(featured);
     }
 
     @FunctionalInterface

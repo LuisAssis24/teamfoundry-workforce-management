@@ -1,15 +1,13 @@
-import { httpDelete, httpGet, httpPost, httpPut } from "../http.js";
+import { httpGet, httpPost } from "../http.js";
 
 const BASE_PATH = "/api/employee/jobs";
+const OFFERS_PATH = "/api/employee/offers";
 
-export const listEmployeeJobs = ({ status = "COMPLETED", page = 0, size = 5 } = {}) =>
-  httpGet(`${BASE_PATH}?status=${encodeURIComponent(status)}&page=${page}&size=${size}`);
+// Devolve histórico de jobs do colaborador autenticado.
+export const listEmployeeJobs = () => httpGet(BASE_PATH);
 
-export const createManualJob = (payload) =>
-  httpPost(`${BASE_PATH}/manual`, payload);
+// Ofertas pendentes (sem funcionário associado).
+export const listEmployeeOffers = () => httpGet(OFFERS_PATH);
 
-export const updateManualJob = (id, payload) =>
-  httpPut(`${BASE_PATH}/manual/${id}`, payload);
-
-export const deleteManualJob = (id) =>
-  httpDelete(`${BASE_PATH}/manual/${id}`);
+// Aceita oferta (associa o colaborador ao request).
+export const acceptEmployeeOffer = (offerId) => httpPost(`${OFFERS_PATH}/${offerId}/accept`);

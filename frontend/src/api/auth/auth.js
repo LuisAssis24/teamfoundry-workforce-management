@@ -1,5 +1,5 @@
-import { httpPost } from "./http.js";
-import { setTokens, clearTokens } from "../auth/tokenStorage.js";
+import { httpPost } from "../http.js";
+import { setTokens, clearTokens } from "../../auth/tokenStorage.js";
 
 /**
  * Envia credenciais ao backend e retorna o tipo do utilizador autenticado.

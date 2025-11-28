@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
-import { login } from "../../../api/auth.js";
+import { login } from "../../../api/auth/auth.js";
 import ForgotPassword from "./ForgotPassword.jsx";
 import { useAuthContext } from "../../../auth/AuthContext.jsx";
 

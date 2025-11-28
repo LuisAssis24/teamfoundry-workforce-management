@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import InputField from "../../../components/ui/Input/InputField.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
 import Modal from "../../../components/ui/Modal/Modal.jsx";
-import { forgotPassword, resetPassword, verifyResetCode } from "../../../api/auth.js";
+import { forgotPassword, resetPassword, verifyResetCode } from "../../../api/auth/auth.js";
 
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 45;

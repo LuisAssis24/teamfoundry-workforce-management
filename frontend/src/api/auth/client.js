@@ -1,5 +1,5 @@
-import { API_URL } from './config.js';
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../auth/tokenStorage.js';
+import { API_URL } from '../config.js';
+import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../../auth/tokenStorage.js';
 
 async function doFetch(path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_URL}${path}`;

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default function Modal({ open, title, onClose, children, actions }) {
+export default function Modal({ open, title, onClose, children, actions, className = "" }) {
   if (!open) return null;
 
   return (
@@ -10,7 +10,7 @@ export default function Modal({ open, title, onClose, children, actions }) {
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative bg-base-100 text-base-content rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+      <div className={`relative bg-base-100 text-base-content rounded-2xl shadow-xl w-full max-w-3xl mx-4 p-6 ${className}`}>
         {title && (
           <h3 className="text-3xl font-semibold mb-4 text-primary">{title}</h3>
         )}
@@ -35,5 +35,6 @@ Modal.propTypes = {
   onClose: PropTypes.func,
   children: PropTypes.node,
   actions: PropTypes.node,
+  className: PropTypes.string,
 };
 

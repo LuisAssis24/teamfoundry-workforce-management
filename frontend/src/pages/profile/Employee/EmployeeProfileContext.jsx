@@ -1,8 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { fetchEmployeeProfile } from "../../../api/profile/employeeProfile.js";
+import { fetchEmployeePreferences } from "../../../api/profile/employeePreferences.js";
 import { useAuthContext } from "../../../auth/AuthContext.jsx";
 
+// Contexto central do perfil de colaborador (dados base + caches de tabs).
 const EmployeeProfileContext = createContext(null);
 
 export function EmployeeProfileProvider({ children }) {
@@ -12,14 +14,20 @@ export function EmployeeProfileProvider({ children }) {
   const [profileError, setProfileError] = useState(null);
   const [personalData, setPersonalData] = useState(null);
   const [preferencesData, setPreferencesData] = useState(null);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+  const [profileOptionsData, setProfileOptionsData] = useState(null);
   const [educationData, setEducationData] = useState(null);
   const [jobsData, setJobsData] = useState(null);
+  const [offersData, setOffersData] = useState(null);
+  const [offersLoaded, setOffersLoaded] = useState(false);
   const { isAuthenticated } = useAuthContext();
 
   const refreshProfile = useCallback(async () => {
-    // Recarrega o perfil do candidato se existir sessão. Caso contrário, limpa o cache.
+    // Recarrega o perfil se existir sessão; caso contrário, limpa qualquer cache.
     if (!isAuthenticated) {
       setProfile(null);
+      setOffersData(null);
+      setOffersLoaded(false);
       return null;
     }
     setLoadingProfile(true);
@@ -41,6 +49,19 @@ export function EmployeeProfileProvider({ children }) {
     refreshProfile();
   }, [refreshProfile]);
 
+  const refreshPreferencesData = useCallback(async () => {
+    if (!isAuthenticated) {
+      setPreferencesData(null);
+      setPreferencesLoaded(false);
+      return null;
+    }
+    if (preferencesData && preferencesLoaded) return preferencesData;
+    const data = await fetchEmployeePreferences();
+    setPreferencesData(data);
+    setPreferencesLoaded(true);
+    return data;
+  }, [isAuthenticated, preferencesData, preferencesLoaded]);
+
   const value = useMemo(
     () => ({
       profile,
@@ -52,10 +73,19 @@ export function EmployeeProfileProvider({ children }) {
       setPersonalData,
       preferencesData,
       setPreferencesData,
+      preferencesLoaded,
+      setPreferencesLoaded,
+      refreshPreferencesData,
       educationData,
       setEducationData,
       jobsData,
       setJobsData,
+      profileOptionsData,
+      setProfileOptionsData,
+      offersData,
+      setOffersData,
+      offersLoaded,
+      setOffersLoaded,
     }),
     [
       profile,
@@ -64,8 +94,13 @@ export function EmployeeProfileProvider({ children }) {
       refreshProfile,
       personalData,
       preferencesData,
+      preferencesLoaded,
+      refreshPreferencesData,
       educationData,
       jobsData,
+      profileOptionsData,
+      offersData,
+      offersLoaded,
     ]
   );
 
@@ -77,6 +112,7 @@ EmployeeProfileProvider.propTypes = {
 };
 
 export function useEmployeeProfile() {
+  // Hook de conveniência para aceder ao contexto já validado.
   const ctx = useContext(EmployeeProfileContext);
   if (!ctx) {
     throw new Error("useEmployeeProfile deve ser usado dentro de EmployeeProfileProvider");

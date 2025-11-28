@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Navbar from "../../components/sections/Navbar.jsx";
 import Footer from "../../components/sections/Footer.jsx";
 import { useAuthContext } from "../../auth/AuthContext.jsx";
 import { useEmployeeProfile } from "../profile/Employee/EmployeeProfileContext.jsx";
-import { fetchAppHomePublic } from "../../api/siteManagement.js";
+import { fetchAppHomePublic, fetchWeeklyTipsPage } from "../../api/siteManagement.js";
 
 const FALLBACK_METRICS = [
   { label: "Equipas concluidas", value: "8" },
@@ -25,10 +25,12 @@ const FALLBACK_WEEKLY_TIP = {
 
 export default function HomeAuthenticated() {
   const { profile, loadingProfile, refreshProfile } = useEmployeeProfile();
-  const { logout } = useAuthContext();
+  const { logout, isAuthenticated } = useAuthContext();
   const [homeContent, setHomeContent] = useState(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState(null);
+  const [weeklyTipsData, setWeeklyTipsData] = useState(null);
+  const [weeklyTipsError, setWeeklyTipsError] = useState(null);
 
   useEffect(() => {
     if (!profile && !loadingProfile) {
@@ -57,6 +59,23 @@ export default function HomeAuthenticated() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    fetchWeeklyTipsPage()
+      .then((data) => {
+        if (!active) return;
+        setWeeklyTipsData(data);
+        setWeeklyTipsError(null);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setWeeklyTipsError(err.message || "Nao foi possivel carregar as dicas da semana.");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const heroSection = homeContent?.sections?.find((section) => section.type === "HERO");
   const weeklyTipSection = homeContent?.sections?.find((section) => section.type === "WEEKLY_TIP");
   const newsSection = homeContent?.sections?.find((section) => section.type === "NEWS");
@@ -67,9 +86,13 @@ export default function HomeAuthenticated() {
     ? `${profile.firstName}${profile.lastName ? ` ${profile.lastName}` : ""}`
     : "Utilizador";
 
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-base-100 text-base-content">
-      <Navbar variant="private" homePath="/home-login" links={[]} onLogout={logout} />
+      <Navbar variant="private" homePath="/" links={[]} onLogout={logout} />
       <main className="flex-1">
         {contentError && (
           <div className="alert alert-warning shadow mx-auto mt-4 w-full max-w-3xl">
@@ -83,7 +106,11 @@ export default function HomeAuthenticated() {
           loadingContent={contentLoading}
         />
         <MetricsSection metrics={metrics} />
-        <WeeklyTipSection section={weeklyTipSection} />
+        <WeeklyTipSection
+          section={weeklyTipSection}
+          tipOfWeek={weeklyTipsData?.tipOfWeek}
+          error={weeklyTipsError}
+        />
         <NewsSection section={newsSection} articles={newsArticles} loading={contentLoading} />
       </main>
       <Footer />
@@ -96,10 +123,7 @@ function HeroPanel({ displayName, loading, section, loadingContent }) {
   const subtitle = section?.subtitle ?? "Perfil =%";
   const contentLines = section?.content
     ? section.content.split("\n").filter(Boolean)
-    : [
-        "Equipa atual: Montagem - Empresa Alfa",
-        "Requisicoes disponiveis: 2 novas oportunidades",
-      ];
+    : [];
   const ctaLabel = section?.primaryCtaLabel ?? "Atualizar perfil";
   const ctaUrl = section?.primaryCtaUrl ?? "/candidato/dados-pessoais";
 
@@ -162,24 +186,52 @@ function MetricsSection({ metrics }) {
   );
 }
 
-function WeeklyTipSection({ section }) {
-  const content = section ?? FALLBACK_WEEKLY_TIP;
+function WeeklyTipSection({ section, tipOfWeek, error }) {
+  const hasTip = Boolean(tipOfWeek);
+  const sectionTitle = section?.title ?? "Dica da Semana";
+  const tipTitle = hasTip ? tipOfWeek.title : FALLBACK_WEEKLY_TIP.title;
+  const category = hasTip ? tipOfWeek.category : null;
+  const descriptionText = hasTip
+    ? tipOfWeek.description
+    : FALLBACK_WEEKLY_TIP.description.join("\n");
+  const paragraphs = descriptionText
+    ? descriptionText.split("\n").filter(Boolean)
+    : [];
+  const ctaLabel = section?.primaryCtaLabel ?? "Ver mais dicas";
+  const ctaUrl = section?.primaryCtaUrl ?? "/dicas";
+
   return (
     <section className="max-w-6xl mx-auto px-6 pb-14">
       <div className="rounded-3xl border border-base-200 bg-base-100 shadow p-8 space-y-4">
-        <p className="text-sm uppercase tracking-[0.4em] text-primary/80">Dica da Semana</p>
+        <p className="text-sm uppercase tracking-[0.4em] text-primary/80">
+          {sectionTitle}
+        </p>
         <div className="flex flex-col gap-2">
-          <h3 className="text-2xl font-semibold text-base-content">{content.title}</h3>
-          {(content.description ?? FALLBACK_WEEKLY_TIP.description).map((paragraph, index) => (
+          {tipTitle && (
+            <h3 className="text-2xl font-semibold text-base-content">
+              {tipTitle}
+            </h3>
+          )}
+          {category && (
+            <p className="text-sm font-medium text-base-content/70">
+              {category}
+            </p>
+          )}
+          {error && (
+            <p className="text-xs text-error/80">
+              {error}
+            </p>
+          )}
+          {paragraphs.map((paragraph, index) => (
             <p key={index} className="text-base-content/70 text-sm leading-relaxed">
               {paragraph}
             </p>
           ))}
         </div>
         <div>
-          <button type="button" className="btn btn-primary btn-sm">
-            Ver mais
-          </button>
+          <Link to={ctaUrl} className="btn btn-primary btn-sm">
+            {ctaLabel}
+          </Link>
         </div>
       </div>
     </section>

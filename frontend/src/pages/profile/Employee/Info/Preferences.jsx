@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import ProfileHeader from "./components/ProfileHeader.jsx";
-import ProfileTabs from "./components/ProfileTabs.jsx";
+import { useEffect, useMemo, useRef, useState } from "react";
+import InfoLayout from "./InfoLayout.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import MultiSelectDropdown from "../../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
-import { fetchProfileOptions } from "../../../../api/profileOptions.js";
-import {
-  fetchEmployeePreferences,
-  updateEmployeePreferences,
-} from "../../../../api/profile/employeePreferences.js";
+import { fetchProfileOptions } from "../../../../api/profile/profileOptions.js";
+import { updateEmployeePreferences } from "../../../../api/profile/employeePreferences.js";
 import { useEmployeeProfile } from "../EmployeeProfileContext.jsx";
+import { formatName, normalizeSelection } from "../utils/profileUtils.js";
 
 const initialForm = {
   roles: [],
@@ -19,13 +16,24 @@ const initialForm = {
 export default function Preferences() {
   const [form, setForm] = useState(initialForm);
   const [options, setOptions] = useState({ functions: [], geoAreas: [], competences: [] });
-  const { profile, refreshProfile, preferencesData, setPreferencesData } = useEmployeeProfile();
+  const {
+    profile,
+    refreshProfile,
+    preferencesData,
+    setPreferencesData,
+    preferencesLoaded,
+    setPreferencesLoaded,
+    refreshPreferencesData,
+    profileOptionsData,
+    setProfileOptionsData,
+  } = useEmployeeProfile();
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const hasLoadedOnce = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -40,8 +48,20 @@ export default function Preferences() {
           setDisplayName(formatName(profileSource?.firstName, profileSource?.lastName));
         }
 
-        const optionsData = await fetchProfileOptions();
-        const preferencesPayload = preferencesData || (await fetchEmployeePreferences());
+        // Reutiliza cache de preferências se já carregadas.
+        if (preferencesData && (preferencesLoaded || hasLoadedOnce.current)) {
+          setForm({
+            roles: normalizeSelection(preferencesData?.roles?.length ? preferencesData.roles : preferencesData?.role ? [preferencesData.role] : []),
+            areas: normalizeSelection(preferencesData?.areas),
+            skills: normalizeSelection(preferencesData?.skills),
+          });
+          setLoading(false);
+          hasLoadedOnce.current = true;
+          return;
+        }
+
+        const optionsData = profileOptionsData || (await fetchProfileOptions());
+        const preferencesPayload = preferencesData || (await refreshPreferencesData());
 
         if (!isMounted) return;
 
@@ -52,16 +72,17 @@ export default function Preferences() {
         });
 
         setForm({
-          roles: Array.isArray(preferencesPayload?.roles)
-            ? preferencesPayload.roles
-            : preferencesPayload?.role
-              ? [preferencesPayload.role]
-              : [],
-          areas: Array.isArray(preferencesPayload?.areas) ? preferencesPayload.areas : [],
-          skills: Array.isArray(preferencesPayload?.skills) ? preferencesPayload.skills : [],
+          roles: normalizeSelection(preferencesPayload?.roles?.length ? preferencesPayload.roles : preferencesPayload?.role ? [preferencesPayload.role] : []),
+          areas: normalizeSelection(preferencesPayload?.areas),
+          skills: normalizeSelection(preferencesPayload?.skills),
         });
 
-        if (!preferencesData) setPreferencesData(preferencesPayload);
+        if (!preferencesData) {
+          setPreferencesData(preferencesPayload);
+          setPreferencesLoaded(true);
+        }
+        if (!profileOptionsData) setProfileOptionsData(optionsData);
+        hasLoadedOnce.current = true;
       } catch (err) {
         if (isMounted) {
           setError(err.message || "Nao foi possivel carregar as preferencias.");
@@ -78,12 +99,14 @@ export default function Preferences() {
   }, [profile, refreshProfile, preferencesData, setPreferencesData]);
 
   const functionOptions = useMemo(() => {
+    // Garante que funções já escolhidas continuam visíveis mesmo que não venham da API.
     const list = Array.isArray(options.functions) ? [...options.functions] : [];
     const extras = (form.roles || []).filter((r) => r && !list.includes(r));
     return [...extras, ...list];
   }, [options.functions, form.roles]);
 
   const handleSubmit = async (event) => {
+    // Valida e guarda preferências, sincronizando o contexto local.
     event.preventDefault();
     setFeedback("");
     setError("");
@@ -115,34 +138,29 @@ export default function Preferences() {
   };
 
   const clearFieldError = (field) => {
+    // Remove erro específico e limpa alertas globais.
     setFieldErrors((prev) => ({ ...prev, [field]: "" }));
     if (error) setError("");
     if (feedback) setFeedback("");
   };
 
   const handleRoleDropdownChange = (values) => {
-    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
-    setForm((prev) => ({ ...prev, roles: normalized }));
+    setForm((prev) => ({ ...prev, roles: normalizeSelection(values) }));
     clearFieldError("role");
   };
 
   const handleAreasChange = (values) => {
-    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
-    setForm((prev) => ({ ...prev, areas: normalized }));
+    setForm((prev) => ({ ...prev, areas: normalizeSelection(values) }));
     clearFieldError("areas");
   };
 
   const handleSkillsChange = (values) => {
-    const normalized = Array.isArray(values) ? Array.from(new Set(values.filter(Boolean))) : [];
-    setForm((prev) => ({ ...prev, skills: normalized }));
+    setForm((prev) => ({ ...prev, skills: normalizeSelection(values) }));
     clearFieldError("skills");
   };
 
   return (
-    <section>
-      <ProfileHeader name={displayName} />
-      <ProfileTabs />
-
+    <InfoLayout name={displayName}>
       <div className="mt-6 rounded-xl border border-base-300 bg-base-100 shadow min-h-[55vh]">
         <form onSubmit={handleSubmit}>
           <div className="p-6 max-w-3xl mx-auto">
@@ -213,7 +231,7 @@ export default function Preferences() {
           </div>
         </form>
       </div>
-    </section>
+    </InfoLayout>
   );
 }
 
@@ -229,11 +247,4 @@ function validateForm(form) {
     errors.skills = "Selecione pelo menos uma competencia.";
   }
   return errors;
-}
-
-function formatName(firstName, lastName) {
-  const trimmedFirst = firstName?.trim();
-  const trimmedLast = lastName?.trim();
-  const full = [trimmedFirst, trimmedLast].filter(Boolean).join(" ").trim();
-  return full || "Nome Sobrenome";
 }

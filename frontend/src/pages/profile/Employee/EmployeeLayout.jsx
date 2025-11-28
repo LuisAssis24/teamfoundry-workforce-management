@@ -1,13 +1,33 @@
-import { Outlet, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "../../../components/sections/Navbar.jsx";
-import EmployeeSidebar from "./EmployeeSidebar.jsx";
+import Sidebar from "../../../components/sections/Sidebar.jsx";
 import { useAuthContext } from "../../../auth/AuthContext.jsx";
+
+const PROFILE_INFO_ROUTES = [
+  "/candidato/dados-pessoais",
+  "/candidato/certificacoes",
+  "/candidato/ultimos-trabalhos",
+  "/candidato/preferencias",
+];
+
+const SIDEBAR_LINKS = [
+  {
+    to: "/candidato/dados-pessoais",
+    label: "Perfil",
+    icon: "bi-person",
+    matches: PROFILE_INFO_ROUTES,
+  },
+  { to: "/candidato/ofertas", label: "Ofertas", icon: "bi-bell" },
+  { to: "/candidato/documentos", label: "Documentos", icon: "bi-file-earmark-text" },
+  { to: "/candidato/proximos-passos", label: "Próximos passos", icon: "bi-flag" },
+];
 
 export default function EmployeeLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [animatingOut, setAnimatingOut] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout } = useAuthContext();
 
   const closeMobileMenu = () => {
@@ -41,7 +61,12 @@ export default function EmployeeLayout() {
       />
 
       <div className="max-w-6xl mx-auto px-2 md:px-2 py-6 flex gap-6">
-        <EmployeeSidebar />
+        <Sidebar
+          items={SIDEBAR_LINKS}
+          activePath={location.pathname}
+          onNavigate={() => {}}
+          className="pr-2"
+        />
         <main className="flex-1">
           <Outlet />
         </main>
@@ -56,7 +81,15 @@ export default function EmployeeLayout() {
           />
           <div className="absolute inset-y-0 left-0 w-72 max-w-[80%]">
             <div className="h-full translate-x-0 transform transition-transform duration-200 ease-out">
-              <EmployeeSidebar isMobile animateOut={animatingOut} onNavigate={closeMobileMenu} />
+              <Sidebar
+                items={SIDEBAR_LINKS}
+                activePath={location.pathname}
+                onNavigate={closeMobileMenu}
+                isMobile
+                animateOut={animatingOut}
+                logo={undefined}
+                title="TeamFoundry"
+              />
             </div>
           </div>
         </div>

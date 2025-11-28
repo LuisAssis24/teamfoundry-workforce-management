@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "formacao")
-public class Certifications {
+public class EmployeeCertifications {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

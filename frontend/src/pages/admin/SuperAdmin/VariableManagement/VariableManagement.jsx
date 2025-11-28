@@ -30,6 +30,7 @@ import Modal from "../../../../components/ui/Modal/Modal.jsx";
 import DropZone from "../../../../components/ui/Upload/DropZone.jsx";
 import { clearTokens } from "../../../../auth/tokenStorage.js";
 import AppHomeManager from "../AppHomeManager.jsx";
+import WeeklyTipsManager from "../WeeklyTipsManager.jsx";
 
 const SECTION_LABELS = {
   HERO: "Hero (topo)",
@@ -612,12 +613,7 @@ export default function VariableManagement() {
     }
 
     if (activeView === "weeklyTips") {
-      return (
-        <TabPlaceholder
-          title="Dicas da semana"
-          description="Espaco reservado para destacar conteudos semanais em breve."
-        />
-      );
+      return <WeeklyTipsManager onUnauthorized={handleUnauthorized} />;
     }
 
     if (activeView === "globalVars") {
