@@ -1,4 +1,4 @@
-﻿import { apiFetch } from "./client.js";
+﻿import { apiFetch } from "../api/auth/client.js";
 
 const ADMIN_BASE = "/api/super-admin/site";
 const FUNCTIONS_BASE = "/api/functions";
@@ -207,6 +207,61 @@ export async function deleteAppMetric(metricId) {
     error.status = resp.status;
     throw error;
   }
+}
+
+// --- Weekly tips ---
+export async function fetchWeeklyTipsPage() {
+    const resp = await apiFetch("/api/site/weekly-tips", {}, { autoRefresh: false });
+    return toJsonOrThrow(resp, "Falha ao carregar as dicas.");
+}
+
+export async function fetchWeeklyTipsAdmin() {
+    const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips`);
+    return toJsonOrThrow(resp, "N�o foi poss�vel carregar as dicas da semana.");
+}
+
+export async function createWeeklyTip(payload) {
+    const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips`, jsonOptions("POST", payload));
+    return toJsonOrThrow(resp, "N�o foi poss�vel criar a dica.");
+}
+
+export async function updateWeeklyTip(id, payload) {
+    const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}`, jsonOptions("PUT", payload));
+    return toJsonOrThrow(resp, "N�o foi poss�vel atualizar a dica.");
+}
+
+export async function toggleWeeklyTipVisibility(id, active) {
+    const resp = await apiFetch(
+        `${ADMIN_BASE}/weekly-tips/${id}/visibility`,
+        jsonOptions("PATCH", { active })
+    );
+    return toJsonOrThrow(resp, "N�o foi poss�vel alterar a visibilidade da dica.");
+}
+
+export async function markWeeklyTipFeatured(id) {
+    const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}/featured`, {
+        method: "PATCH",
+    });
+    return toJsonOrThrow(resp, "N�o foi poss�vel definir a dica da semana.");
+}
+
+export async function reorderWeeklyTips(ids) {
+    const resp = await apiFetch(
+        `${ADMIN_BASE}/weekly-tips/reorder`,
+        jsonOptions("PUT", { ids })
+    );
+    return toJsonOrThrow(resp, "N�o foi poss�vel reordenar as dicas.");
+}
+
+export async function deleteWeeklyTip(id) {
+    const resp = await apiFetch(`${ADMIN_BASE}/weekly-tips/${id}`, {
+        method: "DELETE",
+    });
+    if (!resp.ok) {
+        const error = new Error("N�o foi poss�vel eliminar a dica.");
+        error.status = resp.status;
+        throw error;
+    }
 }
 
 // --- Funcoes ---
