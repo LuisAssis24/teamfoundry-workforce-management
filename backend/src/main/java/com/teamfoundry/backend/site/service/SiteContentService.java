@@ -91,14 +91,22 @@ public class SiteContentService {
                 .filter(WeeklyTip::isActive)
                 .toList();
 
-        // Limit the rotation pool to at most 11 tips
+        // Limit the pool to at most 11 tips (oldest first by display order)
         List<WeeklyTip> rotationPool = activeTips.stream()
                 .sorted(Comparator.comparingInt(WeeklyTip::getDisplayOrder))
                 .limit(11)
                 .toList();
 
         WeeklyTipResponse highlighted = null;
-        if (!rotationPool.isEmpty()) {
+        // 1) If admin marked any tip as featured, use that as tip of the week
+        Optional<WeeklyTip> featured = rotationPool.stream()
+                .filter(WeeklyTip::isFeatured)
+                .findFirst();
+
+        if (featured.isPresent()) {
+            highlighted = mapWeeklyTip(featured.get());
+        } else if (!rotationPool.isEmpty()) {
+            // 2) Otherwise, rotate automatically by week of year
             LocalDate today = LocalDate.now();
             int weekOfYear = today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
             int index = (weekOfYear - 1) % rotationPool.size();
