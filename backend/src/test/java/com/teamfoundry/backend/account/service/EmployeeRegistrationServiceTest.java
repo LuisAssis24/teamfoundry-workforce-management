@@ -40,6 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -103,6 +104,9 @@ class EmployeeRegistrationServiceTest {
         baseAccount.setRegistrationStatus(RegistrationStatus.PENDING);
         baseAccount.setRole(UserType.EMPLOYEE);
         baseAccount.setActive(false);
+
+        // @Value nǜo Ǹ processado em testes unitǭrios com Mockito, for��ando um valor.
+        ReflectionTestUtils.setField(employeeRegistrationService, "verificationExpirationMinutes", 30L);
     }
 
     @Test
@@ -200,7 +204,6 @@ class EmployeeRegistrationServiceTest {
         other.setRole(UserType.ADMIN);
 
         when(accountRepository.findByEmail("candidate@test.com")).thenReturn(Optional.of(other));
-        when(employeeAccountRepository.findByEmail("candidate@test.com")).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> employeeRegistrationService.handleStep1(step1Request))
                 .isInstanceOf(EmployeeRegistrationException.class)
