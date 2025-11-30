@@ -6,14 +6,18 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(getAccessToken()));
+  const [userType, setUserType] = useState(localStorage.getItem("tf-user-type") || null);
 
   const refreshAuth = useCallback(() => {
     setIsAuthenticated(Boolean(getAccessToken()));
+    setUserType(localStorage.getItem("tf-user-type") || null);
   }, []);
 
   const logout = useCallback(() => {
     clearTokens();
     setIsAuthenticated(false);
+    localStorage.removeItem("tf-user-type");
+    setUserType(null);
   }, []);
 
   useEffect(() => {
@@ -28,8 +32,8 @@ export function AuthProvider({ children }) {
   }, [refreshAuth]);
 
   const value = useMemo(
-    () => ({ isAuthenticated, refreshAuth, logout }),
-    [isAuthenticated, refreshAuth, logout]
+    () => ({ isAuthenticated, userType, refreshAuth, logout }),
+    [isAuthenticated, userType, refreshAuth, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

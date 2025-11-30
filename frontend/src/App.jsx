@@ -31,6 +31,11 @@ import JobOffers from "./pages/profile/Employee/JobOffers/JobOffers.jsx";
 import Documentos from "./pages/profile/Employee/Documents/Documentos.jsx";
 import ProximosPassos from "./pages/profile/Employee/NextSteps/ProximosPassos.jsx";
 
+// Profile - Company
+import CompanyLayout, { CompanyIndexRedirect } from "./pages/profile/company/CompanyLayout.jsx";
+import CompanyInfo from "./pages/profile/company/CompanyInfo.jsx";
+import CompanyRequests from "./pages/profile/company/CompanyRequests.jsx";
+
 // Admin / SuperAdmin
 import SuperAdminLayout from "./pages/admin/SuperAdmin/SuperAdminLayout.jsx";
 import Credentials from "./pages/admin/SuperAdmin/Credentials/Credentials.jsx";
@@ -87,6 +92,12 @@ function App() {
         <Route path="ofertas" element={<JobOffers />} />
         <Route path="documentos" element={<Documentos />} />
         <Route path="proximos-passos" element={<ProximosPassos />} />
+      </Route>
+
+      <Route path="/empresa" element={<CompanyLayout />}>
+        <Route index element={<CompanyIndexRedirect />} />
+        <Route path="informacoes" element={<CompanyInfo />} />
+        <Route path="requisicoes" element={<CompanyRequests />} />
       </Route>
     </Routes>
   );

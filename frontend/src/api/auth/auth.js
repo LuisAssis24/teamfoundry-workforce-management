@@ -13,9 +13,13 @@ export async function login(email, password, rememberMe = false) {
     if (data?.accessToken) {
       setTokens({ accessToken: data.accessToken });
     }
+    if (data?.userType) {
+      localStorage.setItem("tf-user-type", data.userType);
+    }
     return data;
   } catch (error) {
     clearTokens();
+    localStorage.removeItem("tf-user-type");
     throw error;
   }
 }

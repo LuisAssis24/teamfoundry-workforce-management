@@ -38,12 +38,13 @@ export default function LoginCandidate() {
         setError("");
         setSuccess(false);
         try {
-            const data = await login(email, password, rememberMe);
-            console.log("Login OK:", data);
-            setSuccess(true);
-            refreshAuth();
-            navigate("/", { replace: true });
-        } catch (e) {
+      const data = await login(email, password, rememberMe);
+      console.log("Login OK:", data);
+      setSuccess(true);
+      refreshAuth();
+      const destination = data?.userType === "COMPANY" ? "/empresa" : "/";
+      navigate(destination, { replace: true });
+    } catch (e) {
             setError(e.message || "Falha no login");
         } finally {
             setLoading(false);
