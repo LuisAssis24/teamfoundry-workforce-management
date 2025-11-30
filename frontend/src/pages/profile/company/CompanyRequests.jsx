@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Tabs from "../../../components/sections/Tabs.jsx";
 import Button from "../../../components/ui/Button/Button.jsx";
-import Modal from "../../../components/ui/Modal/Modal.jsx";
-import InputField from "../../../components/ui/Input/InputField.jsx";
 import { useCompanyProfile } from "./CompanyProfileContext.jsx";
 import CompanyRequestCard from "./components/CompanyRequestCard.jsx";
 import { createCompanyRequest } from "../../../api/profile/companyRequests.js";
+import CompanyRequestModal from "./components/CompanyRequestModal.jsx";
 
 const TABS = [
   { key: "ACTIVE", label: "Ativas" },
@@ -31,13 +30,6 @@ export default function CompanyRequests() {
   const [feedback, setFeedback] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({
-    teamName: "",
-    description: "",
-    location: "",
-    startDate: "",
-    endDate: "",
-  });
 
   useEffect(() => {
     let mounted = true;
@@ -69,24 +61,17 @@ export default function CompanyRequests() {
     [requestsData, activeTab]
   );
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
+  const handleCreate = async (payload) => {
     setSaving(true);
     setError("");
     setFeedback("");
     try {
-      const payload = {
-        ...form,
-        startDate: form.startDate || null,
-        endDate: form.endDate || null,
-      };
       const created = await createCompanyRequest(payload);
       const updated = [created, ...(requestsData || [])];
       setRequestsData(updated);
       setRequestsLoaded(true);
       setFeedback("Requisição criada com sucesso.");
       setModalOpen(false);
-      setForm({ teamName: "", description: "", location: "", startDate: "", endDate: "" });
       // muda para tab coerente com o status calculado
       if (created?.computedStatus) {
         setActiveTab(created.computedStatus);
@@ -143,6 +128,13 @@ export default function CompanyRequests() {
           </div>
         )}
       </section>
+
+      <CompanyRequestModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleCreate}
+        loading={saving}
+      />
     </div>
   );
 }

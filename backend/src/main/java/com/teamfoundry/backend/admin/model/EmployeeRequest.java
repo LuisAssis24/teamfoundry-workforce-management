@@ -3,6 +3,7 @@ package com.teamfoundry.backend.admin.model;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import jakarta.persistence.*;
 import lombok.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,6 +27,9 @@ public class EmployeeRequest {
 
     @Column(name = "requested_role", nullable = false)
     private String requestedRole;
+
+    @Column(name = "salary")
+    private BigDecimal requestedSalary;
 
     @Column(name = "date_accepted")
     private LocalDateTime acceptedDate;

@@ -21,24 +21,31 @@ export function CompanyProfileProvider({ children }) {
   /**
    * Obtém o perfil da empresa autenticada e guarda em cache.
    */
-  const refreshProfile = useCallback(async () => {
-    if (!isAuthenticated) {
-      setCompanyProfile(null);
-      return null;
-    }
-    setLoadingProfile(true);
-    try {
-      const data = await fetchCompanyProfile();
-      setCompanyProfile(data);
-      setProfileError("");
-      return data;
-    } catch (err) {
-      setProfileError(err.message || "Não foi possível carregar o perfil.");
-      return null;
-    } finally {
-      setLoadingProfile(false);
-    }
-  }, [isAuthenticated]);
+  const refreshProfile = useCallback(
+    async (force = false) => {
+      if (!isAuthenticated) {
+        setCompanyProfile(null);
+        return null;
+      }
+      // Evita refetch se já temos cache e não é pedido force.
+      if (!force && companyProfile) {
+        return companyProfile;
+      }
+      setLoadingProfile(true);
+      try {
+        const data = await fetchCompanyProfile();
+        setCompanyProfile(data);
+        setProfileError("");
+        return data;
+      } catch (err) {
+        setProfileError(err.message || "Não foi possível carregar o perfil.");
+        return null;
+      } finally {
+        setLoadingProfile(false);
+      }
+    },
+    [isAuthenticated, companyProfile]
+  );
 
   /**
    * Atualiza os dados do responsável e sincroniza o estado local.
@@ -69,8 +76,11 @@ export function CompanyProfileProvider({ children }) {
   }, [isAuthenticated, requestsLoaded, requestsData]);
 
   useEffect(() => {
-    refreshProfile();
-  }, [refreshProfile]);
+    // Só busca se ainda não houver perfil em cache.
+    if (!companyProfile && !loadingProfile) {
+      refreshProfile();
+    }
+  }, [refreshProfile, companyProfile, loadingProfile]);
 
   const value = useMemo(
     () => ({

@@ -5,7 +5,9 @@ import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import com.teamfoundry.backend.account_options.dto.company.CompanyRequestCreateRequest;
 import com.teamfoundry.backend.account_options.dto.company.CompanyRequestResponse;
 import com.teamfoundry.backend.admin.enums.State;
+import com.teamfoundry.backend.admin.model.EmployeeRequest;
 import com.teamfoundry.backend.admin.model.TeamRequest;
+import com.teamfoundry.backend.admin.repository.EmployeeRequestRepository;
 import com.teamfoundry.backend.admin.repository.TeamRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ import java.util.List;
 public class CompanyRequestService {
 
     private final TeamRequestRepository teamRequestRepository;
+    private final EmployeeRequestRepository employeeRequestRepository;
     private final CompanyAccountRepository companyAccountRepository;
 
     /**
@@ -44,6 +47,9 @@ public class CompanyRequestService {
     @Transactional
     public CompanyRequestResponse createRequest(String email, CompanyRequestCreateRequest request) {
         CompanyAccount company = resolveCompany(email);
+        if (request.getRoles() == null || request.getRoles().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adicione pelo menos uma função.");
+        }
         TeamRequest entity = new TeamRequest();
         entity.setCompany(company);
         entity.setTeamName(request.getTeamName());
@@ -55,7 +61,25 @@ public class CompanyRequestService {
         entity.setCreatedAt(LocalDateTime.now());
 
         TeamRequest saved = teamRequestRepository.save(entity);
+        createEmployeeRequests(saved, request);
         return toResponse(saved);
+    }
+
+    private void createEmployeeRequests(TeamRequest teamRequest, CompanyRequestCreateRequest request) {
+        List<EmployeeRequest> requests = request.getRoles().stream().flatMap(roleReq -> {
+            return java.util.stream.IntStream.range(0, roleReq.getQuantity())
+                    .mapToObj(i -> {
+                        EmployeeRequest er = new EmployeeRequest();
+                        er.setTeamRequest(teamRequest);
+                        er.setRequestedRole(roleReq.getRole());
+                        er.setRequestedSalary(roleReq.getSalary());
+                        er.setCreatedAt(LocalDateTime.now());
+                        return er;
+                    });
+        }).toList();
+        if (!requests.isEmpty()) {
+            employeeRequestRepository.saveAll(requests);
+        }
     }
 
     private CompanyRequestResponse toResponse(TeamRequest request) {
