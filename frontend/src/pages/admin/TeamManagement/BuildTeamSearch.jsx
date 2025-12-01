@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import SuperAdminNavbar from "../SuperAdmin/SuperAdminNavbar.jsx";
-import EmployeeCard from "./EmployeeCard.jsx";
+import { useState } from "react";
+import AdminNavbar from "../components/AdminNavbar.jsx";
+import EmployeeCard from "./components/EmployeeCard.jsx";
+import MultiSelectDropdown from "../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
 
 const GEO_OPTIONS = ["Opcao 1", "Opcao 2"];
 const SKILL_OPTIONS = ["Opcao 1", "Opcao 2"];
-const OFFER_FILTER = "Ofertas Ativas: 5 ou Menos";
 
 const EMPLOYEES = [
   { id: 1, name: "Ceblerson", role: "Tubista", city: "Aveiro", preference: "Portugal" },
@@ -15,23 +16,30 @@ const EMPLOYEES = [
 
 export default function BuildTeamSearch() {
   const navigate = useNavigate();
+  const [geoSelected, setGeoSelected] = useState([]);
+  const [skillsSelected, setSkillsSelected] = useState([]);
 
   return (
     <div className="min-h-screen bg-base-200">
-      <SuperAdminNavbar />
+      <AdminNavbar />
       <main className="flex justify-center px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="w-full max-w-6xl space-y-6 rounded-2xl bg-[#F5F5F5] p-6 text-[#1F2959] shadow overflow-hidden">
           <button
             type="button"
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#1F2959] transition hover:text-[#0f1635]"
-            onClick={() => navigate("/admin/team-management")}
+            onClick={() => navigate("/admin/team-management/requests")}
           >
             <span aria-hidden="true">&larr;</span>
             Voltar
           </button>
           <HeroHeader />
           <div className="flex flex-col gap-6 lg:flex-row">
-            <FiltersPanel />
+            <FiltersPanel
+              geoSelected={geoSelected}
+              skillsSelected={skillsSelected}
+              onGeoChange={setGeoSelected}
+              onSkillsChange={setSkillsSelected}
+            />
             <CandidatesPanel />
           </div>
         </div>
@@ -44,7 +52,7 @@ function HeroHeader() {
   return <header className="h-2" />;
 }
 
-function FiltersPanel() {
+function FiltersPanel({ geoSelected, skillsSelected, onGeoChange, onSkillsChange }) {
   return (
     <aside className="w-full rounded-2xl bg-white p-6 shadow-md lg:w-80">
       <div className="space-y-4">
@@ -53,16 +61,20 @@ function FiltersPanel() {
       </div>
 
       <div className="mt-6 space-y-6">
-        <FilterSection title="Area(s) Geografica(s)" chips={GEO_OPTIONS} />
-        <FilterSection title="Competencias" chips={SKILL_OPTIONS} />
-
-        <div className="space-y-2">
-          <p className="px-2 text-sm font-semibold text-[#111827]">Ofertas</p>
-          <div className="flex items-center justify-between rounded-xl border border-[#111827] bg-[#F0F0F0] px-4 py-3">
-            <span className="text-sm font-medium text-[#09101D]">{OFFER_FILTER}</span>
-            <IconBar />
-          </div>
-        </div>
+        <MultiSelectDropdown
+          label="Area(s) Geografica(s)"
+          options={GEO_OPTIONS}
+          selectedOptions={geoSelected}
+          onChange={onGeoChange}
+          placeholder="Selecione area(s)"
+        />
+        <MultiSelectDropdown
+          label="Competencias"
+          options={SKILL_OPTIONS}
+          selectedOptions={skillsSelected}
+          onChange={onSkillsChange}
+          placeholder="Selecione competencias"
+        />
       </div>
     </aside>
   );
@@ -74,37 +86,6 @@ function FilterTitle({ label, value }) {
       <p className="text-lg font-semibold">
         {label}: <span className="text-[#111827]">{value}</span>
       </p>
-    </div>
-  );
-}
-
-function FilterSection({ title, chips }) {
-  return (
-    <div className="space-y-2">
-      <p className="px-2 text-sm font-semibold text-[#111827]">{title}</p>
-      <div className="rounded-xl border border-[#111827] bg-[#F0F0F0] p-3">
-        <div className="flex flex-wrap gap-2">
-          {chips.map((chip) => (
-            <span
-              key={chip}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#60678E] px-3 py-2 text-sm text-white"
-            >
-              {chip}
-              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-white/30 text-xs text-white">
-                v
-              </span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function IconBar() {
-  return (
-    <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#60678E]" aria-hidden="true">
-      <span className="block h-1 w-3 bg-white" />
     </div>
   );
 }

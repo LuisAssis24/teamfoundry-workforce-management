@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import TeamManagementCard from "./TeamManagementCard.jsx";
-import SuperAdminNavbar from "../SuperAdmin/SuperAdminNavbar.jsx";
+import TeamManagementCard from "./components/TeamManagementCard.jsx";
+import AdminNavbar from "../components/AdminNavbar.jsx";
 import { teamRequestsAPI } from "../../../api/teamRequests.js";
 
 const STATUS_OPTIONS = [
@@ -90,61 +90,61 @@ export default function TeamManagement() {
   ];
 
   return (
-      <div className="min-h-screen bg-base-200">
-        <SuperAdminNavbar />
-        <main className="flex justify-center px-6 pb-16 pt-10">
-          <div className="w-full max-w-6xl">
-            <div className="flex flex-col gap-6 rounded-2xl bg-[#F0F0F0] p-8 shadow">
-              <header className="flex flex-wrap items-center justify-center">
-                <h1 className="text-3xl font-bold text-[#1F2959]">Equipas</h1>
-              </header>
+    <div className="min-h-screen bg-base-200">
+      <AdminNavbar />
+      <main className="flex justify-center px-6 pb-16 pt-10">
+        <div className="w-full max-w-6xl">
+          <div className="flex flex-col gap-6 rounded-2xl bg-[#F0F0F0] p-8 shadow">
+            <header className="flex flex-wrap items-center justify-center">
+              <h1 className="text-3xl font-bold text-[#1F2959]">Equipas</h1>
+            </header>
 
-              <section className="grid gap-4 md:grid-cols-3">
-                {filterControls.map((control) => (
-                    <div
-                        key={control.id}
-                        className="rounded-2xl border border-[#60678E] bg-[#F0F0F0] p-4 shadow flex items-center justify-between gap-3"
-                    >
-                      <span className="text-lg font-medium text-[#2C3A74]">{control.label}:</span>
-                      <select
-                          value={control.value}
-                          onChange={control.onChange}
-                          className="select select-ghost text-sm bg-[#F0F0F0] text-[#1F2959]"
-                      >
-                        {control.options.map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                        ))}
-                      </select>
-                    </div>
+            <section className="grid gap-4 md:grid-cols-3">
+              {filterControls.map((control) => (
+                <div
+                  key={control.id}
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-[#60678E] bg-[#F0F0F0] p-4 shadow"
+                >
+                  <span className="text-lg font-medium text-[#2C3A74]">{control.label}:</span>
+                  <select
+                    value={control.value}
+                    onChange={control.onChange}
+                    className="select select-ghost bg-[#F0F0F0] text-sm text-[#1F2959]"
+                  >
+                    {control.options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </section>
+
+            {error && (
+              <div className="alert alert-error shadow">
+                <span>{error}</span>
+              </div>
+            )}
+
+            {isLoading ? (
+              <div className="py-10 text-center text-base-content/70">
+                Carregando requisicoes atribuidas...
+              </div>
+            ) : filteredRequests.length === 0 ? (
+              <div className="alert alert-info shadow">
+                <span>Nenhuma requisicao encontrada com os filtros selecionados.</span>
+              </div>
+            ) : (
+              <section className="flex flex-col gap-4">
+                {filteredRequests.map((team) => (
+                  <TeamManagementCard key={team.id} {...team} />
                 ))}
               </section>
-
-              {error && (
-                  <div className="alert alert-error shadow">
-                    <span>{error}</span>
-                  </div>
-              )}
-
-              {isLoading ? (
-                  <div className="py-10 text-center text-base-content/70">
-                    Carregando requisicoes atribuidas...
-                  </div>
-              ) : filteredRequests.length === 0 ? (
-                  <div className="alert alert-info shadow">
-                    <span>Nenhuma requisicao encontrada com os filtros selecionados.</span>
-                  </div>
-              ) : (
-                  <section className="flex flex-col gap-4">
-                    {filteredRequests.map((team) => (
-                        <TeamManagementCard key={team.id} {...team} />
-                    ))}
-                  </section>
-              )}
-            </div>
+            )}
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
+    </div>
   );
 }

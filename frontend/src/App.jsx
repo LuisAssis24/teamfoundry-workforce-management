@@ -37,6 +37,7 @@ import CompanyInfo from "./pages/profile/company/CompanyInfo.jsx";
 import CompanyRequests from "./pages/profile/company/CompanyRequests.jsx";
 
 // Admin / SuperAdmin
+import AdminLayout from "./pages/admin/AdminLayout.jsx";
 import SuperAdminLayout from "./pages/admin/SuperAdmin/SuperAdminLayout.jsx";
 import Credentials from "./pages/admin/SuperAdmin/Credentials/Credentials.jsx";
 import Staffing from "./pages/admin/SuperAdmin/Staffing/Staffing.jsx";
@@ -44,6 +45,7 @@ import VariableManagement from "./pages/admin/SuperAdmin/VariableManagement/Vari
 import Metrics from "./pages/admin/SuperAdmin/Metrics/Metrics.jsx";
 import TeamManagement from "./pages/admin/TeamManagement/TeamManagement.jsx";
 import BuildTeamSearch from "./pages/admin/TeamManagement/BuildTeamSearch.jsx";
+import TeamEmployeeRequests from "./pages/admin/TeamManagement/TeamEmployeeRequests.jsx";
 
 function App() {
   return (
@@ -71,9 +73,13 @@ function App() {
         <Route path="step3" element={<CompanyRegisterStep3 />} />
       </Route>
 
-      <Route path="/admin" element={<AdminLogin />} />
-      <Route path="/admin/team-management" element={<TeamManagement />} />
-      <Route path="/admin/team-management/build" element={<BuildTeamSearch />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Navigate to="login" replace />} />
+        <Route path="login" element={<AdminLogin />} />
+        <Route path="team-management" element={<TeamManagement />} />
+        <Route path="team-management/build" element={<BuildTeamSearch />} />
+        <Route path="team-management/requests" element={<TeamEmployeeRequests />} />
+      </Route>
 
       <Route path="/admin/super" element={<SuperAdminLayout />}>
         <Route index element={<Navigate to="credenciais" replace />} />
