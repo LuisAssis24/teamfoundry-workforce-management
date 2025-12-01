@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import TeamManagementCard from "./TeamManagementCard.jsx";
+import TeamManagementCard from "./components/TeamManagementCard.jsx";
+import AdminNavbar from "../components/AdminNavbar.jsx";
 import { teamRequestsAPI } from "../../../api/teamRequests.js";
 
 const STATUS_OPTIONS = [
@@ -90,6 +91,7 @@ export default function TeamManagement() {
 
   return (
     <div className="min-h-screen bg-base-200">
+      <AdminNavbar />
       <main className="flex justify-center px-6 pb-16 pt-10">
         <div className="w-full max-w-6xl">
           <div className="flex flex-col gap-6 rounded-2xl bg-[#F0F0F0] p-8 shadow">

@@ -2,9 +2,8 @@ export default function EmployeeCard({ name, role, city, preference }) {
   return (
     <article className="flex h-full flex-col gap-4 rounded-2xl border border-[#111827] bg-[#F5F5F5] p-4 shadow">
       <div className="flex items-center gap-4">
-        <div className="relative h-14 w-14 rounded-2xl bg-[#1F2959]/10">
-          <span className="absolute inset-0 rounded-2xl bg-[#1F2959]" />
-          <span className="absolute left-1/3 top-2 h-6 w-6 rounded-md bg-white/20" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1F2959] text-white shadow-inner">
+          <i className="bi bi-person-fill text-2xl" aria-hidden="true"></i>
         </div>
         <div>
           <p className="text-lg font-semibold text-[#111827]">{name}</p>

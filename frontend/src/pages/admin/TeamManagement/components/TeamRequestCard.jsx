@@ -1,19 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "../../../../components/ui/Button/Button.jsx";
-
-const STATUS_STYLES = {
-  COMPLETE: {
-    label: "Completo",
-    bg: "#1CA74F",
-    text: "#F5F5F5",
-  },
-  IN_PROGRESS: {
-    label: "Montar",
-    bg: "#1F2959",
-    text: "#F5F5F5",
-  },
-};
 
 export default function TeamRequestCard({
   role,
@@ -24,46 +10,44 @@ export default function TeamRequestCard({
   onAssemble,
   onCompleteClick,
 }) {
-  const normalizedStatus = status?.toUpperCase() === "COMPLETE" ? "COMPLETE" : "IN_PROGRESS";
-  const statusStyle = STATUS_STYLES[normalizedStatus];
-  const handleComplete = onCompleteClick || onAssemble;
+  const isComplete = status?.toUpperCase() === "COMPLETE";
+  const buttonLabel = isComplete ? "Completo" : "Montar";
+  const handleClick = isComplete ? onCompleteClick || onAssemble : onAssemble;
 
   return (
     <div
-      className="flex flex-col items-center gap-3 rounded-xl border border-[#E5E7EB] bg-white p-4 text-center shadow-md"
-      style={{ minWidth: 240 }}
+      className="relative rounded-2xl border border-[#111827] bg-[#F5F5F5] px-6 py-4"
+      style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
     >
-      <InfoLine label="Função" value={role} />
-      <InfoLine label="Mão de Obra" value={`${workforceCurrent} de ${workforceTotal}`} />
-      <InfoLine label="Propostas Enviadas" value={proposalsSent} />
+      <dl className="grid grid-cols-1 gap-1 text-base text-[#111827] sm:grid-cols-2">
+        <InfoRow label="Funcao" value={role} />
+        <InfoRow label="Mao de Obra" value={`${workforceCurrent} de ${workforceTotal}`} />
+        <InfoRow label="Propostas Enviadas" value={proposalsSent} />
+      </dl>
 
-      {normalizedStatus === "COMPLETE" ? (
-        <Button
-          label={statusStyle.label}
-          variant="success"
-          fullWidth={false}
-          className="px-8"
-          onClick={handleComplete}
-        />
-      ) : (
-        <Button
-          label={statusStyle.label}
-          variant="primary"
-          fullWidth={false}
-          className="px-8"
-          onClick={onAssemble}
-        />
-      )}
+      <div className="absolute right-6 top-1/2 -translate-y-1/2">
+        <button
+          type="button"
+          onClick={handleClick}
+          className={`rounded-xl px-8 py-2 text-center text-sm font-semibold text-white shadow transition ${
+            isComplete
+              ? "bg-[#1CA74F] hover:bg-[#168C41]"
+              : "bg-[#1F2959] hover:bg-[#172145]"
+          }`}
+        >
+          {buttonLabel}
+        </button>
+      </div>
     </div>
   );
 }
 
-function InfoLine({ label, value }) {
+function InfoRow({ label, value }) {
   return (
-    <p className="text-base leading-6 text-[#111827]">
-      <span className="font-semibold text-[#2C3A74]">{label}:</span>{" "}
-      <span className="font-medium">{value}</span>
-    </p>
+    <div className="flex flex-wrap gap-2">
+      <dt className="font-medium text-[#2C3A74]">{label}:</dt>
+      <dd className="text-[#111827]">{value}</dd>
+    </div>
   );
 }
 

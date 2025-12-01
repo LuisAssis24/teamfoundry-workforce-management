@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import TeamRequestHeader from "./components/TeamRequestHeader.jsx";
 import TeamRequestGrid from "./components/TeamRequestGrid.jsx";
-import BackButton from "./components/BackButton.jsx";
+import AdminNavbar from "../components/AdminNavbar.jsx";
 
 const TEAM_NAME = "NomeEmpresa";
 
@@ -26,8 +26,16 @@ export default function TeamEmployeeRequests() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F5]">
+      <AdminNavbar />
       <div className="mx-auto flex max-w-screen-xl flex-col gap-8 px-8 py-10">
-        <BackButton />
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[#1F2959] transition hover:text-[#0f1635]"
+          onClick={() => navigate("/admin/team-management")}
+        >
+          <span aria-hidden="true">&larr;</span>
+          Voltar
+        </button>
         <TeamRequestHeader teamName={TEAM_NAME} />
 
         <TeamRequestGrid requests={TEAM_REQUESTS} onSelect={handleSelect} />
