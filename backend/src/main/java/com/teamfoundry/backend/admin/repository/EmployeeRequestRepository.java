@@ -25,8 +25,22 @@ public interface EmployeeRequestRepository extends JpaRepository<EmployeeRequest
             """)
     List<TeamRequestCount> countByTeamRequestIds(@Param("requestIds") Collection<Integer> requestIds);
 
+    @Query("""
+            SELECT er.requestedRole AS role, COUNT(er) AS total, COUNT(er.employee) AS filled
+            FROM EmployeeRequest er
+            WHERE er.teamRequest.id = :teamRequestId
+            GROUP BY er.requestedRole
+            """)
+    List<RoleCount> countByRoleForTeam(@Param("teamRequestId") Integer teamRequestId);
+
     interface TeamRequestCount {
         Integer getRequestId();
         long getTotal();
+    }
+
+    interface RoleCount {
+        String getRole();
+        long getTotal();
+        long getFilled();
     }
 }
