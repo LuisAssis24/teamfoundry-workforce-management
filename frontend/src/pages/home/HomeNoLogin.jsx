@@ -200,16 +200,6 @@ function PartnersSection({ section, partners }) {
                   <p className="text-sm text-base-content/80 leading-relaxed">
                     {partner.description}
                   </p>
-                  {partner.websiteUrl && (
-                    <a
-                      href={partner.websiteUrl}
-                      className="link link-primary text-sm"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Visitar website
-                    </a>
-                  )}
                 </div>
               </article>
             ))}

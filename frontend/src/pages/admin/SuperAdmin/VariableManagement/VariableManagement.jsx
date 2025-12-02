@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   createIndustry,
   createPartner,
-  fetchHomepageConfig,
   reorderIndustries,
   reorderPartners,
   reorderSections,
@@ -13,16 +12,12 @@ import {
   uploadSiteImage,
   deleteIndustry,
   deletePartner,
-  fetchFunctions,
   createFunction,
   deleteFunction,
-  fetchCompetences,
   createCompetence,
   deleteCompetence,
-  fetchGeoAreas,
   createGeoArea,
   deleteGeoArea,
-  fetchActivitySectors,
   createActivitySector,
   deleteActivitySector,
 } from "../../../../api/siteManagement.js";
@@ -31,6 +26,8 @@ import DropZone from "../../../../components/ui/Upload/DropZone.jsx";
 import { clearTokens } from "../../../../auth/tokenStorage.js";
 import AppHomeManager from "../AppHomeManager.jsx";
 import WeeklyTipsManager from "../WeeklyTipsManager.jsx";
+import { useSuperAdminData } from "../SuperAdminDataContext.jsx";
+import { moveItemInList, sortByName, sortByOrder } from "./utils.js";
 
 const SECTION_LABELS = {
   HERO: "Hero (topo)",
@@ -81,17 +78,37 @@ const EMPTY_FORMS = {
 export default function VariableManagement() {
   const navigate = useNavigate();
   const mountedRef = useRef(false);
-  const [config, setConfig] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const {
+    site: {
+      homepage: {
+        data: config,
+        setData: setConfig,
+        loading,
+        loaded: configLoaded,
+        error: loadError,
+        refresh: refreshConfig,
+      },
+    },
+  } = useSuperAdminData();
   const [activeView, setActiveView] = useState("publicHome");
 
-  const [globalOptions, setGlobalOptions] = useState({
-    functions: [],
-    competences: [],
-    geoAreas: [],
-    activitySectors: [],
-  });
+  const {
+    site: {
+      globalOptions: {
+        data: globalOptions = {
+          functions: [],
+          competences: [],
+          geoAreas: [],
+          activitySectors: [],
+        },
+        loading: globalOptionsLoading,
+        loaded: globalOptionsLoaded,
+        error: globalOptionsError,
+        refresh: refreshGlobalOptions,
+        setData: setGlobalOptions,
+      },
+    },
+  } = useSuperAdminData();
   const optionLabels = {
     functions: "função",
     competences: "competência",
@@ -113,8 +130,8 @@ export default function VariableManagement() {
   });
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [optionsError, setOptionsError] = useState(null);
-  const [optionsLoaded, setOptionsLoaded] = useState(false);
   const [optionModal, setOptionModal] = useState({ open: false, type: null, name: "", saving: false });
+  const [globalOptionsErrorDismissed, setGlobalOptionsErrorDismissed] = useState(false);
 
   const [banner, setBanner] = useState(null);
 
@@ -135,53 +152,45 @@ export default function VariableManagement() {
     navigate("/admin", { replace: true });
   }, [navigate]);
 
-  const loadConfig = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const payload = await fetchHomepageConfig();
-      if (!mountedRef.current) return;
-      setConfig(normalizeConfig(payload));
-    } catch (err) {
-      if (!mountedRef.current) return;
-      if (err?.status === 401) {
-        handleUnauthorized();
-        return;
-      }
-      setLoadError(err.message || "Não foi possível carregar as configurações.");
-    } finally {
-      if (mountedRef.current) setLoading(false);
-    }
-  }, [handleUnauthorized]);
-
   useEffect(() => {
     mountedRef.current = true;
-    loadConfig();
     return () => {
       mountedRef.current = false;
     };
-  }, [loadConfig]);
+  }, []);
+
+  const initialConfigLoad = useRef(false);
+  useEffect(() => {
+    if (configLoaded || initialConfigLoad.current) return;
+    initialConfigLoad.current = true;
+    refreshConfig().catch((err) => {
+      if (err?.status === 401) {
+        handleUnauthorized();
+      }
+    });
+  }, [configLoaded, refreshConfig, handleUnauthorized]);
+
+  const retryHomepageConfig = useCallback(() => {
+    refreshConfig({ force: true }).catch((err) => {
+      if (err?.status === 401) {
+        handleUnauthorized();
+      }
+    });
+  }, [refreshConfig, handleUnauthorized]);
+
+  useEffect(() => {
+    if (globalOptionsError) {
+      setGlobalOptionsErrorDismissed(false);
+    }
+  }, [globalOptionsError]);
 
   const loadGlobalOptions = useCallback(async () => {
+    if (globalOptionsLoading || globalOptionsLoaded) return;
     setOptionsLoading(true);
     setOptionsError(null);
     try {
-      const [functions, competences, geoAreas, activitySectors] = await Promise.all([
-        fetchFunctions(),
-        fetchCompetences(),
-        fetchGeoAreas(),
-        fetchActivitySectors(),
-      ]);
-      if (!mountedRef.current) return;
-      setGlobalOptions({
-        functions: sortByName(functions),
-        competences: sortByName(competences),
-        geoAreas: sortByName(geoAreas),
-        activitySectors: sortByName(activitySectors),
-      });
-      setOptionsLoaded(true);
+      await refreshGlobalOptions();
     } catch (err) {
-      if (!mountedRef.current) return;
       if (err?.status === 401) {
         handleUnauthorized();
         return;
@@ -190,13 +199,25 @@ export default function VariableManagement() {
     } finally {
       if (mountedRef.current) setOptionsLoading(false);
     }
-  }, [handleUnauthorized]);
+  }, [globalOptionsLoading, globalOptionsLoaded, refreshGlobalOptions, handleUnauthorized]);
 
   useEffect(() => {
-    if (activeView === "globalVars" && !optionsLoaded) {
+    if (activeView === "globalVars" && !globalOptionsLoaded) {
       loadGlobalOptions();
     }
-  }, [activeView, optionsLoaded, loadGlobalOptions]);
+  }, [activeView, globalOptionsLoaded, loadGlobalOptions]);
+
+  const effectiveGlobalOptionsError = globalOptionsErrorDismissed ? null : globalOptionsError;
+  const combinedOptionsError = optionsError || effectiveGlobalOptionsError;
+  const isGlobalOptionsLoading = optionsLoading || globalOptionsLoading;
+
+  const handleOptionsErrorClose = () => {
+    if (optionsError) {
+      setOptionsError(null);
+    } else {
+      setGlobalOptionsErrorDismissed(true);
+    }
+  };
 
   const heroSection = useMemo(
     () => config?.sections?.find((section) => section.type === "HERO"),
@@ -599,7 +620,7 @@ export default function VariableManagement() {
       return (
         <div className="flex flex-col items-center gap-4 py-20">
           <p className="text-lg text-base-content/70">{loadError}</p>
-          <button type="button" className="btn btn-primary" onClick={loadConfig}>
+          <button type="button" className="btn btn-primary" onClick={retryHomepageConfig}>
             Tentar novamente
           </button>
         </div>
@@ -635,13 +656,13 @@ export default function VariableManagement() {
   function renderGlobalVariables() {
     return (
       <div className="space-y-10 pt-4">
-        {optionsError && (
+        {combinedOptionsError && (
           <div className="alert alert-error shadow flex justify-between">
-            <span>{optionsError}</span>
+            <span>{combinedOptionsError}</span>
             <button
               type="button"
               className="btn btn-ghost btn-xs"
-              onClick={() => setOptionsError(null)}
+              onClick={handleOptionsErrorClose}
             >
               Fechar
             </button>
@@ -650,7 +671,7 @@ export default function VariableManagement() {
 
 
           <div className="space-y-6">
-            {optionsLoading ? (
+            {isGlobalOptionsLoading ? (
               <div className="flex min-h-[200px] items-center justify-center">
                 <span className="loading loading-spinner loading-lg text-primary" />
               </div>
@@ -1454,10 +1475,6 @@ function ShowcaseModal({ state, form, saving, onClose, onChange, onSubmit, onDel
   );
 }
 
-function sortByName(list = []) {
-  return [...list].sort((a, b) => (a?.name || "").localeCompare(b?.name || ""));
-}
-
 function manageTitle(type) {
   switch (type) {
     case "functions":
@@ -1478,29 +1495,6 @@ function filteredManageItems(type, options, search) {
   const query = (search || "").toLowerCase().trim();
   if (!query) return list;
   return list.filter((item) => (item.name || "").toLowerCase().includes(query));
-}
-
-function moveItemInList(list, id, direction) {
-  const index = list.findIndex((item) => item.id === id);
-  if (index < 0) return null;
-  const target = direction === "up" ? index - 1 : index + 1;
-  if (target < 0 || target >= list.length) return null;
-  const next = [...list];
-  const [removed] = next.splice(index, 1);
-  next.splice(target, 0, removed);
-  return next;
-}
-
-function sortByOrder(items = []) {
-  return [...items].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
-}
-
-function normalizeConfig(payload) {
-  return {
-    sections: sortByOrder(payload?.sections ?? []),
-    industries: sortByOrder(payload?.industries ?? []),
-    partners: sortByOrder(payload?.partners ?? []),
-  };
 }
 
 function getModalForm(entity, record) {

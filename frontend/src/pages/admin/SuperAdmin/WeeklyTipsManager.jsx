@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  fetchWeeklyTipsAdmin,
   createWeeklyTip,
   updateWeeklyTip,
   deleteWeeklyTip,
@@ -9,6 +8,8 @@ import {
   reorderWeeklyTips,
 } from "../../../api/siteManagement.js";
 import Modal from "/src/components/ui/Modal/Modal.jsx";
+import { useSuperAdminData } from "./SuperAdminDataContext.jsx";
+import { moveItemInList, sortWeeklyTips } from "./VariableManagement/utils.js";
 
 const EMPTY_FORM = {
   category: "",
@@ -20,9 +21,19 @@ const EMPTY_FORM = {
 };
 
 export default function WeeklyTipsManager({ onUnauthorized }) {
-  const [tips, setTips] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const {
+    site: {
+      weeklyTips: {
+        data: tips = [],
+        loading,
+        loaded,
+        error: loadError,
+        refresh: refreshWeeklyTips,
+        setData: setTipsData,
+      },
+    },
+  } = useSuperAdminData();
+  const tipsList = Array.isArray(tips) ? tips : [];
   const [banner, setBanner] = useState(null);
 
   const [modalState, setModalState] = useState({
@@ -33,34 +44,24 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
 
-  const mountedRef = useRef(false);
-
-  const loadTips = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const payload = await fetchWeeklyTipsAdmin();
-      if (!mountedRef.current) return;
-      setTips(sortByOrder(payload ?? []));
-    } catch (err) {
-      if (!mountedRef.current) return;
+  const initialLoad = useRef(false);
+  useEffect(() => {
+    if (loaded || initialLoad.current) return;
+    initialLoad.current = true;
+    refreshWeeklyTips().catch((err) => {
       if (err?.status === 401) {
         onUnauthorized?.();
-        return;
       }
-      setLoadError(err.message || "N�o foi poss�vel carregar as dicas da semana.");
-    } finally {
-      if (mountedRef.current) setLoading(false);
-    }
-  }, [onUnauthorized]);
+    });
+  }, [loaded, refreshWeeklyTips, onUnauthorized]);
 
-  useEffect(() => {
-    mountedRef.current = true;
-    loadTips();
-    return () => {
-      mountedRef.current = false;
-    };
-  }, [loadTips]);
+  const retryWeeklyTips = () => {
+    refreshWeeklyTips({ force: true }).catch((err) => {
+      if (err?.status === 401) {
+        onUnauthorized?.();
+      }
+    });
+  };
 
   const openModal = (mode, record = null) => {
     setModalState({ open: true, mode, record });
@@ -93,12 +94,13 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
       let result;
       if (modalState.mode === "edit" && modalState.record) {
         result = await updateWeeklyTip(modalState.record.id, payload);
-        setTips((prev) =>
-          sortByOrder(prev.map((item) => (item.id === result.id ? result : item)))
-        );
+        setTipsData((prev) => {
+          const list = Array.isArray(prev) ? prev : [];
+          return sortWeeklyTips(list.map((item) => (item.id === result.id ? result : item)));
+        });
       } else {
         result = await createWeeklyTip(payload);
-        setTips((prev) => sortByOrder([...(prev ?? []), result]));
+        setTipsData((prev) => sortWeeklyTips([...(prev ?? []), result]));
       }
       setBanner({ type: "success", message: "Dica guardada com sucesso." });
       closeModal();
@@ -119,7 +121,10 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
     setBanner(null);
     try {
       await deleteWeeklyTip(modalState.record.id);
-      setTips((prev) => prev.filter((item) => item.id !== modalState.record.id));
+      setTipsData((prev) => {
+        const list = Array.isArray(prev) ? prev : [];
+        return list.filter((item) => item.id !== modalState.record.id);
+      });
       setBanner({ type: "success", message: "Dica removida." });
       closeModal();
     } catch (err) {
@@ -136,9 +141,10 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
     setBanner(null);
     try {
       const updated = await toggleWeeklyTipVisibility(record.id, !record.active);
-      setTips((prev) =>
-        prev.map((item) => (item.id === updated.id ? updated : item))
-      );
+      setTipsData((prev) => {
+        const list = Array.isArray(prev) ? prev : [];
+        return list.map((item) => (item.id === updated.id ? updated : item));
+      });
       setBanner({
         type: "success",
         message: `Dica ${updated.active ? "ativada" : "ocultada"} com sucesso.`,
@@ -155,12 +161,13 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
     setBanner(null);
     try {
       const updated = await markWeeklyTipFeatured(record.id);
-      setTips((prev) =>
-        prev.map((item) => ({
+      setTipsData((prev) => {
+        const list = Array.isArray(prev) ? prev : [];
+        return list.map((item) => ({
           ...item,
           featured: item.id === updated.id,
-        }))
-      );
+        }));
+      });
       setBanner({ type: "success", message: "Dica marcada como destaque da semana." });
     } catch (err) {
       setBanner({
@@ -171,16 +178,16 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
   };
 
   const handleMove = async (id, direction) => {
-    const next = moveItemInList(tips, id, direction);
+    const next = moveItemInList(tipsList, id, direction);
     if (!next) return;
-    const previous = tips;
-    setTips(next);
+    const previous = tipsList;
+    setTipsData(next);
     setBanner(null);
     try {
       await reorderWeeklyTips(next.map((item) => item.id));
       setBanner({ type: "success", message: "Ordem das dicas atualizada." });
     } catch (err) {
-      setTips(previous);
+      setTipsData(previous);
       setBanner({
         type: "error",
         message: err.message || "N�o foi poss�vel reordenar as dicas.",
@@ -232,7 +239,7 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
               <button
                 type="button"
                 className="btn btn-sm"
-                onClick={loadTips}
+                onClick={retryWeeklyTips}
               >
                 Tentar novamente
               </button>
@@ -243,14 +250,14 @@ export default function WeeklyTipsManager({ onUnauthorized }) {
             <div className="flex items-center justify-center py-10">
               <span className="loading loading-spinner loading-lg text-primary" />
             </div>
-          ) : tips.length === 0 ? (
+          ) : tipsList.length === 0 ? (
             <p className="text-sm text-base-content/70">
               Ainda n�o existem dicas configuradas. Cria a primeira para a
               destacar aos utilizadores.
             </p>
           ) : (
             <TipsTable
-              tips={tips}
+              tips={tipsList}
               onEdit={(record) => openModal("edit", record)}
               onMove={handleMove}
               onToggle={handleToggleVisibility}
@@ -483,21 +490,6 @@ function mapForm(record) {
     featured: Boolean(record.featured),
     active: Boolean(record.active),
   };
-}
-
-function sortByOrder(items = []) {
-  return [...items].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
-}
-
-function moveItemInList(list, id, direction) {
-  const index = list.findIndex((item) => item.id === id);
-  if (index < 0) return null;
-  const target = direction === "up" ? index - 1 : index + 1;
-  if (target < 0 || target >= list.length) return null;
-  const next = [...list];
-  const [removed] = next.splice(index, 1);
-  next.splice(target, 0, removed);
-  return next;
 }
 
 function formatDate(value) {

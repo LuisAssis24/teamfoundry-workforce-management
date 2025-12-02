@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch } from "../../../../api/auth/client.js";
 import CompanyCredentialsList from "./components/CompanyCredentialsList.jsx";
 import Button from "../../../../components/ui/Button/Button.jsx";
 import Modal from "../../../../components/ui/Modal/Modal.jsx";
+import { useSuperAdminData } from "../SuperAdminDataContext.jsx";
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
@@ -33,13 +34,26 @@ const normalizeRole = (role) => {
 };
 
 export default function Credenciais() {
-  const [businessCompanies, setBusinessCompanies] = useState([]);
-  const [isLoadingCompanies, setIsLoadingCompanies] = useState(true);
-  const [companyError, setCompanyError] = useState(null);
-
-  const [adminCredentials, setAdminCredentials] = useState([]);
-  const [isLoadingAdmins, setIsLoadingAdmins] = useState(true);
-  const [adminError, setAdminError] = useState(null);
+  const {
+    credentials: {
+      companies: {
+        data: businessCompanies = [],
+        loading: isLoadingCompanies,
+        loaded: companiesLoaded,
+        error: companyError,
+        refresh: refreshCompanies,
+        setData: setBusinessCompanies,
+      },
+      admins: {
+        data: adminCredentials = [],
+        loading: isLoadingAdmins,
+        loaded: adminsLoaded,
+        error: adminError,
+        refresh: refreshAdmins,
+        setData: setAdminCredentials,
+      },
+    },
+  } = useSuperAdminData();
 
   const [createAdminError, setCreateAdminError] = useState(null);
   const [isCreatingAdmin, setIsCreatingAdmin] = useState(false);
@@ -71,66 +85,19 @@ export default function Credenciais() {
   const [editForm, setEditForm] = useState(getInitialEditForm);
   const [createForm, setCreateForm] = useState(getInitialCreateForm);
 
+  const initialCompaniesLoad = useRef(false);
   useEffect(() => {
-    let canceled = false;
+    if (companiesLoaded || initialCompaniesLoad.current) return;
+    initialCompaniesLoad.current = true;
+    refreshCompanies().catch(() => {});
+  }, [companiesLoaded, refreshCompanies]);
 
-    async function loadPendingCompanies() {
-      setIsLoadingCompanies(true);
-      setCompanyError(null);
-
-      try {
-        const resp = await apiFetch("/api/super-admin/credentials/companies");
-        if (!resp.ok) throw new Error("Falha ao carregar credenciais empresariais.");
-        const data = await resp.json();
-        if (!canceled) setBusinessCompanies(Array.isArray(data) ? data : []);
-      } catch (error) {
-        if (!canceled)
-          setCompanyError(error.message || "Erro inesperado ao listar credenciais.");
-      } finally {
-        if (!canceled) setIsLoadingCompanies(false);
-      }
-    }
-
-    loadPendingCompanies();
-    return () => {
-      canceled = true;
-    };
-  }, []);
-
+  const initialAdminsLoad = useRef(false);
   useEffect(() => {
-    let canceled = false;
-
-    async function loadAdminCredentials() {
-      setIsLoadingAdmins(true);
-      setAdminError(null);
-
-      try {
-        const resp = await apiFetch("/api/super-admin/credentials/admins");
-        if (!resp.ok) throw new Error("Falha ao carregar credenciais administrativas.");
-
-        const data = await resp.json();
-        if (!canceled) {
-          const payload = Array.isArray(data) ? data : [];
-          setAdminCredentials(
-              payload.map((admin) => ({
-                ...admin,
-                role: normalizeRole(admin.role),
-              }))
-          );
-        }
-      } catch (error) {
-        if (!canceled)
-          setAdminError(error.message || "Erro inesperado ao listar administradores.");
-      } finally {
-        if (!canceled) setIsLoadingAdmins(false);
-      }
-    }
-
-    loadAdminCredentials();
-    return () => {
-      canceled = true;
-    };
-  }, []);
+    if (adminsLoaded || initialAdminsLoad.current) return;
+    initialAdminsLoad.current = true;
+    refreshAdmins().catch(() => {});
+  }, [adminsLoaded, refreshAdmins]);
 
   const businessFields = useMemo(
       () => [
