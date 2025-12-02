@@ -4,7 +4,7 @@ export default function Modal({ open, title, onClose, children, actions, classNa
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-6">
       <div
         className="absolute inset-0 bg-[#111827]/80 backdrop-blur-sm"
         onClick={onClose}
