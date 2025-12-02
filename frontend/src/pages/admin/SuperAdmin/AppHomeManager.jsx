@@ -1,6 +1,5 @@
-﻿import { useCallback, useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import {
-  fetchAppHomeConfig,
   updateAppHomeSection,
   reorderAppHomeSections,
   createAppMetric,
@@ -10,6 +9,8 @@ import {
   reorderAppMetrics,
 } from "../../../api/siteManagement.js";
 import Modal from "/src/components/ui/Modal/Modal.jsx";
+import { useSuperAdminData } from "./SuperAdminDataContext.jsx";
+import { moveItemInList, sortByOrder } from "./VariableManagement/utils.js";
 
 const APP_SECTION_TYPES = {
   hero: "HERO",
@@ -25,9 +26,18 @@ const SECTION_LABELS = {
 };
 
 export default function AppHomeManager({ onUnauthorized }) {
-  const [config, setConfig] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const {
+    site: {
+      appHome: {
+        data: config,
+        loading,
+        loaded,
+        error: loadError,
+        refresh: refreshAppHome,
+        setData: setAppHomeConfig,
+      },
+    },
+  } = useSuperAdminData();
   const [banner, setBanner] = useState(null);
   const [forms, setForms] = useState({
     hero: defaultAppSectionForm(),
@@ -42,34 +52,24 @@ export default function AppHomeManager({ onUnauthorized }) {
   const [metricModal, setMetricModal] = useState({ open: false, mode: "create", record: null });
   const [metricForm, setMetricForm] = useState(defaultMetricForm());
   const [metricSaving, setMetricSaving] = useState(false);
-  const mountedRef = useRef(false);
-
-  const loadConfig = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const payload = await fetchAppHomeConfig();
-      if (!mountedRef.current) return;
-      setConfig(normalizeAppConfig(payload));
-    } catch (err) {
-      if (!mountedRef.current) return;
+  const initialLoad = useRef(false);
+  useEffect(() => {
+    if (loaded || initialLoad.current) return;
+    initialLoad.current = true;
+    refreshAppHome().catch((err) => {
       if (err?.status === 401) {
         onUnauthorized?.();
-        return;
       }
-      setLoadError(err.message || "Não foi possível carregar a página.");
-    } finally {
-      if (mountedRef.current) setLoading(false);
-    }
-  }, [onUnauthorized]);
+    });
+  }, [loaded, refreshAppHome, onUnauthorized]);
 
-  useEffect(() => {
-    mountedRef.current = true;
-    loadConfig();
-    return () => {
-      mountedRef.current = false;
-    };
-  }, [loadConfig]);
+  const retryAppHomeConfig = () => {
+    refreshAppHome({ force: true }).catch((err) => {
+      if (err?.status === 401) {
+        onUnauthorized?.();
+      }
+    });
+  };
 
   useEffect(() => {
     if (!config) return;
@@ -102,7 +102,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     setBanner(null);
     try {
       const updated = await updateAppHomeSection(section.id, buildSectionPayload(form));
-      setConfig((prev) => ({
+      setAppHomeConfig((prev) => ({
         ...prev,
         sections: prev.sections.map((item) => (item.id === updated.id ? updated : item)),
       }));
@@ -122,13 +122,13 @@ export default function AppHomeManager({ onUnauthorized }) {
     const next = moveItemInList(sections, id, direction);
     if (!next) return;
     const previous = sections;
-    setConfig((prev) => ({ ...prev, sections: next }));
+    setAppHomeConfig((prev) => ({ ...prev, sections: next }));
     setBanner(null);
     try {
       await reorderAppHomeSections(next.map((section) => section.id));
       setBanner({ type: "success", message: "Ordem atualizada com sucesso." });
     } catch (err) {
-      setConfig((prev) => ({ ...prev, sections: previous }));
+      setAppHomeConfig((prev) => ({ ...prev, sections: previous }));
       setBanner({
         type: "error",
         message: err.message || "Não foi possível reordenar as secções.",
@@ -152,7 +152,7 @@ export default function AppHomeManager({ onUnauthorized }) {
         apiUrl: section.apiUrl,
         apiMaxItems: section.apiMaxItems,
       });
-      setConfig((prev) => ({
+      setAppHomeConfig((prev) => ({
         ...prev,
         sections: prev.sections.map((item) => (item.id === updated.id ? updated : item)),
       }));
@@ -195,13 +195,13 @@ export default function AppHomeManager({ onUnauthorized }) {
       let result;
       if (metricModal.mode === "edit" && metricModal.record) {
         result = await updateAppMetric(metricModal.record.id, payload);
-        setConfig((prev) => ({
+        setAppHomeConfig((prev) => ({
           ...prev,
           metrics: prev.metrics.map((item) => (item.id === result.id ? result : item)),
         }));
       } else {
         result = await createAppMetric(payload);
-        setConfig((prev) => ({
+        setAppHomeConfig((prev) => ({
           ...prev,
           metrics: sortByOrder([...(prev.metrics ?? []), result]),
         }));
@@ -224,7 +224,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     setBanner(null);
     try {
       await deleteAppMetric(metricModal.record.id);
-      setConfig((prev) => ({
+      setAppHomeConfig((prev) => ({
         ...prev,
         metrics: prev.metrics.filter((item) => item.id !== metricModal.record.id),
       }));
@@ -244,13 +244,13 @@ export default function AppHomeManager({ onUnauthorized }) {
     const next = moveItemInList(metrics, id, direction);
     if (!next) return;
     const previous = metrics;
-    setConfig((prev) => ({ ...prev, metrics: next }));
+    setAppHomeConfig((prev) => ({ ...prev, metrics: next }));
     setBanner(null);
     try {
       await reorderAppMetrics(next.map((metric) => metric.id));
       setBanner({ type: "success", message: "Métricas reordenadas." });
     } catch (err) {
-      setConfig((prev) => ({ ...prev, metrics: previous }));
+      setAppHomeConfig((prev) => ({ ...prev, metrics: previous }));
       setBanner({
         type: "error",
         message: err.message || "Não foi possível reordenar as métricas.",
@@ -262,7 +262,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     setBanner(null);
     try {
       const updated = await toggleAppMetric(metric.id, !metric.active);
-      setConfig((prev) => ({
+      setAppHomeConfig((prev) => ({
         ...prev,
         metrics: prev.metrics.map((item) => (item.id === updated.id ? updated : item)),
       }));
@@ -287,7 +287,7 @@ export default function AppHomeManager({ onUnauthorized }) {
     return (
       <div className="flex flex-col items-center gap-4 py-20">
         <p className="text-lg text-base-content/70">{loadError}</p>
-        <button type="button" className="btn btn-primary" onClick={loadConfig}>
+        <button type="button" className="btn btn-primary" onClick={retryAppHomeConfig}>
           Tentar novamente
         </button>
       </div>
@@ -608,7 +608,81 @@ function AppNewsSection({ form, section, saving, onFieldChange, onSubmit }) {
 }
 
 function AppSectionOrderCard({ sections, onMove, onToggle }) {
+  const [dragId, setDragId] = useState(null);
+  const [dragIndex, setDragIndex] = useState(null);
+  const [overIndex, setOverIndex] = useState(null);
+  const [clickedId, setClickedId] = useState(null);
+
   if (!sections.length) return null;
+
+  const handleDragStart = (sectionId, index) => {
+    setDragId(sectionId);
+    setDragIndex(index);
+  };
+
+  const handleDragOver = (event, index) => {
+    event.preventDefault();
+    if (overIndex !== index) setOverIndex(index);
+  };
+
+  const handleDrop = async (index) => {
+    if (
+      dragId == null ||
+      dragIndex == null ||
+      dragIndex === index ||
+      typeof onMove !== "function"
+    ) {
+      setDragId(null);
+      setDragIndex(null);
+      setOverIndex(null);
+      return;
+    }
+
+    const direction = dragIndex < index ? "down" : "up";
+    const steps = Math.abs(index - dragIndex);
+
+    for (let i = 0; i < steps; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await onMove(dragId, direction);
+    }
+
+    setDragId(null);
+    setDragIndex(null);
+    setOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDragId(null);
+    setDragIndex(null);
+    setOverIndex(null);
+  };
+
+  const handleArrowClick = async (sectionId, direction) => {
+    if (typeof onMove !== "function") return;
+    setClickedId(sectionId);
+    try {
+      await onMove(sectionId, direction);
+    } finally {
+      setTimeout(() => {
+        setClickedId((current) => (current === sectionId ? null : current));
+      }, 180);
+    }
+  };
+
+  const itemClasses = (index, sectionId) => {
+    let extra = "transition-transform duration-150 ease-out";
+
+    if (dragId === sectionId) {
+      extra += " ring-2 ring-primary/70 shadow-lg scale-[1.02]";
+    } else if (clickedId === sectionId) {
+      extra += " ring-2 ring-primary/60 shadow-md scale-[1.01]";
+    } else if (overIndex === index && dragId != null) {
+      extra += " bg-base-200/80";
+    }
+
+    return `flex items-center justify-between gap-4 rounded-2xl border border-base-300 bg-base-100 px-4 py-3 ${extra}`;
+  };
+
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body space-y-4">
@@ -622,10 +696,17 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
           {sections.map((section, index) => (
             <li
               key={section.id}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-base-300 bg-base-100 px-4 py-3"
+              draggable
+              onDragStart={() => handleDragStart(section.id, index)}
+              onDragOver={(event) => handleDragOver(event, index)}
+              onDrop={() => handleDrop(index)}
+              onDragEnd={handleDragEnd}
+              className={itemClasses(index, section.id)}
             >
               <div className="flex items-center gap-3">
-                <span className="font-semibold text-primary">{index + 1}.</span>
+                <span className="font-semibold text-primary cursor-grab select-none">
+                  {index + 1}.
+                </span>
                 <div>
                   <p className="font-semibold">{SECTION_LABELS[section.type] ?? section.type}</p>
                   <p className="text-sm text-base-content/70">{section.title}</p>
@@ -635,7 +716,7 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
                 {typeof onToggle === "function" && (
                   <label className="label cursor-pointer gap-3">
                     <span className="text-sm text-base-content/70">
-                      {section.active ? "Visí­vel" : "Oculta"}
+                      {section.active ? "Visível" : "Oculta"}
                     </span>
                     <input
                       type="checkbox"
@@ -648,7 +729,7 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
                 <button
                   type="button"
                   className="btn btn-sm btn-ghost"
-                  onClick={() => onMove(section.id, "up")}
+                  onClick={() => handleArrowClick(section.id, "up")}
                   disabled={index === 0}
                 >
                   <i className="bi bi-arrow-up" />
@@ -656,7 +737,7 @@ function AppSectionOrderCard({ sections, onMove, onToggle }) {
                 <button
                   type="button"
                   className="btn btn-sm btn-ghost"
-                  onClick={() => onMove(section.id, "down")}
+                  onClick={() => handleArrowClick(section.id, "down")}
                   disabled={index === sections.length - 1}
                 >
                   <i className="bi bi-arrow-down" />
@@ -851,13 +932,6 @@ function buildSectionPayload(form) {
   };
 }
 
-function normalizeAppConfig(payload) {
-  return {
-    sections: sortByOrder(payload?.sections ?? []),
-    metrics: sortByOrder(payload?.metrics ?? []),
-  };
-}
-
 function defaultAppSectionForm() {
   return {
     title: "",
@@ -913,21 +987,3 @@ function mapMetricForm(metric) {
 function sectionKeyFromType(type) {
   return Object.entries(APP_SECTION_TYPES).find(([, value]) => value === type)?.[0] ?? null;
 }
-
-function moveItemInList(list, id, direction) {
-  const index = list.findIndex((item) => item.id === id);
-  if (index < 0) return null;
-  const target = direction === "up" ? index - 1 : index + 1;
-  if (target < 0 || target >= list.length) return null;
-  const next = [...list];
-  const [removed] = next.splice(index, 1);
-  next.splice(target, 0, removed);
-  return next;
-}
-
-function sortByOrder(items = []) {
-  return [...items].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
-}
-
-
-

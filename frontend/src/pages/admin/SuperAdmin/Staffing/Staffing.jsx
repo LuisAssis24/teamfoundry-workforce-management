@@ -1,69 +1,50 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import WorkRequestCard from "./components/WorkRequestCard.jsx";
 import AssignAdminModal from "./components/AssignAdminModal.jsx";
 import { teamRequestsAPI } from "../../../../api/teamRequests.js";
+import { useSuperAdminData } from "../SuperAdminDataContext.jsx";
 
 export default function GestaoTrabalho() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
 
-  const [workRequests, setWorkRequests] = useState([]);
-  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
-  const [requestsError, setRequestsError] = useState(null);
-
-  const [adminOptions, setAdminOptions] = useState([]);
-  const [isLoadingAdmins, setIsLoadingAdmins] = useState(true);
-  const [adminError, setAdminError] = useState(null);
+  const {
+    staffing: {
+      requests: {
+        data: workRequests = [],
+        loading: isLoadingRequests,
+        loaded: requestsLoaded,
+        error: requestsError,
+        refresh: refreshRequests,
+        setData: setWorkRequests,
+      },
+      adminOptions: {
+        data: adminOptions = [],
+        loading: isLoadingAdmins,
+        loaded: adminOptionsLoaded,
+        error: adminError,
+        refresh: refreshAdminOptions,
+      },
+    },
+  } = useSuperAdminData();
 
   const [assignError, setAssignError] = useState(null);
   const [isAssigning, setIsAssigning] = useState(false);
 
+  const initialRequestsLoad = useRef(false);
   useEffect(() => {
-    let canceled = false;
+    if (requestsLoaded || initialRequestsLoad.current) return;
+    initialRequestsLoad.current = true;
+    refreshRequests().catch(() => {});
+  }, [requestsLoaded, refreshRequests]);
 
-    async function loadRequests() {
-      setIsLoadingRequests(true);
-      setRequestsError(null);
-
-      try {
-        const data = await teamRequestsAPI.getSuperAdminList();
-        if (!canceled) setWorkRequests(data);
-      } catch (err) {
-        if (!canceled) setRequestsError(err.message || "Erro ao carregar requisições.");
-      } finally {
-        if (!canceled) setIsLoadingRequests(false);
-      }
-    }
-
-    async function loadAdminOptions() {
-      setIsLoadingAdmins(true);
-      setAdminError(null);
-
-      try {
-        const options = await teamRequestsAPI.getAdminOptions();
-        if (!canceled) {
-          setAdminOptions(
-              options.map((item) => ({
-                id: item.id,
-                name: item.username,
-                requestCount: item.requestCount,
-              }))
-          );
-        }
-      } catch (err) {
-        if (!canceled) setAdminError(err.message || "Erro ao carregar administradores.");
-      } finally {
-        if (!canceled) setIsLoadingAdmins(false);
-      }
-    }
-
-    loadRequests();
-    loadAdminOptions();
-    return () => {
-      canceled = true;
-    };
-  }, []);
+  const initialAdminOptionsLoad = useRef(false);
+  useEffect(() => {
+    if (adminOptionsLoaded || initialAdminOptionsLoad.current) return;
+    initialAdminOptionsLoad.current = true;
+    refreshAdminOptions().catch(() => {});
+  }, [adminOptionsLoaded, refreshAdminOptions]);
 
   const filteredRequests = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
