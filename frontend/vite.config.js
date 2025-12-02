@@ -5,6 +5,16 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    // Garantir que estamos sempre na porta esperada e com CORS liberado para evitar respostas sem MIME
+    strictPort: true,
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    },
     proxy: {
       '/api': {
         target: 'https://localhost:8443',

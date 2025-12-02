@@ -23,6 +23,8 @@ public interface TeamRequestRepository extends JpaRepository<TeamRequest, Intege
             """)
     List<AdminAssignmentCount> countAssignmentsGroupedByAdmin();
 
+    List<TeamRequest> findByCompany_EmailOrderByCreatedAtDesc(String email);
+
     interface AdminAssignmentCount {
         Integer getAdminId();
         long getTotal();

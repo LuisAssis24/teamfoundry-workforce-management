@@ -55,4 +55,21 @@ export const teamRequestsAPI = {
     );
     return Array.isArray(data) ? data : [];
   },
+
+  async getAssignedRequest(requestId) {
+    const data = await handleResponse(
+        await apiFetch(`/api/admin/work-requests/${requestId}`),
+        "Falha ao carregar detalhes da requisição."
+    );
+    if (!data) throw new Error("Resposta inesperada do servidor.");
+    return data;
+  },
+
+  async getRoleSummaries(requestId) {
+    const data = await handleResponse(
+        await apiFetch(`/api/admin/work-requests/${requestId}/roles`),
+        "Falha ao carregar as funções requisitadas."
+    );
+    return Array.isArray(data) ? data : [];
+  },
 };

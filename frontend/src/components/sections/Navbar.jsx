@@ -3,12 +3,9 @@ import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import Button from "../ui/Button/Button";
 import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
+import { useAuthContext } from "../../auth/AuthContext.jsx";
 
-const NAV_LINKS = [
-  { to: "#industrias", label: "As Indústrias" },
-  { to: "#parceiros", label: "Os Parceiros" },
-  { to: "#sobre", label: "Sobre nós" },
-];
+const NAV_LINKS = [];
 
 const PUBLIC_ACTIONS = [{ to: "/login", label: "Entrar", variant: "secondary" }];
 
@@ -21,6 +18,7 @@ export default function Navbar({
   mobileMenuButton = null,
 }) {
   const isPublic = variant === "public";
+  const { userType } = useAuthContext();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const profileRef = useRef(null);
@@ -119,41 +117,24 @@ export default function Navbar({
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-56 rounded-xl border border-base-300 bg-base-100 text-base-content shadow-lg z-50">
                 <nav>
-                  <Link
-                    to="/candidato/dados-pessoais"
-                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition rounded-t-xl"
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    <i className="bi bi-person" aria-hidden="true" />
-                    <span>Perfil</span>
-                  </Link>
-                  <Link
-                    to="/candidato/ofertas"
-                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    <i className="bi bi-bell" aria-hidden="true" />
-                    <span>Ofertas</span>
-                  </Link>
-                  <Link
-                    to="/candidato/documentos"
-                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    <i className="bi bi-file-earmark-text" aria-hidden="true" />
-                    <span>Documentos</span>
-                  </Link>
-                  <Link
-                    to="/candidato/proximos-passos"
-                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition"
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    <i className="bi bi-flag" aria-hidden="true" />
-                    <span>Próximos passos</span>
-                  </Link>
+                  {(userType === "COMPANY" ? COMPANY_MENU : EMPLOYEE_MENU).map(
+                    ({ to, label, icon }, idx, arr) => (
+                      <Link
+                        key={to}
+                        to={to}
+                        className={`flex items-center gap-3 px-4 py-3 text-sm hover:bg-base-200 transition ${
+                          idx === 0 ? "rounded-t-xl" : ""
+                        } ${idx === arr.length - 1 ? "border-b border-base-200" : ""}`}
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        <i className={`bi ${icon}`} aria-hidden="true" />
+                        <span>{label}</span>
+                      </Link>
+                    )
+                  )}
                   <button
                     type="button"
-                    className="flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150 border-t border-base-200 cursor-pointer rounded-b-xl"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-error hover:bg-error/10 transition-colors duration-150 cursor-pointer rounded-b-xl"
                     onClick={() => {
                       setIsProfileOpen(false);
                       onLogout?.();
@@ -201,3 +182,15 @@ Navbar.propTypes = {
   onLogout: PropTypes.func,
   mobileMenuButton: PropTypes.node,
 };
+
+const EMPLOYEE_MENU = [
+  { to: "/candidato/dados-pessoais", label: "Perfil", icon: "bi-person" },
+  { to: "/candidato/ofertas", label: "Ofertas", icon: "bi-bell" },
+  { to: "/candidato/documentos", label: "Documentos", icon: "bi-file-earmark-text" },
+  { to: "/candidato/proximos-passos", label: "Próximos passos", icon: "bi-flag" },
+];
+
+const COMPANY_MENU = [
+  { to: "/empresa/informacoes", label: "Informações", icon: "bi-buildings" },
+  { to: "/empresa/requisicoes", label: "Requisições", icon: "bi-list-check" },
+];

@@ -1,103 +1,268 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AdminNavbar from "../components/AdminNavbar.jsx";
 import EmployeeCard from "./components/EmployeeCard.jsx";
 import MultiSelectDropdown from "../../../components/ui/MultiSelect/MultiSelectDropdown.jsx";
-
-const GEO_OPTIONS = ["Opcao 1", "Opcao 2"];
-const SKILL_OPTIONS = ["Opcao 1", "Opcao 2"];
-
-const EMPLOYEES = [
-  { id: 1, name: "Ceblerson", role: "Tubista", city: "Aveiro", preference: "Portugal" },
-  { id: 2, name: "Anabela Duarte", role: "Soldador", city: "Lisboa", preference: "Portugal" },
-  { id: 3, name: "Luiz Miguel", role: "Tornerio", city: "Porto", preference: "Espanha" },
-  { id: 4, name: "Sara Valente", role: "Tubista", city: "Coimbra", preference: "Portugal" },
-];
+import { teamRequestsAPI } from "../../../api/teamRequests.js";
+import { fetchGeoAreas, fetchCompetences } from "../../../api/siteManagement.js";
+import { searchCandidates } from "../../../api/candidates.js";
 
 export default function BuildTeamSearch() {
-  const navigate = useNavigate();
-  const [geoSelected, setGeoSelected] = useState([]);
-  const [skillsSelected, setSkillsSelected] = useState([]);
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const teamId = searchParams.get("team");
+    const role = searchParams.get("role") || "";
 
-  return (
-    <div className="min-h-screen bg-base-200">
-      <AdminNavbar />
-      <main className="flex justify-center px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-        <div className="w-full max-w-6xl space-y-6 rounded-2xl bg-[#F5F5F5] p-6 text-[#1F2959] shadow overflow-hidden">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1F2959] transition hover:text-[#0f1635]"
-            onClick={() => navigate("/admin/team-management/requests")}
-          >
-            <span aria-hidden="true">&larr;</span>
-            Voltar
-          </button>
-          <HeroHeader />
-          <div className="flex flex-col gap-6 lg:flex-row">
-            <FiltersPanel
-              geoSelected={geoSelected}
-              skillsSelected={skillsSelected}
-              onGeoChange={setGeoSelected}
-              onSkillsChange={setSkillsSelected}
-            />
-            <CandidatesPanel />
-          </div>
+    const [geoOptions, setGeoOptions] = useState([]);
+    const [skillOptions, setSkillOptions] = useState([]);
+    const [geoSelected, setGeoSelected] = useState([]);
+    const [skillsSelected, setSkillsSelected] = useState([]);
+
+    const [teamInfo, setTeamInfo] = useState(null);
+    const [isLoadingTeam, setIsLoadingTeam] = useState(true);
+    const [teamError, setTeamError] = useState("");
+    const [geoError, setGeoError] = useState("");
+    const [skillError, setSkillError] = useState("");
+
+    const [candidates, setCandidates] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchError, setSearchError] = useState("");
+
+    useEffect(() => {
+        let canceled = false;
+
+        async function loadTeam() {
+            if (!teamId) {
+                setTeamError("Selecione uma requisição antes de montar a equipa.");
+                setIsLoadingTeam(false);
+                return;
+            }
+
+            setIsLoadingTeam(true);
+            setTeamError("");
+            try {
+                const details = await teamRequestsAPI.getAssignedRequest(teamId);
+                if (!canceled) setTeamInfo(details);
+            } catch (err) {
+                if (!canceled) setTeamError(err.message || "Erro ao carregar dados da equipa.");
+            } finally {
+                if (!canceled) setIsLoadingTeam(false);
+            }
+        }
+
+        loadTeam();
+        return () => {
+            canceled = true;
+        };
+    }, [teamId]);
+
+    useEffect(() => {
+        let canceled = false;
+
+        async function loadGeoAreas() {
+            setGeoError("");
+            try {
+                const data = await fetchGeoAreas();
+                if (!canceled) {
+                    const names = Array.isArray(data) ? data.map((item) => item.name).filter(Boolean) : [];
+                    setGeoOptions(names);
+                }
+            } catch (err) {
+                if (!canceled) setGeoError(err.message || "Erro ao carregar áreas geográficas.");
+            }
+        }
+
+        async function loadCompetences() {
+            setSkillError("");
+            try {
+                const data = await fetchCompetences();
+                if (!canceled) {
+                    const names = Array.isArray(data) ? data.map((item) => item.name).filter(Boolean) : [];
+                    setSkillOptions(names);
+                }
+            } catch (err) {
+                if (!canceled) setSkillError(err.message || "Erro ao carregar competências.");
+            }
+        }
+
+        loadGeoAreas();
+        loadCompetences();
+        return () => {
+            canceled = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        let canceled = false;
+
+        async function runSearch() {
+            if (!teamId) return;
+            setIsSearching(true);
+            setSearchError("");
+            try {
+                const data = await searchCandidates({
+                    role,
+                    areas: geoSelected,
+                    skills: skillsSelected,
+                });
+                if (!canceled) setCandidates(data);
+            } catch (err) {
+                if (!canceled) setSearchError(err.message || "Erro ao carregar candidatos.");
+            } finally {
+                if (!canceled) setIsSearching(false);
+            }
+        }
+
+        runSearch();
+        return () => {
+            canceled = true;
+        };
+    }, [teamId, role, geoSelected, skillsSelected]);
+
+    const mappedCandidates = useMemo(() => {
+        return candidates.map((c) => {
+            const fullName = [c.firstName, c.lastName].filter(Boolean).join(" ").trim() || "Sem nome";
+            const preferredArea = c.areas?.[0] || "-";
+            const skills = c.skills?.length ? c.skills : [];
+            const experiences = Array.isArray(c.experiences) ? c.experiences : [];
+            return {
+                id: c.id,
+                name: fullName,
+                role: c.role || "Sem função",
+                city: preferredArea,
+                preference: preferredArea,
+                skills,
+                experiences,
+            };
+        });
+    }, [candidates]);
+
+
+    return (
+        <div className="min-h-screen bg-base-200">
+            <AdminNavbar />
+            <main className="flex justify-center px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+                <div className="w-full max-w-6xl space-y-6 rounded-2xl bg-[#F5F5F5] p-6 text-[#1F2959] shadow">
+                    <button
+                        type="button"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-[#1F2959] transition hover:text-[#0f1635]"
+                        onClick={() => navigate(`/admin/team-management/requests?team=${teamId ?? ""}`)}
+                    >
+                        <span aria-hidden="true">&larr;</span>
+                        Voltar
+                    </button>
+
+                    {teamError ? (
+                        <div className="alert alert-error shadow">
+                            <span>{teamError}</span>
+                        </div>
+                    ) : isLoadingTeam ? (
+                        <div className="rounded-2xl border border-[#E5E7EB] bg-white p-8 text-center text-base-content/70 shadow">
+                            Carregando dados da equipa...
+                        </div>
+                    ) : (
+                        <>
+                            <HeroHeader teamName={teamInfo?.teamName || "Equipa"} role={role} />
+
+                            {(geoError || skillError || searchError) && (
+                                <div className="alert alert-warning shadow">
+                                    <span>{geoError || skillError || searchError}</span>
+                                </div>
+                            )}
+
+                            <div className="flex flex-col gap-6 lg:flex-row">
+                                <FiltersPanel
+                                    companyName={teamInfo?.companyName || "Empresa"}
+                                    role={role || "Função"}
+                                    geoOptions={geoOptions}
+                                    geoSelected={geoSelected}
+                                    skillOptions={skillOptions}
+                                    skillsSelected={skillsSelected}
+                                    onGeoChange={setGeoSelected}
+                                    onSkillsChange={setSkillsSelected}
+                                />
+                                <CandidatesPanel employees={mappedCandidates} isLoading={isSearching} />
+                            </div>
+                        </>
+                    )}
+                </div>
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 }
 
-function HeroHeader() {
-  return <header className="h-2" />;
+function HeroHeader({ teamName, role }) {
+    return (
+        <header className="space-y-1">
+            <p className="text-sm text-[#1F2959]/80">Selecionar funcionários</p>
+            <h1 className="text-3xl font-bold leading-tight text-[#1F2959]">
+                {teamName} {role ? `- ${role}` : ""}
+            </h1>
+        </header>
+    );
 }
 
-function FiltersPanel({ geoSelected, skillsSelected, onGeoChange, onSkillsChange }) {
-  return (
-    <aside className="w-full rounded-2xl bg-white p-6 shadow-md lg:w-80">
-      <div className="space-y-4">
-        <FilterTitle label="Empresa" value="Cleber Lda" />
-        <FilterTitle label="Funcao" value="Tubista" />
-      </div>
+function FiltersPanel({
+                          companyName,
+                          role,
+                          geoOptions,
+                          geoSelected,
+                          skillOptions,
+                          skillsSelected,
+                          onGeoChange,
+                          onSkillsChange,
+                      }) {
+    return (
+        <aside className="w-full rounded-2xl bg-white p-6 shadow-md lg:w-80">
+            <div className="space-y-4">
+                <FilterTitle label="Empresa" value={companyName} />
+                <FilterTitle label="Função" value={role} />
+            </div>
 
-      <div className="mt-6 space-y-6">
-        <MultiSelectDropdown
-          label="Area(s) Geografica(s)"
-          options={GEO_OPTIONS}
-          selectedOptions={geoSelected}
-          onChange={onGeoChange}
-          placeholder="Selecione area(s)"
-        />
-        <MultiSelectDropdown
-          label="Competencias"
-          options={SKILL_OPTIONS}
-          selectedOptions={skillsSelected}
-          onChange={onSkillsChange}
-          placeholder="Selecione competencias"
-        />
-      </div>
-    </aside>
-  );
+            <div className="mt-6 space-y-6">
+                <MultiSelectDropdown
+                    label="Area(s) Geografica(s)"
+                    options={geoOptions}
+                    selectedOptions={geoSelected}
+                    onChange={onGeoChange}
+                    placeholder="Selecione area(s)"
+                />
+                <MultiSelectDropdown
+                    label="Competencias"
+                    options={skillOptions}
+                    selectedOptions={skillsSelected}
+                    onChange={onSkillsChange}
+                    placeholder="Selecione competencias"
+                />
+            </div>
+        </aside>
+    );
 }
 
 function FilterTitle({ label, value }) {
-  return (
-    <div className="rounded-xl bg-[#F0F0F0] px-4 py-2">
-      <p className="text-lg font-semibold">
-        {label}: <span className="text-[#111827]">{value}</span>
-      </p>
-    </div>
-  );
+    return (
+        <div className="rounded-xl bg-[#F0F0F0] px-4 py-2">
+            <p className="text-lg font-semibold">
+                {label}: <span className="text-[#111827]">{value}</span>
+            </p>
+        </div>
+    );
 }
 
-function CandidatesPanel() {
-  return (
-    <section className="flex-1 rounded-2xl border border-[#111827]/20 bg-white p-4 shadow-inner">
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {EMPLOYEES.map((employee) => (
-          <EmployeeCard key={employee.id} {...employee} />
-        ))}
-      </div>
-    </section>
-  );
+function CandidatesPanel({ employees, isLoading }) {
+    return (
+        <section className="flex-1 rounded-2xl border border-[#111827]/20 bg-white p-4 shadow-inner">
+            {isLoading ? (
+                <div className="py-8 text-center text-base-content/70">Carregando candidatos...</div>
+            ) : employees.length === 0 ? (
+                <div className="py-8 text-center text-base-content/70">Nenhum candidato encontrado.</div>
+            ) : (
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {employees.map((employee) => (
+                        <EmployeeCard key={employee.id} {...employee} />
+                    ))}
+                </div>
+            )}
+        </section>
+    );
 }

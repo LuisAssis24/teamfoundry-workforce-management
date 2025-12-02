@@ -5,9 +5,11 @@ import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import com.teamfoundry.backend.admin.dto.AssignedTeamRequestResponse;
+import com.teamfoundry.backend.admin.dto.TeamRequestRoleSummary;
 import com.teamfoundry.backend.admin.dto.WorkRequestAdminOption;
 import com.teamfoundry.backend.admin.dto.WorkRequestResponse;
 import com.teamfoundry.backend.admin.model.TeamRequest;
+import com.teamfoundry.backend.admin.repository.EmployeeRequestEmployeeRepository;
 import com.teamfoundry.backend.admin.repository.EmployeeRequestRepository;
 import com.teamfoundry.backend.admin.repository.TeamRequestRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.stream.Collectors;
+
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class TeamRequestService {
     private final TeamRequestRepository teamRequestRepository;
     private final AdminAccountRepository adminAccountRepository;
     private final EmployeeRequestRepository employeeRequestRepository;
+    private final EmployeeRequestEmployeeRepository employeeRequestEmployeeRepository;
 
     public List<WorkRequestResponse> listAllWorkRequests() {
         return teamRequestRepository
@@ -88,6 +92,38 @@ public class TeamRequestService {
                 .toList();
     }
 
+    public WorkRequestResponse getAssignedRequest(int requestId) {
+        AdminAccount admin = resolveAuthenticatedAdmin();
+        TeamRequest request = loadRequestForAdmin(admin, requestId);
+        return toWorkRequestResponse(request);
+    }
+
+    public List<TeamRequestRoleSummary> listRoleSummariesForTeam(int requestId) {
+        AdminAccount admin = resolveAuthenticatedAdmin();
+        TeamRequest request = loadRequestForAdmin(admin, requestId);
+
+        Map<String, RoleAggregate> aggregates = new LinkedHashMap<>();
+        employeeRequestRepository.countByRoleForTeam(request.getId()).forEach(row -> {
+            aggregates.put(row.getRole(), new RoleAggregate(row.getRole(), row.getTotal(), row.getFilled(), 0L));
+        });
+
+        employeeRequestEmployeeRepository.countInvitesByTeamRequest(request.getId()).forEach(row -> {
+            RoleAggregate agg = aggregates.computeIfAbsent(row.getRole(),
+                    role -> new RoleAggregate(role, 0L, 0L, 0L));
+            agg.setProposalsSent(row.getTotal());
+        });
+
+        return aggregates.values().stream()
+                .map(agg -> new TeamRequestRoleSummary(
+                        agg.role(),
+                        agg.totalRequested(),
+                        agg.filled(),
+                        Math.max(agg.totalRequested() - agg.filled(), 0),
+                        agg.proposalsSent()
+                ))
+                .toList();
+    }
+
     private Map<Integer, Long> loadWorkforceCounts(List<TeamRequest> requests) {
         Set<Integer> ids = requests.stream()
                 .map(TeamRequest::getId)
@@ -102,6 +138,15 @@ public class TeamRequestService {
                 .collect(Collectors.toMap(
                         EmployeeRequestRepository.TeamRequestCount::getRequestId,
                         EmployeeRequestRepository.TeamRequestCount::getTotal));
+    }
+
+    private TeamRequest loadRequestForAdmin(AdminAccount admin, int requestId) {
+        TeamRequest request = teamRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Requisição não encontrada."));
+        if (!Objects.equals(request.getResponsibleAdminId(), admin.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Requisição não atribuída a este administrador.");
+        }
+        return request;
     }
 
     private WorkRequestResponse toWorkRequestResponse(TeamRequest request) {
@@ -150,5 +195,39 @@ public class TeamRequestService {
         String username = principal.substring(ADMIN_TOKEN_PREFIX.length());
         return adminAccountRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Administrador não encontrado."));
+    }
+
+    private static class RoleAggregate {
+        private final String role;
+        private final long totalRequested;
+        private final long filled;
+        private long proposalsSent;
+
+        RoleAggregate(String role, long totalRequested, long filled, long proposalsSent) {
+            this.role = role;
+            this.totalRequested = totalRequested;
+            this.filled = filled;
+            this.proposalsSent = proposalsSent;
+        }
+
+        String role() {
+            return role;
+        }
+
+        long totalRequested() {
+            return totalRequested;
+        }
+
+        long filled() {
+            return filled;
+        }
+
+        long proposalsSent() {
+            return proposalsSent;
+        }
+
+        void setProposalsSent(long proposalsSent) {
+            this.proposalsSent = proposalsSent;
+        }
     }
 }

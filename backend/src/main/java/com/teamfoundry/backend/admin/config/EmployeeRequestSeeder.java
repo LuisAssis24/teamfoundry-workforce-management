@@ -75,20 +75,28 @@ public class EmployeeRequestSeeder {
     private List<EmployeeRequestSeed> defaultSeeds() {
         LocalDateTime now = LocalDateTime.now();
         return List.of(
-                new EmployeeRequestSeed(1, "Electricista Sénior", now.minusDays(12), "joao.silva@teamfoundry.com"),
-                new EmployeeRequestSeed(2, "Soldador MIG/MAG", now.minusDays(8), "ana.martins@teamfoundry.com"),
-                // Trabalhos concluídos
-                new EmployeeRequestSeed(3, "Técnico de Manutenção", now.minusDays(2), "joao.silva@teamfoundry.com"),
-                new EmployeeRequestSeed(4, "Programador PLC", now.minusDays(4), "carlos.rocha@teamfoundry.com"),
-                new EmployeeRequestSeed(5, "Engenheiro de Automação", now.minusDays(1), null),
-                new EmployeeRequestSeed(6, "Eletricista Industrial", now.minusDays(20), "joao.silva@teamfoundry.com"),
-                new EmployeeRequestSeed(7, "Técnico de SCADA", now.minusDays(15), "joao.silva@teamfoundry.com"),
-                // Ofertas pendentes (sem funcionário associado)
-                new EmployeeRequestSeed(8, "Responsável de Manutenção", null, null),
-                new EmployeeRequestSeed(9, "Caldeireiro Especialista", null, null),
-                new EmployeeRequestSeed(10, "Técnico de Soldadura", null, null)
+                // Equipe 1
+                new EmployeeRequestSeed(1, "Eletricista", null, null),
+                new EmployeeRequestSeed(1, "Eletricista", null, null),
+                new EmployeeRequestSeed(1, "Soldador", null, null),
+                new EmployeeRequestSeed(1, "Soldador", null, null),
+                new EmployeeRequestSeed(1, "Canalizador", null, null),
+
+                // Equipe 2
+                new EmployeeRequestSeed(2, "Soldador", null, null),
+                new EmployeeRequestSeed(2, "Soldador", null, null),
+                new EmployeeRequestSeed(2, "Carpinteiro", null, null),
+                new EmployeeRequestSeed(2, "Pedreiro", null, null),
+
+                // Equipe 3
+                new EmployeeRequestSeed(3, "Canalizador", null, null),
+                new EmployeeRequestSeed(3, "Canalizador", null, null),
+                new EmployeeRequestSeed(3, "Eletricista", null, null),
+                new EmployeeRequestSeed(3, "Eletricista", null, null),
+                new EmployeeRequestSeed(3, "Pedreiro", null, null)
         );
     }
+
 
     private record EmployeeRequestSeed(
             int teamRequestId,

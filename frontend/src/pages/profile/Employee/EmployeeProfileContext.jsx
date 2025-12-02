@@ -20,11 +20,11 @@ export function EmployeeProfileProvider({ children }) {
   const [jobsData, setJobsData] = useState(null);
   const [offersData, setOffersData] = useState(null);
   const [offersLoaded, setOffersLoaded] = useState(false);
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, userType } = useAuthContext();
 
   const refreshProfile = useCallback(async () => {
     // Recarrega o perfil se existir sessão; caso contrário, limpa qualquer cache.
-    if (!isAuthenticated) {
+    if (!isAuthenticated || userType !== "EMPLOYEE") {
       setProfile(null);
       setOffersData(null);
       setOffersLoaded(false);
@@ -42,12 +42,17 @@ export function EmployeeProfileProvider({ children }) {
     } finally {
       setLoadingProfile(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, userType]);
 
   useEffect(() => {
     // Busca inicial do perfil logo que o provider monta.
-    refreshProfile();
-  }, [refreshProfile]);
+    if (userType === "EMPLOYEE") {
+      refreshProfile();
+    } else {
+      setProfile(null);
+      setLoadingProfile(false);
+    }
+  }, [refreshProfile, userType]);
 
   const refreshPreferencesData = useCallback(async () => {
     if (!isAuthenticated) {

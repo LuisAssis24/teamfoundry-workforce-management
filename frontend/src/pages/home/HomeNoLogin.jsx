@@ -141,9 +141,8 @@ function HeroSection({ section }) {
 
 function IndustriesSection({ section, industries }) {
   return (
-    <section id="industrias" className="relative bg-base-100 py-16 overflow-hidden">
-      <div className="absolute inset-0 bg-neutral/50" aria-hidden="true" />
-      <div className="relative max-w-6xl mx-auto px-6 space-y-10">
+    <section id="industrias" className="bg-base-200/40 border-y border-base-200 py-16 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 space-y-10">
         <SectionHeader
           section={section}
           fallbackTitle="Indǧstrias em que atuamos"
@@ -201,16 +200,6 @@ function PartnersSection({ section, partners }) {
                   <p className="text-sm text-base-content/80 leading-relaxed">
                     {partner.description}
                   </p>
-                  {partner.websiteUrl && (
-                    <a
-                      href={partner.websiteUrl}
-                      className="link link-primary text-sm"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Visitar website
-                    </a>
-                  )}
                 </div>
               </article>
             ))}

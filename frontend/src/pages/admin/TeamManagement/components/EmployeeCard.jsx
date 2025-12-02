@@ -1,11 +1,9 @@
 import { useState } from "react";
 import EmployeeProfileModal from "./EmployeeProfileModal.jsx";
 
-export default function EmployeeCard({ name, role, city, preference }) {
+export default function EmployeeCard({ name, role, city, preference, skills = [], experiences = [] }) {
   const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const hasExperiences = experiences.length > 0;
 
   return (
     <>
@@ -16,25 +14,34 @@ export default function EmployeeCard({ name, role, city, preference }) {
           </div>
           <div>
             <p className="text-lg font-semibold text-[#111827]">{name}</p>
-            <p className="text-sm text-[#1F2959]">Funcao: {role}</p>
+            <p className="text-sm text-[#1F2959]">Função: {role}</p>
           </div>
         </div>
 
         <dl className="space-y-1 text-sm text-[#111827]">
           <InfoLine label="Localidade" value={city} />
-          <InfoLine label="Preferencia" value={preference} />
+          <InfoLine label="Preferência" value={preference} />
+          {skills.length > 0 && <InfoLine label="Competências" value={skills.join(", ")} />}
         </dl>
 
         <div className="space-y-2 text-sm">
-          <p className="font-semibold text-[#1F2959]">Experiencias:</p>
-          <p className="text-[#8A93C2]">Trabalhou na empresa X atuando sob a funcao de Y.</p>
+          <p className="font-semibold text-[#1F2959]">Experiências:</p>
+          {hasExperiences ? (
+            <ul className="list-disc pl-4 text-[#8A93C2] space-y-1">
+              {experiences.map((exp, idx) => (
+                <li key={idx}>{exp}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-[#8A93C2]">Sem experiências anteriores.</p>
+          )}
         </div>
 
         <div className="mt-auto flex gap-3">
           <button
             type="button"
             className="flex-1 rounded-xl bg-[#1F2959] py-2 text-sm font-semibold text-white shadow"
-            onClick={handleOpen}
+            onClick={() => setOpen(true)}
           >
             Ver mais
           </button>
@@ -44,11 +51,13 @@ export default function EmployeeCard({ name, role, city, preference }) {
         </div>
       </article>
 
-      <EmployeeProfileModal
-        open={open}
-        onClose={handleClose}
-        employee={{ name, role, city, preference }}
-      />
+      {typeof EmployeeProfileModal !== "undefined" && (
+        <EmployeeProfileModal
+          open={open}
+          onClose={() => setOpen(false)}
+          employee={{ name, role, city, preference, skills, experiences }}
+        />
+      )}
     </>
   );
 }
