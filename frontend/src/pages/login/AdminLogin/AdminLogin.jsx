@@ -51,7 +51,7 @@ export default function AdminLogin() {
                 const apiMessage = payload?.error;
                 const localizedMessage =
                     apiMessage === "Invalid credentials"
-                        ? "Credenciais invalidas. Tente novamente."
+                        ? "Credentials invalidas. Tente novamente."
                         : apiMessage || "Falha no login. Tente novamente.";
                 throw new Error(localizedMessage);
             }
