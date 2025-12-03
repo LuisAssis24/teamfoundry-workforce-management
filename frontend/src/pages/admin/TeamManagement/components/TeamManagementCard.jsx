@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
-export default function TeamManagementCard({ id, company, email, phone, workforce }) {
+export default function TeamManagementCard({ id, company, email, phone, workforce, status }) {
+  const isComplete = (status || "").toUpperCase() === "COMPLETE";
+  const buttonLabel = isComplete ? "Concluída" : "Montar";
+  const buttonClass = isComplete ? "bg-gray-500 hover:bg-gray-600" : "bg-[#1F2959] hover:bg-[#172145]";
+
   return (
     <div
       className="relative rounded-2xl border border-[#111827] bg-[#F5F5F5] px-6 py-4"
@@ -15,9 +19,9 @@ export default function TeamManagementCard({ id, company, email, phone, workforc
 
       <Link
         to={`/admin/team-management/requests?team=${id ?? ""}`}
-        className="absolute right-6 top-1/2 -translate-y-1/2 rounded-xl bg-[#1F2959] px-8 py-2 text-center text-sm font-semibold text-white shadow"
+        className={`absolute right-6 top-1/2 -translate-y-1/2 rounded-xl px-8 py-2 text-center text-sm font-semibold text-white shadow transition ${buttonClass}`}
       >
-        Montar
+        {buttonLabel}
       </Link>
     </div>
   );
