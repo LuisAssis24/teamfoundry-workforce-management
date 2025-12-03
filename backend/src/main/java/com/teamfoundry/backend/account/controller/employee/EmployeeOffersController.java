@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Ofertas de trabalho para o colaborador.
+ * - listOffers: convites (ativos/fechados) + aceites do próprio, com status OPEN/ACCEPTED/CLOSED.
+ * - accept: aceita convite, evitando dupla alocação na mesma equipa e inativando convites da vaga.
+ */
 @RestController
 @RequestMapping(value = "/api/employee/offers", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -22,7 +27,8 @@ public class EmployeeOffersController {
 
     @GetMapping
     public List<EmployeeJobSummary> listOffers(Authentication authentication) {
-        return employeeJobHistoryService.listOpenOffers();
+        String email = authentication != null ? authentication.getName() : null;
+        return employeeJobHistoryService.listInvitedOffers(email);
     }
 
     @PostMapping("/{id}/accept")
@@ -31,3 +37,4 @@ public class EmployeeOffersController {
         return employeeJobHistoryService.acceptOffer(requestId, email);
     }
 }
+

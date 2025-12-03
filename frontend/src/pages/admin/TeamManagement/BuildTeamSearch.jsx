@@ -6,6 +6,7 @@ import MultiSelectDropdown from "../../../components/ui/MultiSelect/MultiSelectD
 import { teamRequestsAPI } from "../../../api/teamRequests.js";
 import { fetchGeoAreas, fetchCompetences } from "../../../api/siteManagement.js";
 import { searchCandidates } from "../../../api/candidates.js";
+import { sendInvites, listInvitedIds, listAcceptedIds } from "../../../api/invitations.js";
 
 export default function BuildTeamSearch() {
     const navigate = useNavigate();
@@ -27,6 +28,13 @@ export default function BuildTeamSearch() {
     const [candidates, setCandidates] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [searchError, setSearchError] = useState("");
+
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [acceptedIds, setAcceptedIds] = useState([]);
+    const [inviteFeedback, setInviteFeedback] = useState("");
+  const [inviteError, setInviteError] = useState("");
+  const [isInviting, setIsInviting] = useState(false);
+  const isComplete = teamInfo?.state === "COMPLETE";
 
     useEffect(() => {
         let canceled = false;
@@ -119,12 +127,39 @@ export default function BuildTeamSearch() {
         };
     }, [teamId, role, geoSelected, skillsSelected]);
 
+    useEffect(() => {
+        let canceled = false;
+
+        async function loadInvitedAccepted() {
+            if (!teamId || !role) return;
+            try {
+                const [invited, accepted] = await Promise.all([
+                    listInvitedIds(teamId, role),
+                    listAcceptedIds(teamId),
+                ]);
+                if (!canceled) {
+                    setSelectedIds(invited);
+                    setAcceptedIds(accepted);
+                }
+            } catch {
+                /* silencioso */
+            }
+        }
+
+        loadInvitedAccepted();
+        return () => {
+            canceled = true;
+        };
+    }, [teamId, role]);
+
     const mappedCandidates = useMemo(() => {
         return candidates.map((c) => {
             const fullName = [c.firstName, c.lastName].filter(Boolean).join(" ").trim() || "Sem nome";
             const preferredArea = c.areas?.[0] || "-";
             const skills = c.skills?.length ? c.skills : [];
             const experiences = Array.isArray(c.experiences) ? c.experiences : [];
+            const accepted = acceptedIds.includes(c.id);
+            const selected = selectedIds.includes(c.id);
             return {
                 id: c.id,
                 name: fullName,
@@ -133,10 +168,32 @@ export default function BuildTeamSearch() {
                 preference: preferredArea,
                 skills,
                 experiences,
+                accepted,
+                selected,
             };
         });
-    }, [candidates]);
+    }, [candidates, selectedIds, acceptedIds]);
 
+  const toggleSelect = (id, accepted) => {
+    if (accepted || isComplete) return;
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
+  };
+
+    const handleSendInvites = async () => {
+    if (!teamId || !role || selectedIds.length === 0) return;
+    setInviteError("");
+    setInviteFeedback("");
+    setIsInviting(true);
+        try {
+            const resp = await sendInvites(teamId, role, selectedIds);
+            const created = resp?.invitesCreated ?? selectedIds.length;
+            setInviteFeedback(`Convites enviados: ${created}.`);
+        } catch (err) {
+            setInviteError(err.message || "Erro ao enviar convites.");
+        } finally {
+            setIsInviting(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-base-200">
@@ -169,20 +226,38 @@ export default function BuildTeamSearch() {
                                     <span>{geoError || skillError || searchError}</span>
                                 </div>
                             )}
+                            {inviteFeedback && (
+                                <div className="alert alert-success shadow">
+                                    <span>{inviteFeedback}</span>
+                                </div>
+                            )}
+                            {inviteError && (
+                                <div className="alert alert-error shadow">
+                                    <span>{inviteError}</span>
+                                </div>
+                            )}
 
-                            <div className="flex flex-col gap-6 lg:flex-row">
-                                <FiltersPanel
-                                    companyName={teamInfo?.companyName || "Empresa"}
-                                    role={role || "Função"}
-                                    geoOptions={geoOptions}
-                                    geoSelected={geoSelected}
-                                    skillOptions={skillOptions}
-                                    skillsSelected={skillsSelected}
-                                    onGeoChange={setGeoSelected}
-                                    onSkillsChange={setSkillsSelected}
-                                />
-                                <CandidatesPanel employees={mappedCandidates} isLoading={isSearching} />
-                            </div>
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <FiltersPanel
+          companyName={teamInfo?.companyName || "Empresa"}
+          role={role || "Função"}
+          geoOptions={geoOptions}
+          geoSelected={geoSelected}
+          skillOptions={skillOptions}
+          skillsSelected={skillsSelected}
+          onGeoChange={setGeoSelected}
+          onSkillsChange={setSkillsSelected}
+        />
+        <CandidatesPanel
+          employees={mappedCandidates}
+          isLoading={isSearching}
+          selectedIds={selectedIds}
+          onToggle={toggleSelect}
+          onSendInvites={handleSendInvites}
+          isInviting={isInviting}
+          disabled={isComplete}
+        />
+      </div>
                         </>
                     )}
                 </div>
@@ -249,9 +324,21 @@ function FilterTitle({ label, value }) {
     );
 }
 
-function CandidatesPanel({ employees, isLoading }) {
-    return (
-        <section className="flex-1 rounded-2xl border border-[#111827]/20 bg-white p-4 shadow-inner">
+function CandidatesPanel({ employees, isLoading, selectedIds, onToggle, onSendInvites, isInviting, disabled }) {
+  return (
+    <section className="flex-1 rounded-2xl border border-[#111827]/20 bg-white p-4 shadow-inner space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-base-content/70">Selecionados: {selectedIds.length}</span>
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          disabled={disabled || isLoading || isInviting || selectedIds.length === 0}
+          onClick={onSendInvites}
+        >
+          {isInviting ? "Enviando..." : disabled ? "Concluída" : "Enviar convites"}
+        </button>
+      </div>
+
             {isLoading ? (
                 <div className="py-8 text-center text-base-content/70">Carregando candidatos...</div>
             ) : employees.length === 0 ? (
@@ -259,7 +346,11 @@ function CandidatesPanel({ employees, isLoading }) {
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {employees.map((employee) => (
-                        <EmployeeCard key={employee.id} {...employee} />
+                        <EmployeeCard
+                            key={employee.id}
+                            {...employee}
+                            onSelect={() => onToggle(employee.id, employee.accepted)}
+                        />
                     ))}
                 </div>
             )}

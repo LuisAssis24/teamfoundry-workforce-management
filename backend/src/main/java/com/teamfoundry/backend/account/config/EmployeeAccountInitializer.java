@@ -16,39 +16,39 @@ import com.teamfoundry.backend.account_options.repository.EmployeeFunctionReposi
 import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
 import com.teamfoundry.backend.account_options.repository.FunctionRepository;
 import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 @Profile("!test")
+@RequiredArgsConstructor
 public class EmployeeAccountInitializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeAccountInitializer.class);
 
+    private final PasswordEncoder passwordEncoder;
+    private final FunctionRepository functionRepository;
+    private final CompetenceRepository competenceRepository;
+    private final GeoAreaRepository geoAreaRepository;
+    private final EmployeeFunctionRepository employeeFunctionRepository;
+    private final EmployeeCompetenceRepository employeeCompetenceRepository;
+    private final EmployeeGeoAreaRepository employeeGeoAreaRepository;
+
     @Bean
     @Order(2)
-    CommandLineRunner seedEmployeeAccounts(AccountRepository accountRepository,
-                                           PasswordEncoder passwordEncoder,
-                                           FunctionRepository functionRepository,
-                                           CompetenceRepository competenceRepository,
-                                           GeoAreaRepository geoAreaRepository,
-                                           EmployeeFunctionRepository employeeFunctionRepository,
-                                           EmployeeCompetenceRepository employeeCompetenceRepository,
-                                           EmployeeGeoAreaRepository employeeGeoAreaRepository) {
+    CommandLineRunner seedEmployees(AccountRepository accountRepository) {
         return args -> {
-            // Normalize existing accounts to active=true and COMPLETED
+            // Normaliza contas existentes
             try {
                 var all = accountRepository.findAll();
                 boolean changed = false;
@@ -77,87 +77,64 @@ public class EmployeeAccountInitializer {
             List<EmployeeSeed> seeds = List.of(
                     new EmployeeSeed("joao.silva@teamfoundry.com", 201234567, "Joao", "Silva",
                             "+351912345678", "Portugal", "MALE", LocalDate.of(1990, 5, 21), "password123",
-                            List.of("Eletricista"),
-                            List.of("Eletricista", "Técnico de AVAC"),
-                            List.of("Lisboa", "Porto")),
+                            List.of("Eletricista"), List.of("Eletricista", "Técnico de AVAC"), List.of("Lisboa", "Porto")),
                     new EmployeeSeed("maria.sousa@teamfoundry.com", 209876543, "Maria", "Sousa",
                             "+351932222333", "Portugal", "FEMALE", LocalDate.of(1992, 3, 17), "password123",
-                            List.of("Canalizador"),
-                            List.of("Canalizador"),
-                            List.of("Braga")),
+                            List.of("Canalizador"), List.of("Canalizador"), List.of("Braga")),
                     new EmployeeSeed("carlos.oliveira@teamfoundry.com", 301234567, "Carlos", "Oliveira",
                             "+351915667788", "Portugal", "MALE", LocalDate.of(1988, 11, 2), "password123",
-                            List.of("Soldador"),
-                            List.of("Soldador", "Pintor"),
-                            List.of("Faro")),
+                            List.of("Soldador"), List.of("Soldador", "Pintor"), List.of("Faro")),
                     new EmployeeSeed("ana.martins@teamfoundry.com", 309876543, "Ana", "Martins",
                             "+351934556677", "Portugal", "FEMALE", LocalDate.of(1995, 7, 8), "password123",
-                            List.of("Carpinteiro"),
-                            List.of("Pintor"),
-                            List.of("Madeira")),
+                            List.of("Carpinteiro"), List.of("Pintor"), List.of("Madeira")),
                     new EmployeeSeed("ricardo.pires@teamfoundry.com", 401234567, "Ricardo", "Pires",
                             "+351918889900", "Portugal", "MALE", LocalDate.of(1993, 1, 29), "password123",
-                            List.of("Pedreiro"),
-                            List.of("Eletricista"),
-                            List.of("Açores")),
+                            List.of("Pedreiro"), List.of("Eletricista"), List.of("Açores")),
 
+                    // extras
                     new EmployeeSeed("sofia.lima@teamfoundry.com", 501234567, "Sofia", "Lima",
                             "+351910000111", "Portugal", "FEMALE", LocalDate.of(1994, 6, 12), "password123",
-                            List.of("Eletricista"),
-                            List.of("Eletricista"),
-                            List.of("Lisboa")),
+                            List.of("Eletricista"), List.of("Eletricista"), List.of("Lisboa")),
                     new EmployeeSeed("tiago.rocha@teamfoundry.com", 509876543, "Tiago", "Rocha",
                             "+351910000222", "Portugal", "MALE", LocalDate.of(1991, 9, 5), "password123",
-                            List.of("Soldador"),
-                            List.of("Soldador", "Técnico de AVAC"),
-                            List.of("Porto")),
+                            List.of("Soldador"), List.of("Soldador", "Técnico de AVAC"), List.of("Porto")),
                     new EmployeeSeed("carla.ferreira@teamfoundry.com", 601234567, "Carla", "Ferreira",
                             "+351910000333", "Portugal", "FEMALE", LocalDate.of(1996, 2, 14), "password123",
-                            List.of("Canalizador"),
-                            List.of("Canalizador", "Pintor"),
-                            List.of("Braga", "Porto")),
+                            List.of("Canalizador"), List.of("Canalizador", "Pintor"), List.of("Braga", "Porto")),
                     new EmployeeSeed("miguel.santos@teamfoundry.com", 609876543, "Miguel", "Santos",
                             "+351910000444", "Portugal", "MALE", LocalDate.of(1987, 12, 3), "password123",
-                            List.of("Pedreiro"),
-                            List.of("Pintor"),
-                            List.of("Faro")),
+                            List.of("Pedreiro"), List.of("Pintor"), List.of("Faro")),
                     new EmployeeSeed("ines.costa@teamfoundry.com", 701234567, "Ines", "Costa",
                             "+351910000555", "Portugal", "FEMALE", LocalDate.of(1998, 4, 27), "password123",
-                            List.of("Carpinteiro"),
-                            List.of("Canalizador"),
-                            List.of("Madeira")),
+                            List.of("Carpinteiro"), List.of("Canalizador"), List.of("Madeira")),
                     new EmployeeSeed("rui.gomes@teamfoundry.com", 709876543, "Rui", "Gomes",
                             "+351910000666", "Portugal", "MALE", LocalDate.of(1989, 8, 19), "password123",
-                            List.of("Eletricista"),
-                            List.of("Eletricista", "Soldador"),
-                            List.of("Açores", "Lisboa")),
+                            List.of("Eletricista"), List.of("Eletricista", "Soldador"), List.of("Açores", "Lisboa")),
                     new EmployeeSeed("patricia.medeiros@teamfoundry.com", 801234567, "Patricia", "Medeiros",
                             "+351910000777", "Portugal", "FEMALE", LocalDate.of(1993, 10, 30), "password123",
-                            List.of("Soldador"),
-                            List.of("Soldador"),
-                            List.of("Porto", "Braga")),
+                            List.of("Soldador"), List.of("Soldador"), List.of("Porto", "Braga")),
                     new EmployeeSeed("andre.almeida@teamfoundry.com", 809876543, "Andre", "Almeida",
                             "+351910000888", "Portugal", "MALE", LocalDate.of(1990, 1, 10), "password123",
-                            List.of("Pedreiro"),
-                            List.of("Eletricista", "Pintor"),
-                            List.of("Lisboa")),
+                            List.of("Pedreiro"), List.of("Eletricista", "Pintor"), List.of("Lisboa")),
                     new EmployeeSeed("luis.figueiredo@teamfoundry.com", 901234567, "Luis", "Figueiredo",
                             "+351910000999", "Portugal", "MALE", LocalDate.of(1986, 7, 22), "password123",
-                            List.of("Carpinteiro"),
-                            List.of("Soldador"),
-                            List.of("Porto", "Faro")),
+                            List.of("Carpinteiro"), List.of("Soldador"), List.of("Porto", "Faro")),
                     new EmployeeSeed("marta.ribeiro@teamfoundry.com", 909876543, "Marta", "Ribeiro",
                             "+351910001000", "Portugal", "FEMALE", LocalDate.of(1997, 11, 9), "password123",
-                            List.of("Canalizador"),
-                            List.of("Técnico de AVAC"),
-                            List.of("Braga", "Açores")),
+                            List.of("Canalizador"), List.of("Técnico de AVAC"), List.of("Braga", "Açores")),
                     new EmployeeSeed("daniel.matos@teamfoundry.com", 910111213, "Daniel", "Matos",
                             "+351910001111", "Portugal", "MALE", LocalDate.of(1992, 5, 3), "password123",
-                            List.of("Eletricista"),
-                            List.of("Eletricista", "Técnico de AVAC"),
-                            List.of("Faro", "Lisboa"))
+                            List.of("Eletricista"), List.of("Eletricista", "Técnico de AVAC"), List.of("Faro", "Lisboa")),
+                    new EmployeeSeed("helena.marques@teamfoundry.com", 920111213, "Helena", "Marques",
+                            "+351910001222", "Portugal", "FEMALE", LocalDate.of(1994, 2, 18), "password123",
+                            List.of("Soldador"), List.of("Soldador", "Pintor"), List.of("Lisboa", "Porto")),
+                    new EmployeeSeed("gabriel.fernandes@teamfoundry.com", 930111213, "Gabriel", "Fernandes",
+                            "+351910001333", "Portugal", "MALE", LocalDate.of(1991, 6, 9), "password123",
+                            List.of("Eletricista"), List.of("Eletricista"), List.of("Porto", "Açores")),
+                    new EmployeeSeed("joana.pereira@teamfoundry.com", 940111213, "Joana", "Pereira",
+                            "+351910001444", "Portugal", "FEMALE", LocalDate.of(1995, 9, 1), "password123",
+                            List.of("Carpinteiro"), List.of("Canalizador", "Pintor"), List.of("Braga", "Lisboa"))
             );
-
 
             List<EmployeeFunction> functionRelations = new ArrayList<>();
             List<EmployeeCompetence> competenceRelations = new ArrayList<>();
@@ -221,22 +198,14 @@ public class EmployeeAccountInitializer {
             if (!functionRelations.isEmpty()) {
                 employeeFunctionRepository.saveAll(functionRelations);
                 LOGGER.info("Seeded {} employee-function relations.", functionRelations.size());
-            } else {
-                LOGGER.debug("No employee-function relations were created.");
             }
-
             if (!competenceRelations.isEmpty()) {
                 employeeCompetenceRepository.saveAll(competenceRelations);
                 LOGGER.info("Seeded {} employee-competence relations.", competenceRelations.size());
-            } else {
-                LOGGER.debug("No employee-competence relations were created.");
             }
-
             if (!geoAreaRelations.isEmpty()) {
                 employeeGeoAreaRepository.saveAll(geoAreaRelations);
                 LOGGER.info("Seeded {} employee-geographic area relations.", geoAreaRelations.size());
-            } else {
-                LOGGER.debug("No employee-geographic area relations were created.");
             }
         };
     }

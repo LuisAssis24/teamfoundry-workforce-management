@@ -5,6 +5,7 @@ import com.teamfoundry.backend.admin.model.TeamRequest;
 import com.teamfoundry.backend.admin.repository.TeamRequestRepository;
 import com.teamfoundry.backend.account.model.CompanyAccount;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
+import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,7 @@ import org.springframework.core.annotation.Order;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @Profile("!test")
@@ -26,12 +28,19 @@ public class TeamRequestSeeder {
     @Bean
     @Order(5)
     CommandLineRunner seedTeamRequests(TeamRequestRepository teamRequestRepository,
-                                       CompanyAccountRepository companyAccountRepository) {
+                                       CompanyAccountRepository companyAccountRepository,
+                                       AdminAccountRepository adminAccountRepository) {
         return args -> {
             if (teamRequestRepository.count() > 0) {
                 LOGGER.debug("Team requests already exist; skipping seeding.");
                 return;
             }
+
+            Map<String, Integer> adminIds = adminAccountRepository.findAll().stream()
+                    .collect(java.util.stream.Collectors.toMap(
+                            a -> a.getUsername().toLowerCase(),
+                            a -> a.getId()
+                    ));
 
             List<TeamRequest> toPersist = new ArrayList<>();
             for (TeamRequestSeed seed : defaultSeeds()) {
@@ -46,8 +55,11 @@ public class TeamRequestSeeder {
                 request.setCompany(company);
                 request.setTeamName(seed.teamName());
                 request.setDescription(seed.description());
+                request.setLocation(seed.location());
                 request.setState(seed.state());
-                request.setResponsibleAdminId(seed.responsibleAdminId());
+                Integer adminId = seed.responsibleAdminUsername() == null ? null :
+                        adminIds.get(seed.responsibleAdminUsername().toLowerCase());
+                request.setResponsibleAdminId(adminId);
                 request.setStartDate(seed.startDate());
                 request.setEndDate(seed.endDate());
                 request.setCreatedAt(seed.createdAt());
@@ -65,97 +77,28 @@ public class TeamRequestSeeder {
     }
 
     private List<TeamRequestSeed> defaultSeeds() {
+        LocalDateTime now = LocalDateTime.now();
         return List.of(
-                new TeamRequestSeed(
-                        "contact@blueorbitlabs.com",
-                        "Equipe de Automacao Industrial",
-                        "Squad focada em otimizar celulas robotizadas para a nova linha automotiva.",
-                        State.INCOMPLETE,
-                        null,
-                        LocalDateTime.now().minusDays(10),
-                        LocalDateTime.now().plusDays(30),
-                        LocalDateTime.now().minusDays(6)
-                ),
-                new TeamRequestSeed(
-                        "contact@blueorbitlabs.com",
-                        "Task force de Retrofit",
-                        "Equipa multidisciplinar para upgrades eletricos e mecanicos na planta do Porto.",
-                        State.COMPLETE,
-                        2,
-                        LocalDateTime.now().minusDays(25),
-                        LocalDateTime.now().minusDays(4),
-                        LocalDateTime.now().minusDays(3)
-                ),
-                new TeamRequestSeed(
-                        "contact@blueorbitlabs.com",
-                        "Celula de Manutencao Preditiva",
-                        "Time para implantar sensores IoT e algoritmos de alerta precoce.",
-                        State.INCOMPLETE,
-                        3,
-                        LocalDateTime.now().minusDays(14),
-                        LocalDateTime.now().plusDays(10),
-                        LocalDateTime.now().minusDays(1)
-                ),
-                new TeamRequestSeed(
-                        "operacoes@ferromec.pt",
-                        "Linha de Remanufatura Pesada",
-                        "Equipe dedicada a remanufatura de pecas pesadas com soldagem robotizada.",
-                        State.INCOMPLETE,
-                        null,
-                        LocalDateTime.now().minusDays(7),
-                        LocalDateTime.now().plusDays(21),
-                        LocalDateTime.now().minusDays(4)
-                ),
-                new TeamRequestSeed(
-                        "operacoes@ferromec.pt",
-                        "Squad Retrofit Eletrico",
-                        "Time para substituir paineis de controle legado por CLPs modernos.",
-                        State.COMPLETE,
-                        4,
-                        LocalDateTime.now().minusDays(40),
-                        LocalDateTime.now().minusDays(5),
-                        LocalDateTime.now().minusDays(2)
-                ),
-                new TeamRequestSeed(
-                        "talent@atlantic-robotics.eu",
-                        "Equipe de Integracao AMR",
-                        "Grupo focado em integracao de AMRs com WMS e MES.",
-                        State.INCOMPLETE,
-                        null,
-                        LocalDateTime.now().minusDays(3),
-                        LocalDateTime.now().plusDays(14),
-                        LocalDateTime.now().minusDays(5)
-                ),
-                new TeamRequestSeed(
-                        "talent@atlantic-robotics.eu",
-                        "Celula de Visao Computacional",
-                        "Time para calibrar cameras e treinar modelos de inspecao.",
-                        State.COMPLETE,
-                        8,
-                        LocalDateTime.now().minusDays(18),
-                        LocalDateTime.now().minusDays(1),
-                        LocalDateTime.now().minusDays(2)
-                ),
-                new TeamRequestSeed(
-                        "hr@iberiapower.com",
-                        "Equipe Subestacao Norte",
-                        "Task force para manutencao preventiva em subestacoes HV.",
-                        State.INCOMPLETE,
-                        null,
-                        LocalDateTime.now().minusDays(9),
-                        LocalDateTime.now().plusDays(18),
-                        LocalDateTime.now().minusDays(7)
-                ),
-                new TeamRequestSeed(
-                        "hr@iberiapower.com",
-                        "Programa de SCADA Distribuido",
-                        "Equipe para rollout de SCADA redundante nas usinas solares.",
-                        State.INCOMPLETE,
-                        6,
-                        LocalDateTime.now().minusDays(16),
-                        LocalDateTime.now().plusDays(5),
-                        LocalDateTime.now().minusDays(3)
-                )
+                // Ativos incompletos
+                new TeamRequestSeed("contact@blueorbitlabs.com", "Equipe Retrofit Norte",
+                        "Retrofit elétrico e solda leve.", "Lisboa", State.INCOMPLETE, "admin1",
+                        now.plusDays(7), now.plusDays(30), now.minusDays(2)),
+                new TeamRequestSeed("operacoes@ferromec.pt", "Task force Soldagem",
+                        "Soldagem MIG/MAG estrutural.", "Porto", State.INCOMPLETE, "admin2",
+                        now.plusDays(5), now.plusDays(25), now.minusDays(1)),
+                new TeamRequestSeed("talent@atlantic-robotics.eu", "Montagem Industrial Sul",
+                        "Montagem mecânica e canalização.", "Faro", State.INCOMPLETE, "admin3",
+                        now.plusDays(10), now.plusDays(40), now.minusDays(3)),
+                // Concluídos
+                new TeamRequestSeed("contact@blueorbitlabs.com", "Linha Robotizada A",
+                        "Instalação de célula robotizada.", "Lisboa", State.COMPLETE, "admin1",
+                        now.minusDays(60), now.minusDays(30), now.minusDays(70)),
+                new TeamRequestSeed("operacoes@ferromec.pt", "Squad SCADA Norte",
+                        "Rollout SCADA nas subestações.", "Porto", State.COMPLETE, "admin2",
+                        now.minusDays(50), now.minusDays(20), now.minusDays(55)),
+                new TeamRequestSeed("hr@iberiapower.com", "Equipa Solar Oeste",
+                        "Task force O&M solar.", "Braga", State.COMPLETE, "admin4",
+                        now.minusDays(40), now.minusDays(10), now.minusDays(45))
         );
     }
 
@@ -163,8 +106,9 @@ public class TeamRequestSeeder {
             String companyEmail,
             String teamName,
             String description,
+            String location,
             State state,
-            Integer responsibleAdminId,
+            String responsibleAdminUsername,
             LocalDateTime startDate,
             LocalDateTime endDate,
             LocalDateTime createdAt

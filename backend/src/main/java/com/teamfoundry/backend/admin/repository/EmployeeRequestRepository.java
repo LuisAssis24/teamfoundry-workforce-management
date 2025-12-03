@@ -9,13 +9,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Vagas (EmployeeRequest): consultas para convites, contagens e histórico.
+ */
 public interface EmployeeRequestRepository extends JpaRepository<EmployeeRequest, Integer> {
 
     @EntityGraph(attributePaths = {"teamRequest", "teamRequest.company"})
     List<EmployeeRequest> findByEmployee_EmailOrderByAcceptedDateDesc(String email);
-
-    @EntityGraph(attributePaths = {"teamRequest", "teamRequest.company"})
-    List<EmployeeRequest> findByEmployeeIsNullOrderByCreatedAtDesc();
 
     @Query("""
             SELECT er.teamRequest.id AS requestId, COUNT(er) AS total
@@ -32,6 +32,28 @@ public interface EmployeeRequestRepository extends JpaRepository<EmployeeRequest
             GROUP BY er.requestedRole
             """)
     List<RoleCount> countByRoleForTeam(@Param("teamRequestId") Integer teamRequestId);
+
+    @EntityGraph(attributePaths = {"teamRequest"})
+    List<EmployeeRequest> findByTeamRequest_IdAndRequestedRoleIgnoreCaseAndEmployeeIsNull(Integer teamRequestId, String role);
+
+    @Query("""
+            SELECT DISTINCT er.employee.id
+            FROM EmployeeRequest er
+            WHERE er.teamRequest.id = :teamId
+              AND er.employee IS NOT NULL
+            """)
+    List<Integer> findAcceptedEmployeeIdsByTeam(@Param("teamId") Integer teamId);
+
+    @Query("""
+            SELECT COUNT(er)
+            FROM EmployeeRequest er
+            WHERE er.teamRequest.id = :teamId
+              AND er.employee.id = :employeeId
+            """)
+    long countAcceptedForTeam(@Param("teamId") Integer teamId, @Param("employeeId") Integer employeeId);
+
+    @EntityGraph(attributePaths = {"teamRequest", "teamRequest.company"})
+    List<EmployeeRequest> findByEmployee_IdOrderByAcceptedDateDesc(Integer employeeId);
 
     interface TeamRequestCount {
         Integer getRequestId();

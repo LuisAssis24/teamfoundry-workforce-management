@@ -77,9 +77,10 @@ export default function TeamManagement() {
       email: request.companyEmail ?? "N/A",
       phone: request.companyPhone ?? "N/A",
       workforce:
-          request.workforceNeeded > 0
-              ? `${request.workforceNeeded} funcionarios`
-              : "Sem requisicoes de funcionarios",
+        request.workforceNeeded > 0
+          ? `${request.workforceNeeded} funcionarios`
+          : "Sem requisicoes de funcionarios",
+      status: request.state,
     }));
   }, [requests, statusFilter, dateOrder, workforceOrder]);
 
@@ -99,11 +100,11 @@ export default function TeamManagement() {
               <h1 className="text-3xl font-bold text-[#1F2959]">Equipas</h1>
             </header>
 
-            <section className="grid gap-4 md:grid-cols-3">
+            <section className="flex flex-wrap gap-3 justify-center">
               {filterControls.map((control) => (
                 <div
                   key={control.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-[#60678E] bg-[#F0F0F0] p-4 shadow"
+                  className="flex items-center justify-between gap-2 rounded-2xl  bg-[#F0F0F0] px-3 py-2 shadow w-full max-w-[250px]"
                 >
                   <span className="text-lg font-medium text-[#2C3A74]">{control.label}:</span>
                   <select
