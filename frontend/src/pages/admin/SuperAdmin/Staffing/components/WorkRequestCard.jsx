@@ -7,7 +7,7 @@ const WorkRequestCard = ({
                            teamName,
                            description,
                            state,
-                           responsibleAdminId,
+                           responsibleAdminName,
                            startDate,
                            endDate,
                            createdAt,
@@ -35,6 +35,13 @@ const WorkRequestCard = ({
   };
 
   const { label: statusLabel, color: statusColor } = getStatus();
+  const isComplete = state === 'COMPLETE';
+  const buttonLabel = isComplete
+      ? 'Requisição concluída'
+      : !responsibleAdminName
+          ? 'Atribuir Responsavel'
+          : 'Modificar Responsavel';
+  const buttonVariant = isComplete ? 'ghost' : !responsibleAdminName ? 'success' : 'primary';
 
   return (
       <div className="bg-base-100 rounded-box shadow-sm p-6 mb-4 border border-base-200">
@@ -53,7 +60,7 @@ const WorkRequestCard = ({
                 </p>
                 <p className="text-label text-base-content">
                   <span className="font-semibold">Responsavel:</span>{' '}
-                  {responsibleAdminId ? `Admin #${responsibleAdminId}` : 'N/A'}
+                  {responsibleAdminName || 'N/A'}
                 </p>
               </div>
 
@@ -77,10 +84,11 @@ const WorkRequestCard = ({
 
           <div className="flex-shrink-0">
             <Button
-                variant={!responsibleAdminId ? 'success' : 'primary'}
-                onClick={onAssignAdmin}
-                label={!responsibleAdminId ? 'Atribuir Responsavel' : 'Modificar Responsavel'}
+                variant={buttonVariant}
+                onClick={!isComplete ? onAssignAdmin : undefined}
+                label={buttonLabel}
                 className="w-auto"
+                disabled={isComplete}
             />
           </div>
         </div>
@@ -93,7 +101,7 @@ WorkRequestCard.propTypes = {
   teamName: PropTypes.string.isRequired,
   description: PropTypes.string,
   state: PropTypes.string.isRequired,
-  responsibleAdminId: PropTypes.number,
+  responsibleAdminName: PropTypes.string,
   startDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   endDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
@@ -102,7 +110,7 @@ WorkRequestCard.propTypes = {
 
 WorkRequestCard.defaultProps = {
   description: 'N/A',
-  responsibleAdminId: null,
+  responsibleAdminName: null,
   startDate: null,
   endDate: null,
   createdAt: null,
