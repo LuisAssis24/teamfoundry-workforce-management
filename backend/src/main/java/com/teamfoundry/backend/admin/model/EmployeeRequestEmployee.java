@@ -22,4 +22,7 @@ public class EmployeeRequestEmployee {
     @ManyToOne
     @JoinColumn(name = "id_funcionario", nullable = false)
     private EmployeeAccount employee;
+
+    @Column(nullable = false)
+    private boolean active = true;
 }

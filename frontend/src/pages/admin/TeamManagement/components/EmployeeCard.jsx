@@ -1,41 +1,63 @@
 import { useState } from "react";
 import EmployeeProfileModal from "./EmployeeProfileModal.jsx";
 
-export default function EmployeeCard({ name, role, city, preference, skills = [], experiences = [] }) {
-  const [open, setOpen] = useState(false);
-  const hasExperiences = experiences.length > 0;
+export default function EmployeeCard({
+                                         id,
+                                         name,
+                                         role,
+                                         city,
+                                         preference,
+                                         skills = [],
+                                         experiences = [],
+  selected = false,
+  accepted = false,
+  onSelect,
+}) {
+    const [open, setOpen] = useState(false);
+    const hasExperiences = experiences.length > 0;
 
-  return (
-    <>
-      <article className="flex h-full flex-col gap-4 rounded-2xl border border-[#111827] bg-[#F5F5F5] p-4 shadow">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1F2959] text-white shadow-inner">
-            <i className="bi bi-person-fill text-2xl" aria-hidden="true"></i>
-          </div>
-          <div>
-            <p className="text-lg font-semibold text-[#111827]">{name}</p>
-            <p className="text-sm text-[#1F2959]">Função: {role}</p>
-          </div>
-        </div>
+    const buttonLabel = accepted ? "Aceite" : selected ? "Selecionado" : "Escolher";
+    const buttonClasses = accepted
+        ? "bg-[#1CA74F] cursor-not-allowed"
+        : selected
+            ? "bg-[#60678E]"
+            : "bg-[#1F2959]";
 
-        <dl className="space-y-1 text-sm text-[#111827]">
-          <InfoLine label="Localidade" value={city} />
-          <InfoLine label="Preferência" value={preference} />
-          {skills.length > 0 && <InfoLine label="Competências" value={skills.join(", ")} />}
-        </dl>
+    return (
+        <>
+            <article
+                className={`flex h-full flex-col gap-4 rounded-2xl border ${
+                    accepted ? "border-[#1CA74F]" : selected ? "border-[#1CA74F]" : "border-[#111827]"
+                } bg-[#F5F5F5] p-4 shadow`}
+            >
+                <div className="flex items-center gap-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1F2959] text-white shadow-inner">
+                        <i className="bi bi-person-fill text-2xl" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <p className="text-lg font-semibold text-[#111827]">{name}</p>
+                        <p className="text-sm text-[#1F2959]">Função: {role}</p>
+                    </div>
+                </div>
 
-        <div className="space-y-2 text-sm">
-          <p className="font-semibold text-[#1F2959]">Experiências:</p>
-          {hasExperiences ? (
-            <ul className="list-disc pl-4 text-[#8A93C2] space-y-1">
-              {experiences.map((exp, idx) => (
-                <li key={idx}>{exp}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-[#8A93C2]">Sem experiências anteriores.</p>
-          )}
-        </div>
+                <dl className="space-y-1 text-sm text-[#111827]">
+                    <InfoLine label="Localidade" value={city} />
+                    <InfoLine label="Preferência" value={preference} />
+                    {skills.length > 0 && <InfoLine label="Competências" value={skills.join(", ")} />}
+                </dl>
+
+                <div className="space-y-2 text-sm">
+                    <p className="font-semibold text-[#1F2959]">Experiências:</p>
+                    {hasExperiences ? (
+                        <ul className="list-disc pl-4 text-[#8A93C2] space-y-1">
+                            {experiences.map((exp, idx) => (
+                                <li key={idx}>{exp}</li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-[#8A93C2]">Sem experiências anteriores.</p>
+                    )}
+                </div>
 
         <div className="mt-auto flex gap-3">
           <button
@@ -45,28 +67,34 @@ export default function EmployeeCard({ name, role, city, preference, skills = []
           >
             Ver mais
           </button>
-          <button className="flex-1 rounded-xl bg-[#1CA74F] py-2 text-sm font-semibold text-white shadow">
-            Escolher
+          <button
+            type="button"
+            className={`flex-1 rounded-xl py-2 text-sm font-semibold text-white shadow ${buttonClasses}`}
+            onClick={!accepted ? onSelect : undefined}
+            disabled={accepted}
+          >
+            {buttonLabel}
           </button>
         </div>
       </article>
 
-      {typeof EmployeeProfileModal !== "undefined" && (
-        <EmployeeProfileModal
-          open={open}
-          onClose={() => setOpen(false)}
-          employee={{ name, role, city, preference, skills, experiences }}
-        />
-      )}
-    </>
-  );
+            {typeof EmployeeProfileModal !== "undefined" && (
+                <EmployeeProfileModal
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    employeeId={id}
+                    fallback={{ name, role, city, preference, skills, experiences }}
+                />
+            )}
+        </>
+    );
 }
 
 function InfoLine({ label, value }) {
-  return (
-    <div className="flex items-center gap-2">
-      <dt className="font-medium text-[#1F2959]">{label}:</dt>
-      <dd>{value}</dd>
-    </div>
-  );
+    return (
+        <div className="flex items-center gap-2">
+            <dt className="font-medium text-[#1F2959]">{label}:</dt>
+            <dd>{value}</dd>
+        </div>
+    );
 }

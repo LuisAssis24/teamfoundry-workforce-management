@@ -36,6 +36,7 @@ export default function TeamEmployeeRequests() {
         if (canceled) return;
 
         setTeamName(details?.teamName || "Equipa");
+        const teamState = details?.state;
 
         const mapped = (roles || []).map((item) => {
           const total = item.totalPositions ?? item.totalRequested ?? item.requestedCount ?? 0;
@@ -48,7 +49,7 @@ export default function TeamEmployeeRequests() {
             workforceCurrent: filled,
             workforceTotal: total,
             proposalsSent: item.proposalsSent ?? 0,
-            status: open <= 0 ? "COMPLETE" : "IN_PROGRESS",
+            status: teamState === "COMPLETE" ? "COMPLETE" : open <= 0 ? "COMPLETE" : "IN_PROGRESS",
           };
         });
 

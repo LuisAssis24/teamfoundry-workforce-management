@@ -5,6 +5,9 @@ import lombok.Value;
 
 import java.time.LocalDateTime;
 
+/**
+ * Resumo das ofertas e histórico do colaborador.
+ */
 @Value
 @Builder
 public class EmployeeJobSummary {
@@ -17,4 +20,5 @@ public class EmployeeJobSummary {
     LocalDateTime endDate;
     LocalDateTime acceptedDate;
     String requestedRole;
+    String status;
 }

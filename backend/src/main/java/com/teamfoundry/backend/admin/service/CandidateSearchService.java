@@ -12,6 +12,7 @@ import com.teamfoundry.backend.account_options.model.EmployeeGeoArea;
 import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
 import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
 import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.admin.enums.State;
 import com.teamfoundry.backend.admin.repository.EmployeeRequestRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -22,9 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Busca candidatos filtrando por função, áreas e competências.
+ * Experiências listam apenas trabalhos concluídos (máx. 2).
+ */
 @Service
 @Transactional(readOnly = true)
 public class CandidateSearchService {
@@ -38,13 +44,12 @@ public class CandidateSearchService {
     private final EmployeeGeoAreaRepository employeeGeoAreaRepository;
     private final EmployeeRequestRepository employeeRequestRepository;
 
-
     public CandidateSearchService(AdminAccountRepository adminAccountRepository,
                                   EmployeeAccountRepository employeeAccountRepository,
                                   EmployeeFunctionRepository employeeFunctionRepository,
                                   EmployeeCompetenceRepository employeeCompetenceRepository,
                                   EmployeeGeoAreaRepository employeeGeoAreaRepository,
-                                  EmployeeRequestRepository employeeRequestRepository) { // NOVO
+                                  EmployeeRequestRepository employeeRequestRepository) {
         this.adminAccountRepository = adminAccountRepository;
         this.employeeAccountRepository = employeeAccountRepository;
         this.employeeFunctionRepository = employeeFunctionRepository;
@@ -92,13 +97,15 @@ public class CandidateSearchService {
         List<String> experiences = employeeRequestRepository
                 .findByEmployee_EmailOrderByAcceptedDateDesc(employee.getEmail().toLowerCase())
                 .stream()
-                .filter(req -> req.getAcceptedDate() != null)
-                .limit(3)
+                .filter(req -> req.getAcceptedDate() != null && isConcluded(req.getTeamRequest()))
+                .limit(2)
                 .map(req -> {
-                    String team = req.getTeamRequest() != null ? req.getTeamRequest().getTeamName() : "Equipa";
+                    String company = (req.getTeamRequest() != null && req.getTeamRequest().getCompany() != null)
+                            ? req.getTeamRequest().getCompany().getName()
+                            : "Empresa";
                     String job = req.getRequestedRole() != null ? req.getRequestedRole() : "Função";
                     String date = req.getAcceptedDate().toLocalDate().toString();
-                    return team + " - " + job + " (" + date + ")";
+                    return company + " - " + job + " (" + date + ")";
                 })
                 .toList();
 
@@ -113,6 +120,13 @@ public class CandidateSearchService {
                 areas,
                 experiences
         );
+    }
+
+    private boolean isConcluded(com.teamfoundry.backend.admin.model.TeamRequest tr) {
+        if (tr == null) return false;
+        if (tr.getState() == State.COMPLETE) return true;
+        LocalDateTime end = tr.getEndDate();
+        return end != null && end.isBefore(LocalDateTime.now());
     }
 
     private AdminAccount resolveAuthenticatedAdmin() {
