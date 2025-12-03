@@ -7,6 +7,9 @@ import { EmployeeProfileProvider } from "./pages/profile/Employee/EmployeeProfil
 import "bootstrap-icons/font/bootstrap-icons.css"; // Importa icones do Bootstrap
 import "./index.css";
 
+// Habilita estilo global que converte alerts do DaisyUI em toasts flutuantes.
+document.body.classList.add("toastify-alerts");
+
 ReactDOM.createRoot(document.getElementById("root")).render(
     <StrictMode>
         <BrowserRouter>

@@ -20,6 +20,7 @@ import CompanyRegisterLayout from "./pages/register/CompanyRegister/CompanyRegis
 import CompanyRegisterStep1 from "./pages/register/CompanyRegister/CompanyRegisterStep1.jsx";
 import CompanyRegisterStep2 from "./pages/register/CompanyRegister/CompanyRegisterStep2.jsx";
 import CompanyRegisterStep3 from "./pages/register/CompanyRegister/CompanyRegisterStep3.jsx";
+import CompanyRegisterStep4 from "./pages/register/CompanyRegister/CompanyRegisterStep4.jsx";
 
 // Profile - Employee
 import EmployeeLayout, { CandidateIndexRedirect } from "./pages/profile/Employee/EmployeeLayout.jsx";
@@ -71,6 +72,7 @@ function App() {
         <Route path="step1" element={<CompanyRegisterStep1 />} />
         <Route path="step2" element={<CompanyRegisterStep2 />} />
         <Route path="step3" element={<CompanyRegisterStep3 />} />
+        <Route path="step4" element={<CompanyRegisterStep4 />} />
       </Route>
 
       <Route path="/admin" element={<AdminLayout />}>

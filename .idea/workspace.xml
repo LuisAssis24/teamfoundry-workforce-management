@@ -4,13 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Company Profile Layout e Mudança de email do responsável">
+    <list default="true" id="a7dae958-fb9c-447a-93ab-f5d1d5d4e299" name="Changes" comment="Ajustes Register (Funcioanrio e Empresa)&#10;Toasts atualizados">
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ui/Input/PhoneInput.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_11_2025_19_55_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_11_2025_19_55__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/dto/company/CompanyRequestCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/dto/company/CompanyRequestCreateRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/CompanyRequestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/account_options/service/CompanyRequestService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/EmployeeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/teamfoundry/backend/admin/model/EmployeeRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/company/CompanyProfileContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/company/CompanyProfileContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/profile/company/CompanyRequests.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/profile/company/CompanyRequests.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep1.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep1.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep2.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep3.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/CompanyRegister/CompanyRegisterStep3.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/register/EmployeeRegister/EmployeeRegisterStep2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/register/EmployeeRegister/EmployeeRegisterStep2.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +231,10 @@
       <workItem from="1764151885978" duration="12000" />
       <workItem from="1764152243290" duration="257000" />
       <workItem from="1764153095769" duration="153000" />
-      <workItem from="1764513480370" duration="5744000" />
+      <workItem from="1764513480370" duration="6929000" />
+      <workItem from="1764524233381" duration="1108000" />
+      <workItem from="1764796925520" duration="5302000" />
+      <workItem from="1764804409889" duration="138000" />
     </task>
     <task id="LOCAL-00001" summary="paleta certa">
       <option name="closed" value="true" />
@@ -336,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764518354905</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Requisições a partir da empresa funcionais">
+      <option name="closed" value="true" />
+      <created>1764521033236</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1764521033236</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -386,7 +406,9 @@
     <MESSAGE value="Seeders e Historico de Trabalho Perfil" />
     <MESSAGE value="Componente Tabs reutilizavel&#10;Perfil Info quase completo, a espera do banco de dados para as certificações" />
     <MESSAGE value="Company Profile Layout e Mudança de email do responsável" />
-    <option name="LAST_COMMIT_MESSAGE" value="Company Profile Layout e Mudança de email do responsável" />
+    <MESSAGE value="Requisições a partir da empresa funcionais" />
+    <MESSAGE value="Ajustes Register (Funcioanrio e Empresa)&#10;Toasts atualizados" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajustes Register (Funcioanrio e Empresa)&#10;Toasts atualizados" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

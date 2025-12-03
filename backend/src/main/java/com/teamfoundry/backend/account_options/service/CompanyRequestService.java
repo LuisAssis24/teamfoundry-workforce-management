@@ -5,10 +5,13 @@ import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
 import com.teamfoundry.backend.account_options.dto.company.CompanyRequestCreateRequest;
 import com.teamfoundry.backend.account_options.dto.company.CompanyRequestResponse;
 import com.teamfoundry.backend.admin.enums.State;
+import com.teamfoundry.backend.account.enums.UserType;
+import com.teamfoundry.backend.account.model.AdminAccount;
 import com.teamfoundry.backend.admin.model.EmployeeRequest;
 import com.teamfoundry.backend.admin.model.TeamRequest;
 import com.teamfoundry.backend.admin.repository.EmployeeRequestRepository;
 import com.teamfoundry.backend.admin.repository.TeamRequestRepository;
+import com.teamfoundry.backend.account.repository.AdminAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ public class CompanyRequestService {
     private final TeamRequestRepository teamRequestRepository;
     private final EmployeeRequestRepository employeeRequestRepository;
     private final CompanyAccountRepository companyAccountRepository;
+    private final AdminAccountRepository adminAccountRepository;
 
     /**
      * Lista todas as requisições da empresa autenticada, ordenadas por criação.
@@ -59,6 +63,7 @@ public class CompanyRequestService {
         entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
         entity.setCreatedAt(LocalDateTime.now());
+        entity.setResponsibleAdminId(resolveLeastLoadedAdmin());
 
         TeamRequest saved = teamRequestRepository.save(entity);
         createEmployeeRequests(saved, request);
@@ -116,5 +121,34 @@ public class CompanyRequestService {
         }
         return companyAccountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empresa não encontrada."));
+    }
+
+    /**
+     * Escolhe o admin (role ADMIN) com menos team requests atribuídas.
+     * Em caso de empate, retorna o de menor id. Caso não haja admins, devolve null.
+     */
+    private Integer resolveLeastLoadedAdmin() {
+        // Contagem atual por admin
+        var counts = teamRequestRepository.countAssignmentsGroupedByAdmin();
+        java.util.Map<Integer, Long> countMap = new java.util.HashMap<>();
+        for (var row : counts) {
+            if (row.getAdminId() != null) {
+                countMap.put(row.getAdminId(), row.getTotal());
+            }
+        }
+
+        return adminAccountRepository.findAll()
+                .stream()
+                .filter(admin -> admin.getRole() == UserType.ADMIN)
+                .min((a, b) -> {
+                    long countA = countMap.getOrDefault(a.getId(), 0L);
+                    long countB = countMap.getOrDefault(b.getId(), 0L);
+                    if (countA == countB) {
+                        return Integer.compare(a.getId(), b.getId());
+                    }
+                    return Long.compare(countA, countB);
+                })
+                .map(AdminAccount::getId)
+                .orElse(null);
     }
 }
