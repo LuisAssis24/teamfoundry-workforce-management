@@ -10,6 +10,8 @@ import com.teamfoundry.backend.site.repository.WeeklyTipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
+@Profile("!test")
 public class HomeLoginContentInitializer implements CommandLineRunner {
 
     private final HomeLoginSectionRepository sections;
