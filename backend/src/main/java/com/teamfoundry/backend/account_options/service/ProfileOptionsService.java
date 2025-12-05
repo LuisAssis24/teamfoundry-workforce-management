@@ -1,9 +1,9 @@
 package com.teamfoundry.backend.account_options.service;
 
 import com.teamfoundry.backend.account_options.dto.ProfileOptionsResponse;
-import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.FunctionRepository;
-import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.account_options.repository.employee.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.FunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.GeoAreaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import Button from "../ui/Button/Button";
 import logo from "../../assets/images/logo/teamFoundry_LogoWhite.png";
 import { useAuthContext } from "../../auth/AuthContext.jsx";
+import { useEmployeeProfile } from "../../pages/profile/Employee/EmployeeProfileContext.jsx";
 
 const NAV_LINKS = [];
 
@@ -19,9 +20,11 @@ export default function Navbar({
 }) {
   const isPublic = variant === "public";
   const { userType } = useAuthContext();
+  const { profile } = useEmployeeProfile();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const profileRef = useRef(null);
+  const profileImageUrl = profile?.profilePictureUrl;
 
   useEffect(() => {
     setIsProfileOpen(false);
@@ -110,7 +113,15 @@ export default function Navbar({
               aria-haspopup="true"
               aria-expanded={isProfileOpen}
             >
-              <i className="bi bi-person-circle" aria-hidden="true" />
+              {profileImageUrl ? (
+                <img
+                  src={profileImageUrl}
+                  alt="Foto do perfil"
+                  className="w-full h-full rounded-full object-cover border-2 border-primary-content/30"
+                />
+              ) : (
+                <i className="bi bi-person-circle" aria-hidden="true" />
+              )}
               <span className="sr-only">Abrir menu do perfil</span>
             </button>
 

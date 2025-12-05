@@ -13,22 +13,24 @@ import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.service.exception.EmployeeRegistrationException;
 import com.teamfoundry.backend.account.service.exception.DuplicateEmailException;
-import com.teamfoundry.backend.account_options.model.Competence;
-import com.teamfoundry.backend.account_options.model.EmployeeCurriculum;
-import com.teamfoundry.backend.account_options.model.EmployeeCompetence;
-import com.teamfoundry.backend.account_options.model.EmployeeFunction;
-import com.teamfoundry.backend.account_options.model.EmployeeGeoArea;
-import com.teamfoundry.backend.account_options.model.Function;
-import com.teamfoundry.backend.account_options.model.GeoArea;
-import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.CurriculumRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
-import com.teamfoundry.backend.account_options.repository.FunctionRepository;
-import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.account_options.enums.DocumentType;
+import com.teamfoundry.backend.account_options.model.employee.Competence;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeCompetence;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeDocument;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeFunction;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeGeoArea;
+import com.teamfoundry.backend.account_options.model.employee.Function;
+import com.teamfoundry.backend.account_options.model.employee.GeoArea;
+import com.teamfoundry.backend.account_options.repository.employee.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.DocumentRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeCompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeFunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.account_options.repository.employee.FunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.GeoAreaRepository;
 import com.teamfoundry.backend.security.model.AuthToken;
 import com.teamfoundry.backend.security.repository.AuthTokenRepository;
+import com.teamfoundry.backend.common.service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,16 +41,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -68,11 +64,9 @@ public class EmployeeRegistrationService {
     private final EmployeeCompetenceRepository employeeCompetenceRepository;
     private final GeoAreaRepository geoAreaRepository;
     private final EmployeeGeoAreaRepository employeeGeoAreaRepository;
-    private final CurriculumRepository curriculumRepository;
+    private final DocumentRepository documentRepository;
     private final VerificationEmailService verificationEmailService;
-
-    @Value("${app.registration.cv-upload-dir:uploads/cv}")
-    private String cvUploadDir;
+    private final CloudinaryService cloudinaryService;
 
     @Value("${app.registration.verification.expiration-minutes:30}")
     private long verificationExpirationMinutes;
@@ -133,20 +127,11 @@ public class EmployeeRegistrationService {
         account.setBirthDate(request.getBirthDate());
         account.setNif(request.getNif());
 
-        String storedPath = storeCvIfPresent(account, request.getCvFile(), request.getCvFileName());
+        CloudinaryService.UploadResult cvUpload = storeCvIfPresent(account, request.getCvFile(), request.getCvFileName());
         employeeAccountRepository.save(account);
 
-        if (storedPath != null) {
-            EmployeeCurriculum curriculum = curriculumRepository.findByEmployee(account)
-                    .orElseGet(() -> {
-                        EmployeeCurriculum cv = new EmployeeCurriculum();
-                        cv.setEmployee(account);
-                        return cv;
-                    });
-
-            deleteFileIfExists(curriculum.getCvUrl());
-            curriculum.setCvUrl(storedPath);
-            curriculumRepository.save(curriculum);
+        if (cvUpload != null) {
+            saveDocument(account, DocumentType.CURRICULUM, cvUpload.getPublicId(), request.getCvFileName());
         }
 
         return GenericResponse.success("Dados atualizados.");
@@ -217,43 +202,35 @@ public class EmployeeRegistrationService {
         return token;
     }
 
-    private String storeCvIfPresent(EmployeeAccount account, String cvPayload, String originalName) {
+    private void saveDocument(EmployeeAccount account, DocumentType type, String publicId, String fileName) {
+        EmployeeDocument document = documentRepository.findByEmployeeAndType(account, type)
+                .orElseGet(() -> {
+                    EmployeeDocument doc = new EmployeeDocument();
+                    doc.setEmployee(account);
+                    doc.setType(type);
+                    return doc;
+                });
+        cloudinaryService.delete(document.getPublicId());
+        document.setPublicId(publicId);
+        document.setFileName(fileName);
+        documentRepository.save(document);
+    }
+
+    private CloudinaryService.UploadResult storeCvIfPresent(EmployeeAccount account, String cvPayload, String originalName) {
         if (!StringUtils.hasText(cvPayload)) {
             return null;
         }
 
         try {
-            String base64 = extractBase64Content(cvPayload);
-            byte[] data = Base64.getDecoder().decode(base64);
-
-            Path uploadDirectory = Paths.get(cvUploadDir).toAbsolutePath().normalize();
-            Files.createDirectories(uploadDirectory);
-
-            String extension = resolveExtension(originalName);
-            String filename = "cv_" + account.getId() + "_" + System.currentTimeMillis() + extension;
-            Path filePath = uploadDirectory.resolve(filename);
-
-            Files.write(filePath, data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            log.info("Stored CV for {} at {}", account.getEmail(), filePath);
-            return filePath.toString();
+            CloudinaryService.UploadResult upload = cloudinaryService.uploadBase64(cvPayload, "curriculum", originalName);
+            log.info("Stored CV for {} at {}", account.getEmail(), upload.getPublicId());
+            return upload;
         } catch (IllegalArgumentException ex) {
-            throw new EmployeeRegistrationException("O ficheiro de CV enviado é inválido.", HttpStatus.BAD_REQUEST);
-        } catch (IOException ex) {
+            throw new EmployeeRegistrationException("O ficheiro de CV enviado e invalido.", HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
             log.error("Error storing CV file for {}", account.getEmail(), ex);
-            throw new EmployeeRegistrationException("Não foi possível guardar o CV. Tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new EmployeeRegistrationException("Nao foi possivel guardar o CV. Tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private String extractBase64Content(String raw) {
-        int commaIndex = raw.indexOf(',');
-        return commaIndex >= 0 ? raw.substring(commaIndex + 1) : raw;
-    }
-
-    private String resolveExtension(String originalName) {
-        if (StringUtils.hasText(originalName) && originalName.contains(".")) {
-            return originalName.substring(originalName.lastIndexOf('.')).toLowerCase();
-        }
-        return ".pdf";
     }
 
     private String generateNumericCode(int length) {
@@ -284,21 +261,10 @@ public class EmployeeRegistrationService {
         if (account.getId() == null) {
             return;
         }
-        curriculumRepository.findByEmployee(account).ifPresent(cv -> {
-            deleteFileIfExists(cv.getCvUrl());
-            curriculumRepository.delete(cv);
+        documentRepository.findByEmployeeAndType(account, DocumentType.CURRICULUM).ifPresent(doc -> {
+            cloudinaryService.delete(doc.getPublicId());
+            documentRepository.delete(doc);
         });
-    }
-
-    private void deleteFileIfExists(String storedPath) {
-        if (!StringUtils.hasText(storedPath)) {
-            return;
-        }
-        try {
-            Files.deleteIfExists(Paths.get(storedPath));
-        } catch (IOException ex) {
-            log.warn("Falha ao remover ficheiro {}: {}", storedPath, ex.getMessage());
-        }
     }
 
     private void applyFunctionPreference(EmployeeAccount account, String functionName) {

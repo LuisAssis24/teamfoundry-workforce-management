@@ -2,8 +2,8 @@ package com.teamfoundry.backend.admin.config;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
-import com.teamfoundry.backend.account_options.model.EmployeeCertifications;
-import com.teamfoundry.backend.account_options.repository.CertificationsRepository;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeCertifications;
+import com.teamfoundry.backend.account_options.repository.employee.CertificationsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -47,7 +47,7 @@ public class EmployeeCertificationSeeder {
                 cert.setLocation(seed.location());
                 cert.setCompletionDate(seed.completionDate());
                 cert.setDescription(seed.description());
-                cert.setCertificateUrl(null);
+                cert.setCertificatePublicId(null);
                 toPersist.add(cert);
             }
 

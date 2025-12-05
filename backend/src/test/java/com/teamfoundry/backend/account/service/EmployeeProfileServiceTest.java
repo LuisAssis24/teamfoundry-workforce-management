@@ -4,7 +4,7 @@ import com.teamfoundry.backend.account_options.dto.employee.EmployeeProfileRespo
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeProfileUpdateRequest;
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
-import com.teamfoundry.backend.account_options.service.EmployeeProfileService;
+import com.teamfoundry.backend.account_options.service.employee.EmployeeProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

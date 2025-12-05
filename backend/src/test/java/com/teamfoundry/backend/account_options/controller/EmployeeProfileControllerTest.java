@@ -1,8 +1,9 @@
 package com.teamfoundry.backend.account_options.controller;
 
+import com.teamfoundry.backend.account_options.controller.employee.EmployeeProfileController;
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeProfileResponse;
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeProfileUpdateRequest;
-import com.teamfoundry.backend.account_options.service.EmployeeProfileService;
+import com.teamfoundry.backend.account_options.service.employee.EmployeeProfileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

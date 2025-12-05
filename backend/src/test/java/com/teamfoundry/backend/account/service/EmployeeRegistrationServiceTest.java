@@ -14,19 +14,20 @@ import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
 import com.teamfoundry.backend.account.service.exception.DuplicateEmailException;
 import com.teamfoundry.backend.account.service.exception.EmployeeRegistrationException;
-import com.teamfoundry.backend.account_options.model.Competence;
-import com.teamfoundry.backend.account_options.model.EmployeeCompetence;
-import com.teamfoundry.backend.account_options.model.EmployeeFunction;
-import com.teamfoundry.backend.account_options.model.EmployeeGeoArea;
-import com.teamfoundry.backend.account_options.model.Function;
-import com.teamfoundry.backend.account_options.model.GeoArea;
-import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.CurriculumRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
-import com.teamfoundry.backend.account_options.repository.FunctionRepository;
-import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.account_options.enums.DocumentType;
+import com.teamfoundry.backend.account_options.model.employee.Competence;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeCompetence;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeFunction;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeGeoArea;
+import com.teamfoundry.backend.account_options.model.employee.Function;
+import com.teamfoundry.backend.account_options.model.employee.GeoArea;
+import com.teamfoundry.backend.account_options.repository.employee.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.DocumentRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeCompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeFunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.account_options.repository.employee.FunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.GeoAreaRepository;
 import com.teamfoundry.backend.security.model.AuthToken;
 import com.teamfoundry.backend.security.repository.AuthTokenRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +54,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -82,7 +82,7 @@ class EmployeeRegistrationServiceTest {
     @Mock
     private EmployeeGeoAreaRepository employeeGeoAreaRepository;
     @Mock
-    private CurriculumRepository curriculumRepository;
+    private DocumentRepository documentRepository;
     @Mock
     private VerificationEmailService verificationEmailService;
 
@@ -157,7 +157,7 @@ class EmployeeRegistrationServiceTest {
 
         when(accountRepository.findByEmail("candidate@test.com")).thenReturn(Optional.of(existing));
         when(employeeAccountRepository.findByEmail("candidate@test.com")).thenReturn(Optional.of(existing));
-        when(curriculumRepository.findByEmployee(existing)).thenReturn(Optional.empty());
+        when(documentRepository.findByEmployeeAndType(existing, DocumentType.CURRICULUM)).thenReturn(Optional.empty());
         when(employeeAccountRepository.save(any(EmployeeAccount.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         GenericResponse response = employeeRegistrationService.handleStep1(step1Request);

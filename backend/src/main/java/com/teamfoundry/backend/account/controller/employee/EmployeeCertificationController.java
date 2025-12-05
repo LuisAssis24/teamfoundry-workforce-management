@@ -2,7 +2,7 @@ package com.teamfoundry.backend.account.controller.employee;
 
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificationRequest;
 import com.teamfoundry.backend.account_options.dto.employee.EmployeeCertificationResponse;
-import com.teamfoundry.backend.account_options.service.EmployeeCertificationService;
+import com.teamfoundry.backend.account_options.service.employee.EmployeeCertificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

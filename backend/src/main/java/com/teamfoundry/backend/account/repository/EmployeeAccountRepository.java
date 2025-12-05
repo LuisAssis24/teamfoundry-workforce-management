@@ -14,11 +14,11 @@ public interface EmployeeAccountRepository extends JpaRepository<EmployeeAccount
     @Query("""
             SELECT DISTINCT e
             FROM EmployeeAccount e
-            LEFT JOIN com.teamfoundry.backend.account_options.model.EmployeeFunction ef ON ef.employee = e
+            LEFT JOIN com.teamfoundry.backend.account_options.model.employee.EmployeeFunction ef ON ef.employee = e
             LEFT JOIN ef.function f
-            LEFT JOIN com.teamfoundry.backend.account_options.model.EmployeeGeoArea ega ON ega.employee = e
+            LEFT JOIN com.teamfoundry.backend.account_options.model.employee.EmployeeGeoArea ega ON ega.employee = e
             LEFT JOIN ega.geoArea ga
-            LEFT JOIN com.teamfoundry.backend.account_options.model.EmployeeCompetence ec ON ec.employee = e
+            LEFT JOIN com.teamfoundry.backend.account_options.model.employee.EmployeeCompetence ec ON ec.employee = e
             LEFT JOIN ec.competence c
             WHERE e.active = true
               AND (:role IS NULL OR LOWER(f.name) = LOWER(:role))

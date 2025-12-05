@@ -1,13 +1,13 @@
 package com.teamfoundry.backend.account_options.config;
 
-import com.teamfoundry.backend.account_options.model.ActivitySectors;
-import com.teamfoundry.backend.account_options.model.Competence;
-import com.teamfoundry.backend.account_options.model.Function;
-import com.teamfoundry.backend.account_options.model.GeoArea;
-import com.teamfoundry.backend.account_options.repository.ActivitySectorsRepository;
-import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.FunctionRepository;
-import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.account_options.model.company.ActivitySectors;
+import com.teamfoundry.backend.account_options.model.employee.Competence;
+import com.teamfoundry.backend.account_options.model.employee.Function;
+import com.teamfoundry.backend.account_options.model.employee.GeoArea;
+import com.teamfoundry.backend.account_options.repository.company.ActivitySectorsRepository;
+import com.teamfoundry.backend.account_options.repository.employee.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.FunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.GeoAreaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

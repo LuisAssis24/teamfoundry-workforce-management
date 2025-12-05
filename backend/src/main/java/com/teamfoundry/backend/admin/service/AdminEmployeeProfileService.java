@@ -2,12 +2,12 @@ package com.teamfoundry.backend.admin.service;
 
 import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.EmployeeAccountRepository;
-import com.teamfoundry.backend.account_options.model.EmployeeCompetence;
-import com.teamfoundry.backend.account_options.model.EmployeeFunction;
-import com.teamfoundry.backend.account_options.model.EmployeeGeoArea;
-import com.teamfoundry.backend.account_options.repository.EmployeeCompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeFunctionRepository;
-import com.teamfoundry.backend.account_options.repository.EmployeeGeoAreaRepository;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeCompetence;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeFunction;
+import com.teamfoundry.backend.account_options.model.employee.EmployeeGeoArea;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeCompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeFunctionRepository;
+import com.teamfoundry.backend.account_options.repository.employee.EmployeeGeoAreaRepository;
 import com.teamfoundry.backend.admin.dto.AdminEmployeeProfileResponse;
 import com.teamfoundry.backend.admin.enums.State;
 import com.teamfoundry.backend.admin.model.EmployeeRequest;

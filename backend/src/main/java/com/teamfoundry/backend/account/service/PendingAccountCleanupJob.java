@@ -7,7 +7,7 @@ import com.teamfoundry.backend.account.model.EmployeeAccount;
 import com.teamfoundry.backend.account.repository.AccountRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountOwnerRepository;
 import com.teamfoundry.backend.account.repository.CompanyAccountRepository;
-import com.teamfoundry.backend.account_options.repository.CompanyActivitySectorsRepository;
+import com.teamfoundry.backend.account_options.repository.company.CompanyActivitySectorsRepository;
 import com.teamfoundry.backend.common.util.AccountCleanupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

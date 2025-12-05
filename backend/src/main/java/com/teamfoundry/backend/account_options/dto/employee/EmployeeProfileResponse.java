@@ -16,4 +16,8 @@ public class EmployeeProfileResponse {
     Integer nif;
     String phone;
     String email;
+    String curriculumUrl;
+    String identificationFrontUrl;
+    String identificationBackUrl;
+    String profilePictureUrl;
 }

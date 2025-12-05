@@ -1,12 +1,12 @@
 package com.teamfoundry.backend.site.service;
 
-import com.teamfoundry.backend.account_options.model.ActivitySectors;
-import com.teamfoundry.backend.account_options.model.Competence;
-import com.teamfoundry.backend.account_options.model.Function;
-import com.teamfoundry.backend.account_options.model.GeoArea;
-import com.teamfoundry.backend.account_options.repository.ActivitySectorsRepository;
-import com.teamfoundry.backend.account_options.repository.CompetenceRepository;
-import com.teamfoundry.backend.account_options.repository.GeoAreaRepository;
+import com.teamfoundry.backend.account_options.model.company.ActivitySectors;
+import com.teamfoundry.backend.account_options.model.employee.Competence;
+import com.teamfoundry.backend.account_options.model.employee.Function;
+import com.teamfoundry.backend.account_options.model.employee.GeoArea;
+import com.teamfoundry.backend.account_options.repository.company.ActivitySectorsRepository;
+import com.teamfoundry.backend.account_options.repository.employee.CompetenceRepository;
+import com.teamfoundry.backend.account_options.repository.employee.GeoAreaRepository;
 import com.teamfoundry.backend.site.dto.CreateFunctionRequest;
 import com.teamfoundry.backend.site.dto.CreateFunctionResponse;
 import com.teamfoundry.backend.site.repository.CreateFunctionRepository;

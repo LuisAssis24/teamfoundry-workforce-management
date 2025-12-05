@@ -1,6 +1,6 @@
 package com.teamfoundry.backend.site.repository;
 
-import com.teamfoundry.backend.account_options.model.Function;
+import com.teamfoundry.backend.account_options.model.employee.Function;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

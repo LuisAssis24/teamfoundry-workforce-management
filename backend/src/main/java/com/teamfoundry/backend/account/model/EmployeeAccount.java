@@ -35,4 +35,7 @@ public class EmployeeAccount extends Account {
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Column(name = "profile_picture_public_id")
+    private String profilePicturePublicId;
 }

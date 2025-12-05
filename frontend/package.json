@@ -11,6 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.14.3",
+    "@cloudinary/url-gen": "^1.22.0",
     "bootstrap-icons": "^1.13.1",
     "prop-types": "^15.8.1",
     "react": "^19.1.1",

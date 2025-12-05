@@ -1,4 +1,4 @@
-import { httpGet, httpPut, httpPost } from "../http.js";
+import { httpGet, httpPut, httpPost } from "../config/http.js";
 
 /**
  * Busca o perfil da empresa autenticada.
